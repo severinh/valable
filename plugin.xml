@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="valable.preferences.ValaPreferencePage"
+            id="valable.preferences.ValaPreferencePage"
+            name="Vala Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="valable.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>
