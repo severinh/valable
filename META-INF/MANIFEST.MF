@@ -4,6 +4,8 @@ Bundle-Name: Valable Plug-in
 Bundle-SymbolicName: valable;singleton:=true
 Bundle-Version: 0.1
 Bundle-Activator: valable.ValaPlugin
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
+Require-Bundle: org.eclipse.ui.editors,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text
 Eclipse-LazyStart: true

@@ -2,6 +2,20 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
+         id="valable.editors"
+         name="Vala Editor"
+         point="org.eclipse.ui.editors">
+      <editor
+            class="valable.editors.ValaEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            default="true"
+            extensions="vala"
+            icon="icons/sample.gif"
+            id="valable.editors.ValaEditor"
+            name="Vala Editor">
+      </editor>
+   </extension>
+   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="valable.preferences.ValaPreferencePage"

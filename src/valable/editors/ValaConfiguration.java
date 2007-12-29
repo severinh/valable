@@ -1,0 +1,113 @@
+/* ValaConfiguration.java
+ *
+ * Copyright (C) 2007  Johann Prieur <johann.prieur@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+package valable.editors;
+
+import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
+import org.eclipse.jface.text.IAutoEditStrategy;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextDoubleClickStrategy;
+import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.presentation.IPresentationReconciler;
+import org.eclipse.jface.text.presentation.PresentationReconciler;
+import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
+import org.eclipse.jface.text.rules.RuleBasedScanner;
+import org.eclipse.jface.text.rules.Token;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
+
+import valable.editors.util.IValaColorConstants;
+import valable.editors.util.ValaColorManager;
+import valable.editors.vala.ValaCodeScanner;
+import valable.editors.vala.ValaDoubleClickStrategy;
+import valable.editors.vala.ValaPartitionScanner;
+
+public class ValaConfiguration extends SourceViewerConfiguration {
+	
+	private ValaDoubleClickStrategy doubleClickStrategy;
+	private ValaCodeScanner codeScanner;
+	//private GTKDocScanner docScanner;
+	private ValaColorManager colorManager;
+
+	public ValaConfiguration(ValaColorManager colorManager) {
+		this.colorManager = colorManager;
+	}
+	
+	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
+		return new String[] {
+			IDocument.DEFAULT_CONTENT_TYPE,
+			ValaPartitionScanner.VALA_MULTILINE_COMMENT };
+	}
+	
+	public ITextDoubleClickStrategy getDoubleClickStrategy(
+		ISourceViewer sourceViewer,
+		String contentType) {
+		if (doubleClickStrategy == null)
+			doubleClickStrategy = new ValaDoubleClickStrategy();
+		return doubleClickStrategy;
+	}
+
+	protected ValaCodeScanner getValaScanner() {
+		if (codeScanner == null) {
+			codeScanner = new ValaCodeScanner(colorManager);
+			codeScanner.setDefaultReturnToken(
+				new Token(
+					new TextAttribute(
+						colorManager.getColor(IValaColorConstants.DEFAULT))));
+		}
+		return codeScanner;
+	}
+	
+//	protected GTKDocScanner getGTKDocScanner() {
+// TODO : implement a GTK-Doc scanner	
+//	}
+
+	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
+		PresentationReconciler reconciler = new PresentationReconciler();
+
+		// Rule for code
+		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(getValaScanner());
+		reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
+		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
+
+		// Rule for multi line comments
+		RuleBasedScanner multilineScanner = new RuleBasedScanner();
+		multilineScanner.setDefaultReturnToken(new Token(new TextAttribute(
+					colorManager.getColor(IValaColorConstants.COMMENT))));
+		dr = new DefaultDamagerRepairer(multilineScanner);
+		reconciler.setDamager(dr, ValaPartitionScanner.VALA_MULTILINE_COMMENT);
+		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_MULTILINE_COMMENT);
+		
+		// TODO : add a rule for GTK-Doc
+
+		return reconciler;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getAutoEditStrategies(org.eclipse.jface.text.source.ISourceViewer, java.lang.String)
+	 */
+	@Override
+	public IAutoEditStrategy[] getAutoEditStrategies(
+			ISourceViewer sourceViewer, String contentType) {
+		IAutoEditStrategy[] indent = { new DefaultIndentLineAutoEditStrategy() };
+		return indent;
+	}
+
+	
+	
+}
