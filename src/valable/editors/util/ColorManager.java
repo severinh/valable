@@ -1,4 +1,4 @@
-/* ValaEditor.java
+/* ValaColorManager.java
  *
  * Copyright (C) 2007  Johann Prieur <johann.prieur@gmail.com>
  * 
@@ -16,26 +16,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package valable.editors;
+package valable.editors.util;
 
-import org.eclipse.ui.editors.text.TextEditor;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-import valable.editors.util.ColorManager;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 
-public class ValaEditor extends TextEditor {
+public class ColorManager implements IColorConstants {
 
-	private ColorManager colorManager;
+	protected Map<RGB, Color> colorTable = new HashMap<RGB, Color>(10);
 
-	public ValaEditor() {
-		super();
-		
-		colorManager = new ColorManager();
-		setSourceViewerConfiguration(new ValaConfiguration(colorManager));
-		setDocumentProvider(new ValaDocumentProvider());
-	}
 	public void dispose() {
-		colorManager.dispose();
-		super.dispose();
+		Iterator<Color> e = colorTable.values().iterator();
+		while (e.hasNext())
+			 ((Color) e.next()).dispose();
 	}
-
+	public Color getColor(RGB rgb) {
+		Color color = (Color) colorTable.get(rgb);
+		if (color == null) {
+			color = new Color(Display.getCurrent(), rgb);
+			colorTable.put(rgb, color);
+		}
+		return color;
+	}
 }

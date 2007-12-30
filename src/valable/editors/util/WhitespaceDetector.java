@@ -1,4 +1,4 @@
-/* IValaColorConstants.java
+/* ValaWhitespaceDetector.java
  *
  * Copyright (C) 2007  Johann Prieur <johann.prieur@gmail.com>
  * 
@@ -18,17 +18,11 @@
  */
 package valable.editors.util;
 
-import org.eclipse.swt.graphics.RGB;
+import org.eclipse.jface.text.rules.IWhitespaceDetector;
 
-public interface IValaColorConstants {
-	
-	public static final RGB BACKGROUND = new RGB(255, 255, 255);
+public class WhitespaceDetector implements IWhitespaceDetector {
 
-	public static final RGB COMMENT = new RGB(64, 128, 128);
-	
-	public static final RGB DEFAULT = new RGB(0, 0, 0);
-	public static final RGB KEYWORD = new RGB(127, 0, 85);
-	public static final RGB TYPE = new RGB(64, 0, 200);
-	public static final RGB STRING = new RGB(0, 128, 0);
-
+	public boolean isWhitespace(char c) {
+		return (c == ' ' || c == '\t' || c == '\n' || c == '\r');
+	}
 }

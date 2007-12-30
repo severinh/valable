@@ -35,6 +35,7 @@ public class ValaDocumentProvider extends FileDocumentProvider {
 				new FastPartitioner(
 					new ValaPartitionScanner(),
 					new String[] {
+						ValaPartitionScanner.GTKDOC_COMMENT,
 						ValaPartitionScanner.VALA_MULTILINE_COMMENT });
 			partitioner.connect(document);
 			document.setDocumentPartitioner(partitioner);

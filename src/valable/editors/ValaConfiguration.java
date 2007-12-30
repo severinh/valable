@@ -31,8 +31,9 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
-import valable.editors.util.IValaColorConstants;
-import valable.editors.util.ValaColorManager;
+import valable.editors.doc.GTKDocScanner;
+import valable.editors.util.IColorConstants;
+import valable.editors.util.ColorManager;
 import valable.editors.vala.ValaCodeScanner;
 import valable.editors.vala.ValaDoubleClickStrategy;
 import valable.editors.vala.ValaPartitionScanner;
@@ -41,10 +42,10 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 	
 	private ValaDoubleClickStrategy doubleClickStrategy;
 	private ValaCodeScanner codeScanner;
-	//private GTKDocScanner docScanner;
-	private ValaColorManager colorManager;
+	private GTKDocScanner docScanner;
+	private ColorManager colorManager;
 
-	public ValaConfiguration(ValaColorManager colorManager) {
+	public ValaConfiguration(ColorManager colorManager) {
 		this.colorManager = colorManager;
 	}
 	
@@ -65,17 +66,16 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 	protected ValaCodeScanner getValaScanner() {
 		if (codeScanner == null) {
 			codeScanner = new ValaCodeScanner(colorManager);
-			codeScanner.setDefaultReturnToken(
-				new Token(
-					new TextAttribute(
-						colorManager.getColor(IValaColorConstants.DEFAULT))));
 		}
 		return codeScanner;
 	}
 	
-//	protected GTKDocScanner getGTKDocScanner() {
-// TODO : implement a GTK-Doc scanner	
-//	}
+	protected GTKDocScanner getGTKDocScanner() {
+		if (docScanner == null) {
+			docScanner = new GTKDocScanner(colorManager);
+		}
+		return docScanner;
+	}
 
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 		PresentationReconciler reconciler = new PresentationReconciler();
@@ -85,16 +85,19 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
+		// Rule for gtk-doc
+		dr = new DefaultDamagerRepairer(getGTKDocScanner());
+		reconciler.setDamager(dr, ValaPartitionScanner.GTKDOC_COMMENT);
+		reconciler.setRepairer(dr, ValaPartitionScanner.GTKDOC_COMMENT);
+		
 		// Rule for multi line comments
 		RuleBasedScanner multilineScanner = new RuleBasedScanner();
 		multilineScanner.setDefaultReturnToken(new Token(new TextAttribute(
-					colorManager.getColor(IValaColorConstants.COMMENT))));
+					colorManager.getColor(IColorConstants.COMMENT))));
 		dr = new DefaultDamagerRepairer(multilineScanner);
 		reconciler.setDamager(dr, ValaPartitionScanner.VALA_MULTILINE_COMMENT);
 		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_MULTILINE_COMMENT);
 		
-		// TODO : add a rule for GTK-Doc
-
 		return reconciler;
 	}
 

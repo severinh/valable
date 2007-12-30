@@ -25,14 +25,16 @@ import org.eclipse.jface.text.rules.*;
 public class ValaPartitionScanner extends RuleBasedPartitionScanner {
 	
 	public final static String VALA_MULTILINE_COMMENT = "__vala_multiline_comment";
+	public final static String GTKDOC_COMMENT = "__gtkdoc_comment";
 
 	public ValaPartitionScanner() {
-
 		IToken valaMultilineComment = new Token(VALA_MULTILINE_COMMENT);
+		IToken gtkdocComment = new Token(GTKDOC_COMMENT);
 		
 		ArrayList<IPredicateRule> rules = new ArrayList<IPredicateRule>();
 		
-		// TODO : add a rule for GTK-doc comments
+		// Rule for gtk-doc comments
+		rules.add(new MultiLineRule("/**", "*/", gtkdocComment));
 		
 		// Rule for multi line comments
 		rules.add(new MultiLineRule("/*", "*/", valaMultilineComment));

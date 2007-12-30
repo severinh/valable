@@ -24,21 +24,20 @@ import org.eclipse.jface.text.rules.*;
 import org.eclipse.jface.text.*;
 import org.eclipse.swt.SWT;
 
-import valable.editors.util.ValaColorManager;
-import valable.editors.util.ValaWhitespaceDetector;
+import valable.editors.util.ColorManager;
+import valable.editors.util.WhitespaceDetector;
 import valable.editors.util.ValaWordDetector;
 
 public class ValaCodeScanner extends RuleBasedScanner 
 	implements IValaLanguageWords {
 
-	public ValaCodeScanner(ValaColorManager manager) {
-		IToken keyword = new Token(new TextAttribute(manager.getColor(ValaColorManager.KEYWORD), 
+	public ValaCodeScanner(ColorManager manager) {
+		IToken keyword = new Token(new TextAttribute(manager.getColor(ColorManager.KEYWORD), 
 													 null, SWT.BOLD));
-		IToken type = new Token(new TextAttribute(manager.getColor(ValaColorManager.TYPE), 
-												  null, SWT.BOLD));
-		IToken string = new Token(new TextAttribute(manager.getColor(ValaColorManager.STRING)));
-		IToken comment = new Token(new TextAttribute(manager.getColor(ValaColorManager.COMMENT)));
-		IToken other = new Token(new TextAttribute(manager.getColor(ValaColorManager.DEFAULT)));
+		IToken type = new Token(new TextAttribute(manager.getColor(ColorManager.TYPE)));
+		IToken string = new Token(new TextAttribute(manager.getColor(ColorManager.STRING)));
+		IToken comment = new Token(new TextAttribute(manager.getColor(ColorManager.COMMENT)));
+		IToken other = new Token(new TextAttribute(manager.getColor(ColorManager.DEFAULT)));
 		
 		setDefaultReturnToken(other);
 		
@@ -51,7 +50,7 @@ public class ValaCodeScanner extends RuleBasedScanner
 		rules.add(new SingleLineRule("\"", "\"", string));
 		
 		// Rule for whitespaces
-		rules.add(new WhitespaceRule(new ValaWhitespaceDetector()));
+		rules.add(new WhitespaceRule(new WhitespaceDetector()));
 		
 		// Rule for keywords, types and constants
 		WordRule wordRule = new WordRule(new ValaWordDetector(), other);
