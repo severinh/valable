@@ -68,7 +68,8 @@ public interface IValaLanguageWords {
 					   "string",
 					   "uchar",
 					   "uint",
-					   "unichar" };
+					   "unichar",
+					   "void" };
 	
 	String[] constants = { "false", 
 						   "null", 

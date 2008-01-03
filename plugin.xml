@@ -94,5 +94,22 @@
          </run>
       </builder>
    </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="valable.wizard.file.importCategory"
+            name="Vala">
+      </category>
+      <wizard
+            category="valable.wizard.file.importCategory"
+            class="valable.wizard.file.ValaImportWizard"
+            icon="icons/sample.gif"
+            id="valable.wizard.file.ValaImportWizard"
+            name="Import Vala File">
+         <description>
+            Import a file from the local file system into the workspace.
+         </description>
+      </wizard>
+   </extension>
 
 </plugin>

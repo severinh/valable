@@ -36,5 +36,5 @@ public interface IGTKDocLanguageWords {
 						 "structfield",
 						 "classname",
 						 "emphasis",
-						 "filename" }; 	
+						 "filename" };
 }

@@ -13,6 +13,8 @@ package valable.editors;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
@@ -21,6 +23,7 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
+import valable.editors.doc.GTKDocCompletionProcessor;
 import valable.editors.doc.GTKDocScanner;
 import valable.editors.util.IColorConstants;
 import valable.editors.util.ColorManager;
@@ -90,6 +93,20 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 			ISourceViewer sourceViewer, String contentType) {
 		IAutoEditStrategy[] indent = { new ValaAutoIndentStrategy() };
 		return indent;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getContentAssistant(org.eclipse.jface.text.source.ISourceViewer)
+	 */
+	@Override
+	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
+		ContentAssistant assistant = new ContentAssistant();
+		
+		assistant.enableAutoActivation(true);
+		//assistant.setContentAssistProcessor(new JavaCompletionProcessor(), IDocument.DEFAULT_CONTENT_TYPE);
+		assistant.setContentAssistProcessor(new GTKDocCompletionProcessor(), ValaPartitionScanner.GTKDOC_COMMENT);
+		
+		return assistant;
 	}
 
 	
