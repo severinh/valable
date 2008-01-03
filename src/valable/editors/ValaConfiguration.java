@@ -18,10 +18,8 @@
  */
 package valable.editors;
 
-import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
@@ -34,13 +32,12 @@ import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import valable.editors.doc.GTKDocScanner;
 import valable.editors.util.IColorConstants;
 import valable.editors.util.ColorManager;
+import valable.editors.vala.ValaAutoIndentStrategy;
 import valable.editors.vala.ValaCodeScanner;
-import valable.editors.vala.ValaDoubleClickStrategy;
 import valable.editors.vala.ValaPartitionScanner;
 
 public class ValaConfiguration extends SourceViewerConfiguration {
 	
-	private ValaDoubleClickStrategy doubleClickStrategy;
 	private ValaCodeScanner codeScanner;
 	private GTKDocScanner docScanner;
 	private ColorManager colorManager;
@@ -53,14 +50,6 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		return new String[] {
 			IDocument.DEFAULT_CONTENT_TYPE,
 			ValaPartitionScanner.VALA_MULTILINE_COMMENT };
-	}
-	
-	public ITextDoubleClickStrategy getDoubleClickStrategy(
-		ISourceViewer sourceViewer,
-		String contentType) {
-		if (doubleClickStrategy == null)
-			doubleClickStrategy = new ValaDoubleClickStrategy();
-		return doubleClickStrategy;
 	}
 
 	protected ValaCodeScanner getValaScanner() {
@@ -107,7 +96,7 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 	@Override
 	public IAutoEditStrategy[] getAutoEditStrategies(
 			ISourceViewer sourceViewer, String contentType) {
-		IAutoEditStrategy[] indent = { new DefaultIndentLineAutoEditStrategy() };
+		IAutoEditStrategy[] indent = { new ValaAutoIndentStrategy() };
 		return indent;
 	}
 

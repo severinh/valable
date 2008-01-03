@@ -70,7 +70,7 @@ public class GTKDocScanner extends RuleBasedScanner
 		for(String f : function)
 			rules.add(new SingleLineRule(String.format("%s:", f), " ", other));
 		
-		// TODO : Rule for function()
+		rules.add(new SingleLineRule(" ", "()", tag));
 		
 		IRule[] r = new IRule[rules.size()];
 		rules.toArray(r);

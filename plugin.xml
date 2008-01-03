@@ -29,5 +29,70 @@
             class="valable.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            file-extensions="vala"
+            id="valable.valafile"
+            name="Vala File">
+      </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="valable.wizard.ValaCategory"
+            name="Vala">
+      </category>
+      <wizard
+            canFinishEarly="false"
+            category="valable.wizard.ValaCategory"
+            class="valable.wizard.project.ValaProjectWizard"
+            finalPerspective="valable.perspective.ValaPerspective"
+            hasPages="true"
+            id="valable.wizard.project.ValaProject"
+            name="Vala Project"
+            preferredPerspectives="valable.perspective.ValaPerspective"
+            project="true">
+      </wizard>
+   </extension>
+   <extension
+         id="valable.nature.ValaNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="valable.nature.ValaNature">
+         </run>
+      </runtime>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="valable.perspective.ValaPerspectiveFactory"
+            fixed="false"
+            id="valable.perspective.ValaPerspective"
+            name="Vala">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="valable.view.ValaResourceNavigator"
+            id="valable.view.ValaResourceView"
+            name="Vala Resource Navigator">
+      </view>
+   </extension>
+   <extension
+         id="id1"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            callOnEmptyDelta="false"
+            hasNature="true"
+            isConfigurable="false">
+         <run
+               class="valable.builder.ValaProjectBuilder">
+         </run>
+      </builder>
+   </extension>
 
 </plugin>
