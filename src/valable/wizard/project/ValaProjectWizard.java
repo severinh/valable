@@ -79,11 +79,11 @@ public class ValaProjectWizard extends Wizard implements INewWizard {
 	private IProject createProject() {
 		final IProject project = projectPage.getProjectHandle();
 		IPath projectPath = projectPage.getProjectPath();
-        /*IPath defaultPath = Platform.getLocation();
+        IPath defaultPath = Platform.getLocation();
 
         if (defaultPath.equals(projectPath)){
         	projectPath = null;
-        }*/
+        }
 
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         final IProjectDescription description = workspace.newProjectDescription(project.getName());

@@ -200,7 +200,7 @@ public class ValaProjectWizardPage extends WizardPage {
 	}
 
 	IPath getProjectPath() {
-        return new Path(locationText.getText().trim());
+        return (new Path(locationText.getText().trim())).removeLastSegments(1);
     }
 
 	IProject getProjectHandle() {
