@@ -32,20 +32,22 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 import valable.ValaPlugin;
 
 public class ValaProjectWizardPage extends WizardPage {
 	
-	Text projectNameText;
-	Text locationText;
-	Text authorNameText;
-	Text authorEmailText;
+	private Text projectNameText;
+	private Text locationText;
+	private Text authorNameText;
+	private Text authorEmailText;
 	
-	Button licenseCheckBox;
+	private Button licenseCheckBox;
 	
 	/**
 	 * Convenient method to easily get localized strings.
@@ -148,8 +150,7 @@ public class ValaProjectWizardPage extends WizardPage {
 		authorEmailText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				String content = authorEmailText.getText();
-				if(content.matches("")) {
-					// TODO : empty string or email regexp
+				if(content.matches("^(^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$)?$")) {
 					setMessage(_("wizard.project.description"), NONE);
 				}else{
 					setMessage(_("wizard.project.info.email.malformed"), WARNING);
@@ -197,5 +198,17 @@ public class ValaProjectWizardPage extends WizardPage {
 		setPageComplete(validatePage());
 		setControl(control);
 	}
+
+	IPath getProjectPath() {
+        return new Path(locationText.getText().trim());
+    }
+
+	IProject getProjectHandle() {
+        return ResourcesPlugin.getWorkspace().getRoot().getProject(getProjectName());
+    }
+
+	String getProjectName() {
+		return projectNameText.getText().trim();
+    }
 
 }

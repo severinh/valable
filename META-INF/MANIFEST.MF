@@ -1,15 +1,22 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Valable Plug-in
+Bundle-Name: Vala Plug-in
 Bundle-SymbolicName: valable;singleton:=true
 Bundle-Version: 0.1
 Bundle-Activator: valable.ValaPlugin
-Require-Bundle: org.eclipse.ui.editors,
- org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.jface.text,
- org.eclipse.core.resources,
- org.eclipse.ui.ide,
- org.eclipse.search,
- org.eclipse.ui.console
+Require-Bundle: org.eclipse.ui.editors,org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.core.resources,org.eclipse.ui.ide,org.eclipse.search,org.eclipse.ui.console
 Eclipse-LazyStart: true
+Export-Package: valable,
+ valable.builder,
+ valable.data,
+ valable.editors,
+ valable.editors.doc,
+ valable.editors.util,
+ valable.editors.vala,
+ valable.job,
+ valable.nature,
+ valable.perspective,
+ valable.preferences,
+ valable.view,
+ valable.wizard.file,
+ valable.wizard.project

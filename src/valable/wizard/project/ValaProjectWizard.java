@@ -26,7 +26,9 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
 import valable.nature.ValaNature;
@@ -41,7 +43,7 @@ public class ValaProjectWizard extends Wizard implements INewWizard {
 	private IStructuredSelection selection;
 
 	private ValaProjectWizardPage projectPage;
-	
+
 	public ValaProjectWizard() {
 		super();
 		setNeedsProgressMonitor(true);
@@ -75,18 +77,17 @@ public class ValaProjectWizard extends Wizard implements INewWizard {
 	}
 
 	private IProject createProject() {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		
-		// Get a handle from the workspace for the new project
-		String projectName = projectPage.projectNameText.getText().trim();
-		final IProject project = workspace.getRoot().getProject(projectName);
+		final IProject project = projectPage.getProjectHandle();
+		IPath projectPath = projectPage.getProjectPath();
+        /*IPath defaultPath = Platform.getLocation();
 
-		
-		// Set the project location in the project description
-		String projectPath = projectPage.locationText.getText().trim();
-		final IProjectDescription description = workspace.newProjectDescription(projectName);
-		// TODO : specify the real location of the project
-		//description.setLocation(new Path(projectPath));
+        if (defaultPath.equals(projectPath)){
+        	projectPath = null;
+        }*/
+
+        IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        final IProjectDescription description = workspace.newProjectDescription(project.getName());
+        description.setLocation(projectPath);
 		
 		// Instanciate a project creation operation
 		WorkspaceModifyOperation projectCreation = new WorkspaceModifyOperation() {
