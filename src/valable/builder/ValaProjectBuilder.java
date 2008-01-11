@@ -27,7 +27,7 @@ import valable.job.ValaBuildJob;
 public class ValaProjectBuilder extends IncrementalProjectBuilder {
 	
 	public static final String ID = "valable.builder.ValaProjectBuilder";
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.resources.IncrementalProjectBuilder#build(int, java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
 	 */

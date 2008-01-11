@@ -35,7 +35,8 @@
             base-type="org.eclipse.core.runtime.text"
             file-extensions="vala"
             id="valable.valafile"
-            name="Vala File">
+            name="Vala File"
+            priority="high">
       </content-type>
    </extension>
    <extension
@@ -50,6 +51,7 @@
             class="valable.wizard.project.ValaProjectWizard"
             finalPerspective="valable.perspective.ValaPerspective"
             hasPages="true"
+            icon="icons/sample.gif"
             id="valable.wizard.project.ValaProject"
             name="Vala Project"
             preferredPerspectives="valable.perspective.ValaPerspective"

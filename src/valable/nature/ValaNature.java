@@ -31,7 +31,7 @@ public class ValaNature implements IProjectNature {
 	 */
 	@Override
 	public void configure() throws CoreException {
-
+		addBuilders(project, new NullProgressMonitor());
 	}
 
 	/*
@@ -112,9 +112,6 @@ public class ValaNature implements IProjectNature {
         newNatures[oldNatures.length] = ValaNature.ID;
         description.setNatureIds(newNatures);
 		project.setDescription(description, monitor);
-		
-		// Add the builders
-		addBuilders(project, monitor);
 		
 		return project.getNature(ValaNature.ID);
 	}
