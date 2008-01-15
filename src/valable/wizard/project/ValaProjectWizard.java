@@ -19,6 +19,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -29,25 +30,26 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
+import valable.builder.ValaProjectBuilder;
 import valable.nature.ValaNature;
 
-
-
 public class ValaProjectWizard extends Wizard implements INewWizard {
-	
+
 	public static final String ID = "valable.wizard.project.ValaProject";
-	
+
 	private IWorkbench workbench;
 	private IStructuredSelection selection;
 
 	private ValaProjectWizardPage projectPage;
-	
+
 	public ValaProjectWizard() {
 		super();
 		setNeedsProgressMonitor(true);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.wizard.Wizard#addPages()
 	 */
 	@Override
@@ -56,50 +58,54 @@ public class ValaProjectWizard extends Wizard implements INewWizard {
 		this.addPage(projectPage);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
 	public boolean performFinish() {
 		IProject project = createProject();
-		if(project == null) {
+		if (project == null) {
 			return false;
 		}
-		
+
 		IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
 		try {
-			workbench.showPerspective("valable.perspective.ValaPerspective", activeWindow);
-		} catch (WorkbenchException e) {}
-		
+			workbench.showPerspective("valable.perspective.ValaPerspective",
+					activeWindow);
+		} catch (WorkbenchException e) {
+		}
+
 		return true;
 	}
 
 	private IProject createProject() {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		
+
 		// Get a handle from the workspace for the new project
 		String projectName = projectPage.projectNameText.getText().trim();
 		final IProject project = workspace.getRoot().getProject(projectName);
 
-		
 		// Set the project location in the project description
 		String projectPath = projectPage.locationText.getText().trim();
-		final IProjectDescription description = workspace.newProjectDescription(projectName);
+		final IProjectDescription description = workspace
+				.newProjectDescription(projectName);
 		// TODO : specify the real location of the project
-		//description.setLocation(new Path(projectPath));
-		
+		// description.setLocation(new Path(projectPath));
+
 		// Instanciate a project creation operation
 		WorkspaceModifyOperation projectCreation = new WorkspaceModifyOperation() {
-			
+
 			@Override
 			protected void execute(IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException,
 					InterruptedException {
 				createProject(project, description, monitor);
 			}
-			
+
 		};
-		
+
 		// Run the project creation operation
 		try {
 			getContainer().run(true, true, projectCreation);
@@ -110,29 +116,60 @@ public class ValaProjectWizard extends Wizard implements INewWizard {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return project;
 	}
-	
-	private void createProject(IProject project, IProjectDescription description, 
-			IProgressMonitor monitor) throws CoreException {
+
+	private void createProject(IProject project,
+			IProjectDescription description, IProgressMonitor monitor)
+			throws CoreException {
 		try {
 			monitor.beginTask("valaProjectCreation", 3);
-			
+
 			project.create(description, new SubProgressMonitor(monitor, 1));
-			project.open(IResource.BACKGROUND_REFRESH, 
-					new SubProgressMonitor(monitor, 1));
-			
+			project.open(IResource.BACKGROUND_REFRESH, new SubProgressMonitor(
+					monitor, 1));
+
 			// TODO : create generated files
-			
-			ValaNature.addNature(project, new SubProgressMonitor(monitor, 1));
+
+			addBuilders(project, new SubProgressMonitor(monitor, 1));
 		} finally {
 			monitor.done();
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+	private static void addBuilders(IProject project, IProgressMonitor monitor)
+			throws CoreException {
+		IProjectDescription description = project.getDescription();
+		ICommand[] commands = description.getBuildSpec();
+		boolean found = false;
+
+		for (ICommand command : commands) {
+			if (command.getBuilderName().equals(ValaProjectBuilder.ID)) {
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) {
+			// Add builder to the project
+			ICommand command = description.newCommand();
+			command.setBuilderName(ValaProjectBuilder.ID);
+			ICommand[] newCommands = new ICommand[commands.length + 1];
+
+			// Add it before other builders
+			System.arraycopy(commands, 0, newCommands, 1, commands.length);
+			newCommands[0] = command;
+			description.setBuildSpec(newCommands);
+			project.setDescription(description, null);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
+	 *      org.eclipse.jface.viewers.IStructuredSelection)
 	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {

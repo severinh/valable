@@ -59,15 +59,6 @@
       </wizard>
    </extension>
    <extension
-         id="valable.nature.ValaNature"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run
-               class="valable.nature.ValaNature">
-         </run>
-      </runtime>
-   </extension>
-   <extension
          point="org.eclipse.ui.perspectives">
       <perspective
             class="valable.perspective.ValaPerspectiveFactory"
