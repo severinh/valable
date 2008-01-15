@@ -23,7 +23,6 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
-import valable.editors.gtkdoc.GTKDocCompletionProcessor;
 import valable.editors.gtkdoc.GTKDocScanner;
 import valable.editors.util.IColorConstants;
 import valable.editors.util.ColorManager;
@@ -101,11 +100,6 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 	@Override
 	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
 		ContentAssistant assistant = new ContentAssistant();
-		
-		assistant.enableAutoActivation(true);
-		//assistant.setContentAssistProcessor(new JavaCompletionProcessor(), IDocument.DEFAULT_CONTENT_TYPE);
-		assistant.setContentAssistProcessor(new GTKDocCompletionProcessor(), ValaPartitionScanner.GTKDOC_COMMENT);
-		
 		return assistant;
 	}
 
