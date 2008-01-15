@@ -88,7 +88,7 @@
          id="id1"
          point="org.eclipse.core.resources.builders">
       <builder
-            callOnEmptyDelta="false"
+            callOnEmptyDelta="true"
             hasNature="true"
             isConfigurable="false">
          <run

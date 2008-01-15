@@ -41,8 +41,6 @@ public class ValaNature implements IProjectNature {
 	 */
 	@Override
 	public void deconfigure() throws CoreException {
-		// TODO Auto-generated method stub
-
 	}
 
 	/* (non-Javadoc)

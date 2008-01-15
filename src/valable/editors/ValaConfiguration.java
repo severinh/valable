@@ -23,8 +23,8 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
-import valable.editors.doc.GTKDocCompletionProcessor;
-import valable.editors.doc.GTKDocScanner;
+import valable.editors.gtkdoc.GTKDocCompletionProcessor;
+import valable.editors.gtkdoc.GTKDocScanner;
 import valable.editors.util.IColorConstants;
 import valable.editors.util.ColorManager;
 import valable.editors.vala.ValaAutoIndentStrategy;

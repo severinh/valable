@@ -8,7 +8,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  */
-package valable.editors.doc;
+package valable.editors.gtkdoc;
 
 public interface IGTKDocLanguageWords {
 	
