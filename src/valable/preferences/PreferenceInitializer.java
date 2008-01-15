@@ -26,6 +26,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		IPreferenceStore store = ValaPlugin.getDefault().getPreferenceStore();
 		store.setDefault(PreferenceConstants.P_VALAC_EXE, "/usr/local/bin/valac");
 		store.setDefault(PreferenceConstants.P_VAPI_PATH, "/usr/local/share/vala/vapi/");
+		store.setDefault(PreferenceConstants.P_OUTPUT_FOLDER, "/output/");
 	}
 
 }

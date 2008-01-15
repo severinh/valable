@@ -33,6 +33,8 @@ public class ValaPreferencePage extends FieldEditorPreferencePage
 				_("preferences.general.valac.executable"), getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_VAPI_PATH, 
 				_("preferences.general.vapi.path"), getFieldEditorParent()));	
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_OUTPUT_FOLDER, 
+				_("preferences.general.output.directory"), getFieldEditorParent()));	
 	}
 
 	/* (non-Javadoc)

@@ -27,44 +27,53 @@ import valable.preferences.PreferenceConstants;
 public class ValaBuildJob extends Job {
 
 	private List<IFile> filesToCompile;
-	
+	private String valac;
+	private String vapi;
+	private String output;
+
 	public ValaBuildJob(String name) {
 		super(name);
 	}
-	
-	public ValaBuildJob(List<IFile> filesToCompile) {
+
+	public ValaBuildJob(List<IFile> filesToCompile, String valac, String vapi,
+			String output) {
 		this("ValaBuildJob");
+
+		// TODO : add --pkg
 		this.filesToCompile = filesToCompile;
+		this.valac = valac;
+		this.vapi = vapi;
+		this.output = output;
 	}
 
 	/**
 	 * Builds the vala compiler command to compile the files from the given list
-	 * @param filesToCompile the list of files to compile with that command
+	 * 
+	 * @param filesToCompile
+	 *            the list of files to compile with that command
 	 * @return the valac command to execute to compile the files
 	 */
-	private String buildValacCommand(List<IFile> filesToCompile) {
+	private String buildValacCommand() {
 		IPreferenceStore store = ValaPlugin.getDefault().getPreferenceStore();
 		StringBuffer command = new StringBuffer();
-		
+
 		// Vala compiler program
-		command.append(store.getString(PreferenceConstants.P_VALAC_EXE));
-		
-		// TODO : define a build directory
+		command.append(valac);
+
 		// VAPI directory
-		//command.append(String.format(" --directory=%s", "/home/jprieur/tmp/"));
-		
-		// VAPI directory
-		command.append(String.format(" --vapidir=%s", 
-				store.getString(PreferenceConstants.P_VAPI_PATH)));
-		
+		command.append(String.format(" --vapidir=%s", vapi));
+
+		// Output directory
+		command.append(String.format(" --directory=%s", output));
+
 		// Vala files to compile
-		for(IFile file : filesToCompile) {
+		for (IFile file : filesToCompile) {
 			command.append(String.format(" %s", file.getLocation()));
 		}
-		
+
 		return command.toString();
 	}
-	
+
 	protected String getStringFromStream(InputStream stream) throws IOException {
 		StringBuffer buffer = new StringBuffer();
 		byte[] b = new byte[100];
@@ -78,26 +87,29 @@ public class ValaBuildJob extends Job {
 		}
 		return buffer.toString();
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		Runtime runtime = Runtime.getRuntime();
-		
-		String command = buildValacCommand(filesToCompile);
+
+		String command = buildValacCommand();
 		try {
 			System.out.println(command);
 			Process process = runtime.exec(command);
-			
+
+			// TODO : something better is needed here, output to console
 			InputStream stream = process.getInputStream();
 			System.out.println(getStringFromStream(stream));
-			
+
 		} catch (IOException e) {
 			return Status.CANCEL_STATUS;
 		}
-		
+
 		return Status.OK_STATUS;
 	}
 

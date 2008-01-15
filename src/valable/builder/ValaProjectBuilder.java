@@ -22,9 +22,13 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jface.preference.IPreferenceStore;
 
+import valable.ValaPlugin;
 import valable.job.ValaBuildJob;
+import valable.preferences.PreferenceConstants;
 
 public class ValaProjectBuilder extends IncrementalProjectBuilder {
 
@@ -75,7 +79,19 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 			}
 		}
 
-		ValaBuildJob job = new ValaBuildJob(filesToCompile);
+		IPreferenceStore store = ValaPlugin.getDefault().getPreferenceStore();
+		IFolder folder = getProject().getFolder(
+				store.getString(PreferenceConstants.P_OUTPUT_FOLDER));
+		if (!folder.exists()) {
+			folder.create(true, true, monitor);
+		}
+
+		String valac = store.getString(PreferenceConstants.P_VALAC_EXE);
+		String vapi = store.getString(PreferenceConstants.P_VAPI_PATH);
+		// TODO : fix this
+		String output = "." + store.getString(PreferenceConstants.P_OUTPUT_FOLDER);
+
+		ValaBuildJob job = new ValaBuildJob(filesToCompile, valac, vapi, output);
 		job.schedule();
 
 		monitor.done();
@@ -133,8 +149,18 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 	 */
 	@Override
 	protected void clean(IProgressMonitor monitor) throws CoreException {
-		// TODO : clean the build directory
-		super.clean(monitor);
+		// Cleaning consists in deleting the content of the output folder
+		IPreferenceStore store = ValaPlugin.getDefault().getPreferenceStore();
+		String output = store.getString(PreferenceConstants.P_OUTPUT_FOLDER);
+
+		IFolder folder = getProject().getFolder(output);
+		if (!folder.exists()) {
+			return;
+		}
+
+		for (IResource resource : folder.members()) {
+			resource.delete(true, monitor);
+		}
 	}
 
 }

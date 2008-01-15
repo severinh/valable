@@ -14,5 +14,6 @@ public class PreferenceConstants {
 
 	public static final String P_VALAC_EXE = "valacPathPreference";
 	public static final String P_VAPI_PATH = "vapiPathPreference";
+	public static final String P_OUTPUT_FOLDER = "outputPathPreference";
 	
 }

@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
 import valable.builder.ValaProjectBuilder;
-import valable.nature.ValaNature;
 
 public class ValaProjectWizard extends Wizard implements INewWizard {
 

@@ -20,7 +20,7 @@
       <page
             class="valable.preferences.ValaPreferencePage"
             id="valable.preferences.ValaPreferencePage"
-            name="Vala Preferences">
+            name="Vala">
       </page>
    </extension>
    <extension
