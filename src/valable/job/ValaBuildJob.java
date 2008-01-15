@@ -49,6 +49,10 @@ public class ValaBuildJob extends Job {
 		// Vala compiler program
 		command.append(store.getString(PreferenceConstants.P_VALAC_EXE));
 		
+		// TODO : define a build directory
+		// VAPI directory
+		//command.append(String.format(" --directory=%s", "/home/jprieur/tmp/"));
+		
 		// VAPI directory
 		command.append(String.format(" --vapidir=%s", 
 				store.getString(PreferenceConstants.P_VAPI_PATH)));

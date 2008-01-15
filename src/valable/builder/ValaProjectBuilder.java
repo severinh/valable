@@ -34,12 +34,17 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
 			throws CoreException {
+		IProject[] built = null;
 		if(kind == FULL_BUILD) {
 			fullBuild(monitor);
+			built = new IProject[1];
+			built[0] = getProject();
 		} else {
-			// TODO : incremental build
+			// TODO : incremental or delta build
 		}
-		return null;
+		
+		if(built == null) built = new IProject[0];
+		return built;
 	}
 
 	private void fullBuild(IProgressMonitor monitor) throws CoreException {
@@ -50,7 +55,9 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 		
 		for(IResource resource : members) {
 			if(resource.getType() == IResource.FILE) {
-				filesToCompile.add((IFile)resource);
+				if(resource.getName().endsWith(".vala")){
+					filesToCompile.add((IFile)resource);
+				}
 			} else if(resource.getType() == IResource.FOLDER) {
 				// TODO : grab vala files from sub folders
 			}
