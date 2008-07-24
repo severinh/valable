@@ -4,7 +4,14 @@ Bundle-Name: Vala Plug-in
 Bundle-SymbolicName: valable;singleton:=true
 Bundle-Version: 0.1
 Bundle-Activator: valable.ValaPlugin
-Require-Bundle: org.eclipse.ui.editors,org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.core.resources,org.eclipse.ui.ide,org.eclipse.search,org.eclipse.ui.console
+Require-Bundle: org.eclipse.ui.editors,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.core.resources,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.console,
+ org.eclipse.ui.views
 Eclipse-LazyStart: true
 Export-Package: valable,
  valable.builder,
@@ -19,3 +26,4 @@ Export-Package: valable,
  valable.view,
  valable.wizard.file,
  valable.wizard.project
+Import-Package: org.eclipse.ui.texteditor

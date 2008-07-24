@@ -11,19 +11,21 @@
 package valable.builder;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import valable.ValaPlugin;
@@ -43,18 +45,15 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
 			throws CoreException {
-		IProject[] built = null;
-		if (kind == FULL_BUILD) {
-			fullBuild(monitor);
-			built = new IProject[1];
-			built[0] = getProject();
-		} else {
-			// TODO : incremental or delta build
-		}
 
-		if (built == null)
-			built = new IProject[0];
-		return built;
+		IResourceDelta delta = null;
+		
+		if (kind == AUTO_BUILD || kind == INCREMENTAL_BUILD)
+			delta = getDelta(getProject());
+
+		fullBuild(monitor, delta);
+
+		return new IProject[0];
 	}
 
 	/**
@@ -63,18 +62,18 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 	 * @param monitor
 	 * @throws CoreException
 	 */
-	private void fullBuild(IProgressMonitor monitor) throws CoreException {
-		List<IFile> filesToCompile = new ArrayList<IFile>();
+	private void fullBuild(IProgressMonitor monitor, IResourceDelta delta) throws CoreException {
+		Set<IFile> filesToCompile = new HashSet<IFile>();
 
 		monitor.beginTask("ValaProjectBuilding", IProgressMonitor.UNKNOWN);
 		IResource[] members = getProject().members();
 
 		for (IResource resource : members) {
 			if (resource.getType() == IResource.FILE) {
-				addValaCompilerCompliantFile((IFile) resource, filesToCompile);
+				addValaCompilerCompliantFile((IFile) resource, filesToCompile, delta);
 			} else if (resource.getType() == IResource.FOLDER) {
 				for (IFile file : getFileChildren((IFolder) resource)) {
-					addValaCompilerCompliantFile(file, filesToCompile);
+					addValaCompilerCompliantFile(file, filesToCompile, delta);
 				}
 			}
 		}
@@ -86,10 +85,9 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 			folder.create(true, true, monitor);
 		}
 
-		String valac = store.getString(PreferenceConstants.P_VALAC_EXE);
-		String vapi = store.getString(PreferenceConstants.P_VAPI_PATH);
-		// TODO : fix this
-		String output = "." + store.getString(PreferenceConstants.P_OUTPUT_FOLDER);
+		String valac  = store.getString(PreferenceConstants.P_VALAC_EXE);
+		String vapi   = store.getString(PreferenceConstants.P_VAPI_PATH);
+		String output = folder.getLocation().toString();
 
 		ValaBuildJob job = new ValaBuildJob(filesToCompile, valac, vapi, output);
 		job.schedule();
@@ -99,19 +97,23 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 
 	/**
 	 * Adds the given <code>file</code> resource to the given list only if its
-	 * extension complies with the possible inputs for the valac compiler.
+	 * extension complies with the possible inputs for the valac compiler and
+	 * it was affected by a given delta.
 	 * 
 	 * @param file
 	 *            the file resource
 	 * @param files
 	 *            the list in which the file should be added
+	 * @param delta
+	 *            specifies which files have been changed, or <var>null</var> if all.
 	 */
 	private static void addValaCompilerCompliantFile(IFile file,
-			List<IFile> files) {
+			Collection<IFile> files, IResourceDelta delta) {
 		if (file.getName().endsWith(".vala")
 				|| file.getName().endsWith(".vapi")
 				|| file.getName().endsWith(".c")) {
-			files.add((IFile) file);
+			if (delta == null || delta.findMember(file.getProjectRelativePath()) != null)
+				files.add((IFile) file);
 		}
 	}
 

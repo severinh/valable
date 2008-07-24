@@ -10,9 +10,13 @@
  */
 package valable.preferences;
 
-import org.eclipse.jface.preference.*;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.FileFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+
 import valable.ValaPlugin;
 
 public class ValaPreferencePage extends FieldEditorPreferencePage 
@@ -33,7 +37,7 @@ public class ValaPreferencePage extends FieldEditorPreferencePage
 				_("preferences.general.valac.executable"), getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_VAPI_PATH, 
 				_("preferences.general.vapi.path"), getFieldEditorParent()));	
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_OUTPUT_FOLDER, 
+		addField(new StringFieldEditor(PreferenceConstants.P_OUTPUT_FOLDER, 
 				_("preferences.general.output.directory"), getFieldEditorParent()));	
 	}
 

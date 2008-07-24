@@ -14,6 +14,7 @@ import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
@@ -24,10 +25,11 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
 import valable.editors.gtkdoc.GTKDocScanner;
-import valable.editors.util.IColorConstants;
 import valable.editors.util.ColorManager;
+import valable.editors.util.IColorConstants;
 import valable.editors.vala.ValaAutoIndentStrategy;
 import valable.editors.vala.ValaCodeScanner;
+import valable.editors.vala.ValaCompletionProcessor;
 import valable.editors.vala.ValaPartitionScanner;
 
 public class ValaConfiguration extends SourceViewerConfiguration {
@@ -94,15 +96,16 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		return indent;
 	}
 
-	/* (non-Javadoc)
+	
+	/**
 	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getContentAssistant(org.eclipse.jface.text.source.ISourceViewer)
 	 */
 	@Override
-	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
-		ContentAssistant assistant = new ContentAssistant();
-		return assistant;
-	}
-
-	
-	
+    public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
+        ContentAssistant ca = new ContentAssistant();
+        IContentAssistProcessor cap = new ValaCompletionProcessor();
+        ca.setContentAssistProcessor(cap, IDocument.DEFAULT_CONTENT_TYPE);
+        ca.setInformationControlCreator(getInformationControlCreator(sourceViewer));
+        return ca;
+     }
 }

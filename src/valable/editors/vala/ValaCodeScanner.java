@@ -12,13 +12,20 @@ package valable.editors.vala;
 
 import java.util.ArrayList;
 
-import org.eclipse.jface.text.rules.*;
-import org.eclipse.jface.text.*;
+import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.rules.EndOfLineRule;
+import org.eclipse.jface.text.rules.IRule;
+import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.RuleBasedScanner;
+import org.eclipse.jface.text.rules.SingleLineRule;
+import org.eclipse.jface.text.rules.Token;
+import org.eclipse.jface.text.rules.WhitespaceRule;
+import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
 
 import valable.editors.util.ColorManager;
-import valable.editors.util.WhitespaceDetector;
 import valable.editors.util.ValaWordDetector;
+import valable.editors.util.WhitespaceDetector;
 
 public class ValaCodeScanner extends RuleBasedScanner 
 	implements IValaLanguageWords {
