@@ -80,4 +80,26 @@ public class ValaPackage {
 	public void setVapiFile(File vapiFile) {
 		this.vapiFile = vapiFile;
 	}
+	
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public final boolean equals(Object arg) {
+		if (arg == null || !(arg instanceof ValaPackage))
+			return false;
+		
+		ValaPackage other = (ValaPackage)arg;
+		return name.equals(other.name) && pkgConfigName.equals(other.pkgConfigName);
+	}
+	
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return name.hashCode() + pkgConfigName.hashCode();
+	}
 }

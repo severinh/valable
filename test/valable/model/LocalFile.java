@@ -425,13 +425,15 @@ public class LocalFile implements IFile {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	
+	/**
 	 * @see org.eclipse.core.resources.IResource#getFileExtension()
 	 */
 	public String getFileExtension() {
-		// TODO Auto-generated method stub
-		return null;
+		String[] parts = file.getName().split("\\.");
+		return parts[parts.length - 1];
 	}
+	
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.resources.IResource#getLocalTimeStamp()

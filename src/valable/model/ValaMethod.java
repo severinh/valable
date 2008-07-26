@@ -1,4 +1,4 @@
-/* ValaField.java
+/* ValaMethod.java
  *
  * Copyright (C) 2008  Andrew Flegg <andrew@bleb.org>
  *
@@ -19,10 +19,14 @@ import java.util.Set;
 /**
  * Encapsulate information about a method in a {@link ValaType}.
  */
-public class ValaMethod extends ValaEntity {
+public class ValaMethod extends ValaEntity implements HasModifiers {
 	private Set<String>  modifiers = new HashSet<String>();
 	private String       type;
 	private Map<String, String> signature = new LinkedHashMap<String, String>();
+
+	// This should really be a more complete AST, taking into account
+	// blocks, scoping and types...
+	private Set<ValaField>  localVariables = new HashSet<ValaField>();
 	
 	
 	/**
@@ -64,5 +68,25 @@ public class ValaMethod extends ValaEntity {
 	 */
 	public Map<String, String> getSignature() {
 		return signature;
+	}
+	
+	
+	/**
+	 * @return the visibility contained in {@link #modifiers}.
+	 */
+	public Visibility getVisibility() {
+		for (Visibility v : Visibility.values())
+			if (modifiers.contains(v.toString().toLowerCase()))
+				return v;
+		
+		return Visibility.DEFAULT;
+	}
+
+
+	/**
+	 * @return the localVariables
+	 */
+	public Set<ValaField> getLocalVariables() {
+		return localVariables;
 	}
 }

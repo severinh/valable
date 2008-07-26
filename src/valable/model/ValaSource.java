@@ -11,9 +11,11 @@
 package valable.model;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -36,7 +38,7 @@ public class ValaSource {
 	
 	private final ValaProject     project;
 	private final IFile           source;
-	private List<ValaPackage>     uses  = new ArrayList<ValaPackage>();
+	private Set<ValaPackage>      uses  = new LinkedHashSet<ValaPackage>();
 	private Map<String, ValaType> types = new HashMap<String, ValaType>();
 	
 	
@@ -67,15 +69,27 @@ public class ValaSource {
 	 * 
 	 * @throws CoreException if the file is unparseable 
 	 */
-	public void parse() throws CoreException {
+	public List<String> parse() throws CoreException {
 		uses.clear();
 		types.clear();
 		
 		// -- Find usings...
 		//
-		Scanner scanner = new Scanner(source.getContents());
+		InputStream contents;
+		try {
+			contents = source.getContents();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		Scanner      scanner = new Scanner(contents);
+		List<String> lines   = new ArrayList<String>(); 
 		while (scanner.hasNextLine()) {
-			Matcher matcher = USING.matcher(scanner.nextLine());
+			String  line    = scanner.nextLine();
+			Matcher matcher = USING.matcher(line);
+
+			lines.add(line);
 			if (matcher.matches()) {
 				Set<ValaPackage> pkgs = ValaProject.getAvailablePackages().get(matcher.group(1));
 				if (pkgs != null)
@@ -92,13 +106,16 @@ public class ValaSource {
 				"--language-force=C#",
 				"-f", "-",
 				"-n",
-				"--fields=akiSt",
+				"--sort=no",
+				"--fields=akifSt",
+				"--c#-kinds=+l",
 				source.getLocation().toOSString()});
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new CoreException(Status.CANCEL_STATUS);
 		}
 		
+		System.out.println("\n\n+++ ctags for " + source);
 		scanner = new Scanner(output.getInputStream());
 		while (scanner.hasNextLine()) {
 			String line = scanner.nextLine();
@@ -139,20 +156,32 @@ public class ValaSource {
 				ValaField fieldDefn = new ValaField(name);
 				fieldDefn.setSourceReference(sourceRef);
 				fieldDefn.getModifiers().addAll(Arrays.asList(extraData.get("access").split(",\\s*")));
-				
+				fieldDefn.setType(typeFromLine(lines.get(lineNumber - 1), name));
 				typeDefn.getFields().add(fieldDefn);
 				
-			} else if (type == 'm') {
+			} else if (type == 'm' && extraData.get("access") != null) {
+				// Method invocations also included unless we check for "access:"
 				ValaType   typeDefn   = findTypeForLine(lineNumber);
 				ValaMethod methodDefn = new ValaMethod(name);
 				methodDefn.setSourceReference(sourceRef);
 				methodDefn.getModifiers().addAll(Arrays.asList(extraData.get("access").split(",\\s*")));
+				methodDefn.setType(typeFromLine(lines.get(lineNumber - 1), name));
 				// TODO Signature
 				
 				typeDefn.getMethods().add(methodDefn);
+				
+			} else if (type == 'l') {
+				ValaType   typeDefn   = findTypeForLine(lineNumber);
+				ValaMethod methodDefn = typeDefn.findMethodForLine(lineNumber);
+				ValaField  varDefn    = new ValaField(name);
+				varDefn.setSourceReference(sourceRef);
+				varDefn.setType(typeFromLine(lines.get(lineNumber - 1), name));
+				methodDefn.getLocalVariables().add(varDefn);
 			}
 		}
 		scanner.close();
+		
+		return lines;
 	}
 
 
@@ -166,7 +195,7 @@ public class ValaSource {
 	 * @param lineNumber
 	 * @return ValaType enclosing the given line number.
 	 */
-	private ValaType findTypeForLine(int lineNumber) {
+	public ValaType findTypeForLine(int lineNumber) {
 		SortedSet<ValaType> sortedTypes = new TreeSet<ValaType>(ValaEntity.SOURCE_ORDER);
 		sortedTypes.addAll(types.values());
 
@@ -180,6 +209,26 @@ public class ValaSource {
 		}
 		
 		return lastType;
+	}
+	
+	
+	/**
+	 * Find the declaration of <var>name</var> on the given line and
+	 * return the immediately preceding identifier, assuming that this
+	 * will be the type.
+	 * 
+	 * <p>This is obviously prone to error, but may work in the majority
+	 * of cases until a {@code libvala} wrapper is available.</p>
+	 * 
+	 * @param line
+	 * @param name
+	 * @return
+	 */
+	private String typeFromLine(String line, String name) {
+		Pattern pattern = Pattern.compile(".*?\\b(" + ValaEntity.IDENTIFIER.pattern() + ")\\s+" + name + "\\b.*");
+		Matcher matcher = pattern.matcher(line);
+		
+		return matcher.matches() ? matcher.group(1) : "";
 	}
 
 
@@ -202,9 +251,32 @@ public class ValaSource {
 	/**
 	 * @return the uses
 	 */
-	public List<ValaPackage> getUses() {
+	public Set<ValaPackage> getUses() {
 		return uses;
 	}
+	
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public final boolean equals(Object arg) {
+		if (arg == null || !(arg instanceof ValaSource))
+			return false;
+		
+		ValaSource other = (ValaSource)arg;
+		return source.getName().equals(other.source.getName());
+	}
+	
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return source.getName().hashCode();
+	}
+
 	
 	
 	/**
@@ -248,6 +320,27 @@ public class ValaSource {
 		public ValaSource getSource() {
 			return ValaSource.this;
 		}
+		
+		
+		/**
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		@Override
+		public final boolean equals(Object arg) {
+			if (arg == null || !(arg instanceof SourceReference))
+				return false;
+			
+			SourceReference other = (SourceReference)arg;
+			return line == other.line && column == other.column && getSource().equals(other.getSource());
+		}
+		
+		
+		/**
+		 * @see java.lang.Object#hashCode()
+		 */
+		@Override
+		public int hashCode() {
+			return line * 1000 + column + ValaSource.this.hashCode();
+		}
 	}
-
 }

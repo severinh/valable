@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,10 +34,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.MessageConsole;
 
 import valable.model.ValaPackage;
 import valable.model.ValaProject;
@@ -76,6 +71,8 @@ public class ValaBuildJob extends Job {
 	private String vapi;
 	private String output;
 	private Set<String> packages = new HashSet<String>();
+	
+	private Map<IFile, List<String>> lines = new HashMap<IFile, List<String>>();
 	
 	/**
 	 * Used to retrieve {@link IFile}s from leaf filenames.
@@ -120,7 +117,7 @@ public class ValaBuildJob extends Job {
 			//
 			ValaSource source = project.getSource(file);
 			System.out.println("Parsing [" + source + "] for [" +file + "]");
-			source.parse();
+			lines.put(file, source.parse());
 			
 			// -- Add dependencies...
 			//
@@ -314,18 +311,23 @@ public class ValaBuildJob extends Job {
 					String missingName    = matcher.group(1);
 					String containingType = matcher.group(2);
 					
-					for (IFile compilingFile : filesToCompile) {
-						if (project.hasType(missingName) && project.hasType(containingType))
-							doAgain |= project.getType(containingType).
-							                   getDependencies().
-								               add(project.getType(missingName));
-					}
+					if (project.hasType(missingName) && project.hasType(containingType))
+						doAgain |= project.getType(containingType).
+						                   getDependencies().
+							               add(project.getType(missingName));
 					
 				} else {
 					IMarker marker = reverseFiles.get(file).createMarker(IMarker.PROBLEM);
 					marker.setAttribute(IMarker.MESSAGE, message);
-					marker.setAttribute(IMarker.LINE_NUMBER, startLine);
 					marker.setAttribute(IMarker.SEVERITY, type.severity);
+					marker.setAttribute(IMarker.LOCATION, "Line " + startLine);
+					if (startLine == endLine) {
+						int offset = offsetOfLine(lines.get(reverseFiles.get(file)), startLine);
+						marker.setAttribute(IMarker.CHAR_START, offset + startCol - 1);
+						marker.setAttribute(IMarker.CHAR_END, offset + endCol);
+					} else {
+						marker.setAttribute(IMarker.LINE_NUMBER, startLine);
+					}
 				}
 			}
 
@@ -381,25 +383,22 @@ public class ValaBuildJob extends Job {
 
 		return Status.OK_STATUS;
 	}
-
+	
 	
 	/**
-	 * Find a console suitable for this plugin, or create one if necessary.
+	 * Return the offset of the start of the given line number.
 	 * 
-	 * @param name name of the console
-	 * @return
+	 * @param lines All lines in the file.
+	 * @param lineNumber Line in the file, starting from 1.
+	 * @return offset, from 0 of the start of line <var>lineNumber</var>.
 	 */
-	private MessageConsole findConsole(String name) {
-		ConsolePlugin plugin = ConsolePlugin.getDefault();
-		IConsoleManager conMan = plugin.getConsoleManager();
-		IConsole[] existing = conMan.getConsoles();
-		for (int i = 0; i < existing.length; i++)
-			if (name.equals(existing[i].getName()))
-				return (MessageConsole) existing[i];
-		//no console found, so create a new one
-		MessageConsole myConsole = new MessageConsole(name, null);
-		conMan.addConsoles(new IConsole[] { myConsole });
-		return myConsole;
+	private int offsetOfLine(List<String> lines, int lineNumber) {
+		lineNumber--;
+		int count = 0;
+		for (int i = 0; i < lineNumber; i++) {
+			count += lines.get(i).length() + 1;
+		}
+		
+		return count;
 	}
-
 }

@@ -48,8 +48,8 @@ public class TestValaSource extends TestCase {
 		source.parse();
 		
 		assertEquals("Identified using packages", 2, source.getUses().size());
-		assertEquals("Using libgee", "Gee", source.getUses().get(0).getName());
-		assertEquals("Using vala VAPI", "vala-1.0", source.getUses().get(0).getPkgConfigName());
+		assertEquals("Using libgee", "Gee", source.getUses().iterator().next().getName());
+		assertEquals("Using vala VAPI", "vala-1.0", source.getUses().iterator().next().getPkgConfigName());
 		
 		assertEquals("Types found", 2, source.getTypes().size());
 		

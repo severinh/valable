@@ -11,6 +11,7 @@
 package valable.model;
 
 import java.util.Comparator;
+import java.util.regex.Pattern;
 
 import valable.model.ValaSource.SourceReference;
 
@@ -19,6 +20,9 @@ import valable.model.ValaSource.SourceReference;
  * {@code .vala} file.
  */
 public class ValaEntity {
+
+	public enum Visibility { DEFAULT, PUBLIC, PROTECTED, PRIVATE; }
+
 	
 	/**
 	 * A comparator which ensures that two {@link ValaEntity}s are returned
@@ -36,6 +40,9 @@ public class ValaEntity {
 	
 	private final String    name;
 	private SourceReference sourceReference;
+
+
+	public static final Pattern               IDENTIFIER       = Pattern.compile("[A-Za-z_]([A-Za-z0-9_])*");
 	
 	
 	/**
@@ -79,5 +86,28 @@ public class ValaEntity {
 	@Override
 	public String toString() {
 		return name;
+	}
+	
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object arg) {
+		if (arg == null || !arg.getClass().equals(this.getClass()))
+			return false;
+		
+		ValaEntity other = (ValaEntity)arg;
+		return name.equals(other.name) && sourceReference.equals(other.sourceReference);
+	}
+	
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return (name != null ? name.hashCode() : 0) +
+		       (sourceReference != null ? sourceReference.hashCode() : 0);
 	}
 }

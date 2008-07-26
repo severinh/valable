@@ -40,6 +40,27 @@ public class ValaType extends ValaEntity {
 	public ValaType(String name) {
 		super(name);
 	}
+	
+	
+	/**
+	 * Find the method which contains the given line number.
+	 * 
+	 * @param type
+	 * @param lineNumber
+	 * @return
+	 */
+	public ValaMethod findMethodForLine(int lineNumber) {
+		ValaMethod lastMethod = null;
+		for (ValaMethod method : methods) {
+			if (lastMethod != null && lineNumber >= lastMethod.getSourceReference().getLine() &&
+					lineNumber < method.getSourceReference().getLine())
+				return lastMethod;
+			
+			lastMethod = method;
+		}
+		
+		return lastMethod;
+	}
 
 
 	/**
