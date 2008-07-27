@@ -116,7 +116,6 @@ public class ValaBuildJob extends Job {
 			// -- Parse the file...
 			//
 			ValaSource source = project.getSource(file);
-			System.out.println("Parsing [" + source + "] for [" +file + "]");
 			lines.put(file, source.parse());
 			
 			// -- Add dependencies...
@@ -272,13 +271,8 @@ public class ValaBuildJob extends Job {
 		// TODO Early abort if last mods show no reason to
 		
 		Runtime runtime = Runtime.getRuntime();
-
-//		MessageConsole console = findConsole(valac);
-//		console.clearConsole();
-//		Thread.sleep(100); // Otherwise the console can get cleared before any output
 		
 		PrintStream out = System.out;
-//		PrintStream out = new PrintStream(console.newOutputStream());
 
 		// -- Incrementally build the files, pulling in any dependencies necessary...
 		//
@@ -288,7 +282,6 @@ public class ValaBuildJob extends Job {
 			out.println(Arrays.asList(command) + "\n");
 
 			Process process = runtime.exec(command);
-//			copyToStream(out, process.getInputStream(), process.getErrorStream());
 			Scanner scanner = new Scanner(process.getErrorStream());
 			while (scanner.hasNext()) {
 				String line = scanner.nextLine();
@@ -356,11 +349,7 @@ public class ValaBuildJob extends Job {
 				return run(monitor);
 			}
 			
-		} catch (IOException e) {
-			return Status.CANCEL_STATUS;
-		} catch (InterruptedException e) {
-			return Status.CANCEL_STATUS;
-		} catch (CoreException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return Status.CANCEL_STATUS;
 		}
@@ -373,10 +362,7 @@ public class ValaBuildJob extends Job {
 			Process link = runtime.exec(cmd);
 			copyToStream(out, link.getInputStream(), link.getErrorStream());
 			link.waitFor();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return Status.CANCEL_STATUS;
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return Status.CANCEL_STATUS;
 		}

@@ -10,6 +10,7 @@
  */
 package valable.editors;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ContentAssistAction;
@@ -18,7 +19,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import valable.ValaPlugin;
 import valable.editors.util.ColorManager;
-import valable.editors.vala.ValaOutlinePage;
+import valable.outline.ValaOutlinePage;
 
 public class ValaEditor extends TextEditor {
 
@@ -75,5 +76,13 @@ public class ValaEditor extends TextEditor {
 		action.setActionDefinitionId(id);
 		setAction("ContentAssistProposal", action); 
 		markAsStateDependentAction("ContentAssistProposal", true);
+	}
+	
+	
+	/**
+	 * @return the file represented in this editor.
+	 */
+	public IFile getCurrentFile() {
+        return (IFile)this.getEditorInput().getAdapter(IFile.class);
 	}
 }

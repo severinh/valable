@@ -100,6 +100,6 @@ public class ValaPackage {
 	 */
 	@Override
 	public int hashCode() {
-		return name.hashCode() + pkgConfigName.hashCode();
+		return name.hashCode() + (pkgConfigName != null ? pkgConfigName.hashCode() : 0);
 	}
 }

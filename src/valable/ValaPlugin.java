@@ -11,15 +11,23 @@
 package valable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -33,7 +41,7 @@ import valable.model.ValaEntity.Visibility;
 
 public class ValaPlugin extends AbstractUIPlugin {
 
-	public enum ImageType  { CLASS, INTERFACE, ENUM, FIELD, METHOD, PACKAGE, VARIABLE, UNKNOWN; }
+	public enum ImageType  { FILE, CLASS, INTERFACE, ENUM, FIELD, METHOD, PACKAGE, VARIABLE, UNKNOWN; }
 	public static final String PLUGIN_ID = "valable";
 
 	private static ValaPlugin plugin;
@@ -52,19 +60,46 @@ public class ValaPlugin extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
-		
-		loadIcons();
-		
-		// -- Compile all Vala projects from scratch...
+
+		// -- If the plugin's being initialised twice, only run the setup code once...
 		//
-		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-			IProjectDescription desc = project.getDescription();
-			for (ICommand builder : desc.getBuildSpec()) {
-				if (builder.getBuilderName().equals(ValaProjectBuilder.class.getName())) {
-					// TODO This needs to be moved to some kind of action running in the background
-					System.out.println(project + " is a Vala project. Rebuilding...");
-					project.build(IncrementalProjectBuilder.FULL_BUILD, null);
+		synchronized (ValaPlugin.class) {
+			if (plugin != null)
+				return;
+	
+			plugin = this;
+			
+			loadIcons();
+			
+			// -- Compile all Vala projects from scratch...
+			//
+			Set<String> scheduledTobuild = new HashSet<String>(); 
+			project: for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+				if (!project.isOpen() || scheduledTobuild.contains(project.getName()))
+					continue;
+				
+				IProjectDescription desc = project.getDescription();
+				for (ICommand builder : desc.getBuildSpec()) {
+					if (builder.getBuilderName().equals(ValaProjectBuilder.class.getName())) {
+						scheduledTobuild.add(project.getName());
+						final IProject valaProject = project;
+						WorkspaceJob job = new WorkspaceJob("Rebuilding " + valaProject.getName()) {
+							@Override
+							public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+								try {
+									valaProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+									valaProject.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
+								} catch (Throwable t) {
+									t.printStackTrace();
+									return Status.CANCEL_STATUS;
+								}
+								return Status.OK_STATUS;
+							}
+						};
+						job.setRule(ResourcesPlugin.getWorkspace().getRoot());
+						job.schedule();
+						continue project;
+					}
 				}
 			}
 		}
@@ -137,6 +172,7 @@ public class ValaPlugin extends AbstractUIPlugin {
 	 * Load all known icons from {@code icons}.
 	 */
 	private void loadIcons() {
+		addIcon(ImageType.FILE,  Visibility.DEFAULT, "vala_obj.gif");
 		addIcon(ImageType.UNKNOWN, Visibility.DEFAULT, "unknown_obj.gif");
 		addIcon(ImageType.PACKAGE, Visibility.DEFAULT, "package_obj.gif");
 		addIcon(ImageType.CLASS, Visibility.DEFAULT, "class_obj.gif");
@@ -166,6 +202,8 @@ public class ValaPlugin extends AbstractUIPlugin {
 		if (typeMap == null) {
 			typeMap = new HashMap<Visibility, Image>();
 			images.put(type, typeMap);
+		} else if (typeMap.containsKey(visibility)) {
+			return;
 		}
 		
 		Image image = imageDescriptorFromPlugin(PLUGIN_ID, "icons/" + name).createImage();
@@ -183,5 +221,6 @@ public class ValaPlugin extends AbstractUIPlugin {
 				image.dispose();
 			}
 		}
+		images.clear();
 	}
 }
