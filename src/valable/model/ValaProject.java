@@ -245,6 +245,11 @@ public class ValaProject {
 		
 		for (ValaSource source : sources)
 			result.addAll(source.getUses());
+
+		// The GLib package is now implicit
+		ValaPackage glibPackage = new ValaPackage("GLib");
+		glibPackage.setPkgConfigName("gobject-2.0");
+		result.add(glibPackage);
 		
 		return result;
 	}
