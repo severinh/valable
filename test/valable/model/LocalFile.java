@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
+import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -43,7 +44,8 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
  */
 public class LocalFile implements IFile {
 	
-	private File file;
+	private File    file;
+	private boolean hidden = false;
 	
 	
 	/**
@@ -753,6 +755,7 @@ public class LocalFile implements IFile {
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
+	@SuppressWarnings("unchecked")
 	public Object getAdapter(Class adapter) {
 		// TODO Auto-generated method stub
 		return null;
@@ -774,4 +777,58 @@ public class LocalFile implements IFile {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.resources.IResource#findMaxProblemSeverity(java.lang.String, boolean, int)
+	 */
+	@Override
+	public int findMaxProblemSeverity(String arg0, boolean arg1, int arg2)
+			throws CoreException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.resources.IResource#getPersistentProperties()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map getPersistentProperties() throws CoreException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.resources.IResource#getSessionProperties()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map getSessionProperties() throws CoreException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.resources.IResource#isDerived(int)
+	 */
+	@Override
+	public boolean isDerived(int arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * @see org.eclipse.core.resources.IResource#isHidden()
+	 */
+	@Override
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	/**
+	 * @see org.eclipse.core.resources.IResource#setHidden(boolean)
+	 */
+	@Override
+	public void setHidden(boolean hidden) throws CoreException {
+		this.hidden = hidden;
+	}
 }
