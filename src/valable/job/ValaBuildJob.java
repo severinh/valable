@@ -300,16 +300,23 @@ public class ValaBuildJob extends Job {
 				String message   = msg.group(7);
 				
 				Matcher matcher = UNKNOWN_NAME.matcher(message);
+				boolean processed = false;
 				if (type == MessageType.ERROR && matcher.matches()) {
 					String missingName    = matcher.group(1);
 					String containingType = matcher.group(2);
 					
-					if (project.hasType(missingName) && project.hasType(containingType))
+					if (project.hasType(missingName) && project.hasType(containingType)) {
 						doAgain |= project.getType(containingType).
 						                   getDependencies().
 							               add(project.getType(missingName));
+						processed = true;
+					}
 					
-				} else {
+				}
+				
+				// -- Any other errors, or where the type couldn't be determined: show the user...
+				//
+				if (!processed) {
 					IMarker marker = reverseFiles.get(file).createMarker(IMarker.PROBLEM);
 					marker.setAttribute(IMarker.MESSAGE, message);
 					marker.setAttribute(IMarker.SEVERITY, type.severity);
@@ -321,6 +328,7 @@ public class ValaBuildJob extends Job {
 					} else {
 						marker.setAttribute(IMarker.LINE_NUMBER, startLine);
 					}
+					processed = true;
 				}
 			}
 
