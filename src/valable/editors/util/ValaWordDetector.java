@@ -14,46 +14,38 @@ import org.eclipse.jface.text.rules.IWordDetector;
 
 import valable.editors.vala.IValaLanguageWords;
 
-public class ValaWordDetector implements IWordDetector, IValaLanguageWords {
+/**
+ * Identify Vala words. The rules governing a Vala word are
+ * identical to those governing a Java word. The methods on this class
+ * should <em>not</em> return true for only characters which exist in
+ * {@link IValaLanguageWords}: instead, this is used to identify
+ * <em>any</em> possible Vala identifiers.
+ * 
+ * <p>Therefore, both methods delegate to Java identifier
+ * methods on {@link Character}.</p>
+ */
+public class ValaWordDetector implements IWordDetector {
 
-	/* (non-Javadoc)
+	/**
+	 * Return <var>true</var> if <var>c</var> <strong>could</strong>
+	 * be part of a Vala word. Delegates to {@link Character#isJavaIdentifierPart(char)}. 
+	 * 
 	 * @see org.eclipse.jface.text.rules.IWordDetector#isWordPart(char)
 	 */
 	@Override
 	public boolean isWordPart(char c) {
-		for(String keyword : keywords) 
-			if (keyword.indexOf(c) != -1)
-				return true;	
-
-		for(String type : types) 
-			if (type.indexOf(c) != -1) 
-				return true;
-
-		for(String constant : constants) 
-			if (constant.indexOf(c) != -1) 
-				return true;
-		
-		return false;
+		return Character.isJavaIdentifierPart(c);
 	}
 
-	/* (non-Javadoc)
+	
+	/**
+	 * Return <var>true</var> if <var>c</var> <strong>could</strong>
+	 * be part of a Vala word. Delegates to {@link Character#isJavaIdentifierStart(char)}
+	 * 
 	 * @see org.eclipse.jface.text.rules.IWordDetector#isWordStart(char)
 	 */
 	@Override
 	public boolean isWordStart(char c) {
-		for(String keyword : keywords) 
-			if (keyword.charAt(0) == c)
-				return true;	
-
-		for (String type : types) 
-			if (type.charAt(0) == c) 
-				return true;
-
-		for (String constant : constants) 
-			if (constant.charAt(0) == c) 
-				return true;	
-	
-		return false;
+		return Character.isJavaIdentifierStart(c);
 	}
-
 }
