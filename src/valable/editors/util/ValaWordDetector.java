@@ -46,6 +46,6 @@ public class ValaWordDetector implements IWordDetector {
 	 */
 	@Override
 	public boolean isWordStart(char c) {
-		return Character.isJavaIdentifierStart(c);
+		return Character.isJavaIdentifierStart(c) || c == '@';
 	}
 }
