@@ -51,8 +51,8 @@ public class ValaSource {
 	public ValaSource(ValaProject project, IFile source) {
 		super();
 		
-		if (!source.getFileExtension().equals("vala"))
-			throw new IllegalArgumentException("Only .vala files can be represented");
+		if (!(source.getFileExtension().equals("vala") || source.getFileExtension().equals("vapi")))
+			throw new IllegalArgumentException("Only .vala / .vapi files can be represented");
 		
 		this.project = project;
 		this.source  = source;
@@ -150,6 +150,18 @@ public class ValaSource {
 						typeDefn.getInherits().add(project.getType(superType));
 				
 				types.put(name, typeDefn);
+			
+			} else if (type == 's') {
+				// TODO What about private struct?
+				ValaType typeDefn = project.getType(name);
+				typeDefn.setSourceReference(sourceRef);
+				typeDefn.reset();
+				
+				if (extraData.containsKey("inherits"))
+					for (String superType : extraData.get("inherits").split(",\\s*"))
+						typeDefn.getInherits().add(project.getType(superType));
+				
+				types.put(name, typeDefn);
 				
 			} else if (type == 'f') {
 				ValaType  typeDefn  = findTypeForLine(lineNumber);
@@ -157,7 +169,10 @@ public class ValaSource {
 				fieldDefn.setSourceReference(sourceRef);
 				fieldDefn.getModifiers().addAll(Arrays.asList(extraData.get("access").split(",\\s*")));
 				fieldDefn.setType(typeFromLine(lines.get(lineNumber - 1), name));
-				typeDefn.getFields().add(fieldDefn);
+				
+				// typeDefn may be null
+				if (typeDefn != null)
+					typeDefn.getFields().add(fieldDefn);
 				
 			} else if (type == 'm' && extraData.get("access") != null) {
 				// Method invocations also included unless we check for "access:"
@@ -168,7 +183,9 @@ public class ValaSource {
 				methodDefn.setType(typeFromLine(lines.get(lineNumber - 1), name));
 				// TODO Signature
 				
-				typeDefn.getMethods().add(methodDefn);
+				// typeDefn may be null
+				if (typeDefn != null)
+					typeDefn.getMethods().add(methodDefn);
 				
 			} else if (type == 'l') {
 				ValaType   typeDefn   = findTypeForLine(lineNumber);
