@@ -12,7 +12,6 @@ package valable.editors.vala;
 
 import org.eclipse.jface.text.rules.IWordDetector;
 
-import valable.editors.util.ValaWordDetector;
 import junit.framework.TestCase;
 
 /**

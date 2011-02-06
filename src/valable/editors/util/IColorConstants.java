@@ -16,6 +16,7 @@ public interface IColorConstants {
 	
 	public static final RGB DEFAULT = new RGB(0, 0, 0);
 	public static final RGB KEYWORD = new RGB(127, 0, 85);
+	public static final RGB NUMBER = new RGB(0, 0, 255);
 	public static final RGB TYPE = new RGB(64, 0, 200);
 	public static final RGB STRING = new RGB(42, 0, 255);
 	

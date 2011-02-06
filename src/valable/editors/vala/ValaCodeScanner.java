@@ -16,6 +16,8 @@ import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.EndOfLineRule;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.MultiLineRule;
+import org.eclipse.jface.text.rules.NumberRule;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
@@ -24,7 +26,6 @@ import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
 
 import valable.editors.util.ColorManager;
-import valable.editors.util.ValaWordDetector;
 import valable.editors.util.WhitespaceDetector;
 
 public class ValaCodeScanner extends RuleBasedScanner 
@@ -34,6 +35,8 @@ public class ValaCodeScanner extends RuleBasedScanner
 		IToken keyword = new Token(new TextAttribute(manager.getColor(ColorManager.KEYWORD), 
 													 null, SWT.BOLD));
 		IToken type = new Token(new TextAttribute(manager.getColor(ColorManager.TYPE)));
+		IToken number = new Token(new TextAttribute(manager.getColor(ColorManager.NUMBER)));
+		IToken character = new Token(new TextAttribute(manager.getColor(ColorManager.NUMBER)));
 		IToken string = new Token(new TextAttribute(manager.getColor(ColorManager.STRING)));
 		IToken comment = new Token(new TextAttribute(manager.getColor(ColorManager.COMMENT)));
 		IToken other = new Token(new TextAttribute(manager.getColor(ColorManager.DEFAULT)));
@@ -41,12 +44,24 @@ public class ValaCodeScanner extends RuleBasedScanner
 		setDefaultReturnToken(other);
 		
 		ArrayList<IRule> rules = new ArrayList<IRule>();
+
+		// RUle for multi line comment
+		rules.add(new MultiLineRule("/*", "*/", comment));
 		
 		// Rule for single line comment
 		rules.add(new EndOfLineRule("//", comment));
-		
+
+		// Rule for char
+		rules.add(new SingleLineRule("'", "'", character, '\\'));
+
+		// Rule for verbatim FIXME, it changes while writing
+		rules.add(new MultiLineRule("\"\"\"", "\"\"\"", string));
+
 		// Rule for strings
-		rules.add(new SingleLineRule("\"", "\"", string));
+		rules.add(new SingleLineRule("\"", "\"", string, '\\'));
+
+		// Rule for numbers
+		rules.add(new NumberRule(number));
 		
 		// Rule for whitespaces
 		rules.add(new WhitespaceRule(new WhitespaceDetector()));

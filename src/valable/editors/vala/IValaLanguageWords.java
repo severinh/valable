@@ -1,6 +1,7 @@
 /* IValaLanguageWords.java
  *
  * Copyright (C) 2007  Johann Prieur <johann.prieur@gmail.com>
+ * Copyright (C) 2011  Marco Trevisan (Treviño) <mail@3v1n0.net>
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +13,10 @@ package valable.editors.vala;
 
 public interface IValaLanguageWords {
 	
-	String[] keywords = { "abstract",
+	String[] keywords = { "#if",
+			  			  "#else",
+			  			  "#endif",
+						  "abstract",
 						  "as",
 						  "async",
 						  "base", 
@@ -72,10 +76,7 @@ public interface IValaLanguageWords {
 						  "weak", 
 						  "while",
 						  "yield",
-						  "yields",
-						  "#if",
-						  "#else",
-						  "#endif" };
+						  "yields" };
 	
 	String[] types = { "bool",
 					   "char",
