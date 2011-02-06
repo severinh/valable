@@ -12,8 +12,7 @@ public class ParentesizedRule extends SingleLineRule {
 	}
 
 	@Override
-	protected IToken doEvaluate(ICharacterScanner scanner, boolean resume) {
-
+	public IToken evaluate(ICharacterScanner scanner, boolean resume) {
 		if (resume) {
 			if (endSequenceDetected(scanner))
 				return fToken;
