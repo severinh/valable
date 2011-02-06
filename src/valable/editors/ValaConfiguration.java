@@ -12,6 +12,7 @@ package valable.editors;
 
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
@@ -37,6 +38,7 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 	private ValaCodeScanner codeScanner;
 	private GTKDocScanner docScanner;
 	private ColorManager colorManager;
+	private ValaDoubleClickStrategy doubleClickStrategy;
 
 	public ValaConfiguration(ColorManager colorManager) {
 		this.colorManager = colorManager;
@@ -108,4 +110,11 @@ public class ValaConfiguration extends SourceViewerConfiguration {
         ca.setInformationControlCreator(getInformationControlCreator(sourceViewer));
         return ca;
      }
+
+	public ITextDoubleClickStrategy getDoubleClickStrategy(ISourceViewer sourceViewer, String contentType) {
+		if (doubleClickStrategy == null) {
+			doubleClickStrategy = new ValaDoubleClickStrategy();
+		}
+		return doubleClickStrategy;
+	}
 }

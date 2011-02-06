@@ -7,7 +7,7 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WordRule;
 
 /**
- * @author bb
+ * @author bb (imported from emonic)
  * This class extends a WordRule: It assures that the words to find are not part of
  * other words but surrounded with spaces and brackets
  */
