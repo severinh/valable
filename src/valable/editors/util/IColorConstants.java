@@ -13,12 +13,12 @@ package valable.editors.util;
 import org.eclipse.swt.graphics.RGB;
 
 public interface IColorConstants {
-	
 	public static final RGB DEFAULT = new RGB(0, 0, 0);
 	public static final RGB KEYWORD = new RGB(127, 0, 85);
 	public static final RGB NUMBER = new RGB(0, 0, 255);
 	public static final RGB TYPE = new RGB(64, 0, 200);
 	public static final RGB STRING = new RGB(42, 0, 255);
+	public static final RGB STRING_TEMPLATE = new RGB(46, 52, 175);
 	
 	public static final RGB COMMENT = new RGB(63, 127, 95);
 	

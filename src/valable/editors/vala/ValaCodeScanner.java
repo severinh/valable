@@ -49,12 +49,12 @@ public class ValaCodeScanner extends RuleBasedScanner
 
 		// Rule for char
 		rules.add(new SingleLineRule("'", "'", character, '\\'));
-
-		// Rule for numbers
-		rules.add(new NumberRule(number));
 		
 		// Rule for whitespaces
 		rules.add(new WhitespaceRule(new WhitespaceDetector()));
+
+		// Rule for numbers
+		rules.add(new NumberRule(number));
 		
 		// Rule for keywords, types and constants
 		WordRule wordRule = new ValaWordRule(new ValaWordDetector(), other);

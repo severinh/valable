@@ -32,11 +32,13 @@ import valable.editors.vala.ValaAutoIndentStrategy;
 import valable.editors.vala.ValaCodeScanner;
 import valable.editors.vala.ValaCompletionProcessor;
 import valable.editors.vala.ValaPartitionScanner;
+import valable.editors.vala.ValaStringTemplateScanner;
 
 public class ValaConfiguration extends SourceViewerConfiguration {
 	
 	private ValaCodeScanner codeScanner;
 	private GTKDocScanner docScanner;
+	ValaStringTemplateScanner templateScanner;
 	private ColorManager colorManager;
 	private ValaDoubleClickStrategy doubleClickStrategy;
 
@@ -49,7 +51,8 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 			IDocument.DEFAULT_CONTENT_TYPE,
 			ValaPartitionScanner.VALA_MULTILINE_COMMENT,
 			ValaPartitionScanner.VALA_MULTILINE_STRING,
-			ValaPartitionScanner.VALA_VERBATIM_STRING
+			ValaPartitionScanner.VALA_VERBATIM_STRING,
+			ValaPartitionScanner.VALA_STRING_TEMPLATES
 		};
 	}
 
@@ -65,6 +68,13 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 			docScanner = new GTKDocScanner(colorManager);
 		}
 		return docScanner;
+	}
+
+	protected ValaStringTemplateScanner getStringTemplateScanner() {
+		if (templateScanner == null) {
+			templateScanner = new ValaStringTemplateScanner(colorManager);
+		}
+		return templateScanner;
 	}
 
 	//TODO: @"string" scanner
@@ -105,6 +115,11 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		dr = new DefaultDamagerRepairer(verbatimScanner);
 		reconciler.setDamager(dr, ValaPartitionScanner.VALA_VERBATIM_STRING);
 		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_VERBATIM_STRING);
+
+		// Rule for string templates
+		dr = new DefaultDamagerRepairer(getStringTemplateScanner());
+		reconciler.setDamager(dr, ValaPartitionScanner.VALA_STRING_TEMPLATES);
+		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_STRING_TEMPLATES);
 		
 		return reconciler;
 	}
