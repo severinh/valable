@@ -23,10 +23,12 @@ public class ValaPartitionScanner extends RuleBasedPartitionScanner {
 	
 	public final static String VALA_MULTILINE_COMMENT = "__vala_multiline_comment";
 	public final static String GTKDOC_COMMENT = "__gtkdoc_comment";
+	public final static String VALA_VERBATIM_STRING = "__vala_verbatim_string";
 
 	public ValaPartitionScanner() {
 		IToken valaMultilineComment = new Token(VALA_MULTILINE_COMMENT);
 		IToken gtkdocComment = new Token(GTKDOC_COMMENT);
+		IToken valaVerbatimString = new Token(VALA_VERBATIM_STRING);
 		
 		ArrayList<IPredicateRule> rules = new ArrayList<IPredicateRule>();
 		
@@ -38,6 +40,9 @@ public class ValaPartitionScanner extends RuleBasedPartitionScanner {
 		
 		// Rule for single line comments
 		rules.add(new EndOfLineRule("//", Token.UNDEFINED));
+
+		// Rule for multi line comments
+		rules.add(new MultiLineRule("\"\"\"", "\"\"\"", valaVerbatimString));
 		
 		IPredicateRule[] r = new IPredicateRule[rules.size()];
 		rules.toArray(r);

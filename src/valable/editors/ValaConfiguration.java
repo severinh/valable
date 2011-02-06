@@ -47,7 +47,9 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
 		return new String[] {
 			IDocument.DEFAULT_CONTENT_TYPE,
-			ValaPartitionScanner.VALA_MULTILINE_COMMENT };
+			ValaPartitionScanner.VALA_MULTILINE_COMMENT,
+			ValaPartitionScanner.VALA_VERBATIM_STRING
+		};
 	}
 
 	protected ValaCodeScanner getValaScanner() {
@@ -63,6 +65,8 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		}
 		return docScanner;
 	}
+
+	//TODO: @"string" scanner
 
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 		PresentationReconciler reconciler = new PresentationReconciler();
@@ -84,6 +88,14 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		dr = new DefaultDamagerRepairer(multilineScanner);
 		reconciler.setDamager(dr, ValaPartitionScanner.VALA_MULTILINE_COMMENT);
 		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_MULTILINE_COMMENT);
+
+		// Rule for verbatim strings
+		RuleBasedScanner verbatimScanner = new RuleBasedScanner();
+		verbatimScanner.setDefaultReturnToken(new Token(new TextAttribute(
+					colorManager.getColor(IColorConstants.STRING))));
+		dr = new DefaultDamagerRepairer(verbatimScanner);
+		reconciler.setDamager(dr, ValaPartitionScanner.VALA_VERBATIM_STRING);
+		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_VERBATIM_STRING);
 		
 		return reconciler;
 	}

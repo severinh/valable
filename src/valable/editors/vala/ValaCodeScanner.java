@@ -45,9 +45,6 @@ public class ValaCodeScanner extends RuleBasedScanner
 		setDefaultReturnToken(other);
 		
 		ArrayList<IRule> rules = new ArrayList<IRule>();
-
-		// RUle for multi line comment
-		rules.add(new MultiLineRule("/*", "*/", comment));
 		
 		// Rule for single line comment
 		rules.add(new EndOfLineRule("//", comment));
@@ -55,11 +52,9 @@ public class ValaCodeScanner extends RuleBasedScanner
 		// Rule for char
 		rules.add(new SingleLineRule("'", "'", character, '\\'));
 
-		// Rule for verbatim FIXME, it changes while writing
-		rules.add(new MultiLineRule("\"\"\"", "\"\"\"", string));
-
 		// Rule for strings
 		rules.add(new SingleLineRule("\"", "\"", string, '\\'));
+		rules.add(new SingleLineRule("@\"", "\"", string, '\\'));
 
 		// Rule for numbers
 		rules.add(new NumberRule(number));

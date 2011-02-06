@@ -28,7 +28,9 @@ public class ValaDocumentProvider extends FileDocumentProvider {
 					new ValaPartitionScanner(),
 					new String[] {
 						ValaPartitionScanner.GTKDOC_COMMENT,
-						ValaPartitionScanner.VALA_MULTILINE_COMMENT });
+						ValaPartitionScanner.VALA_MULTILINE_COMMENT,
+						ValaPartitionScanner.VALA_VERBATIM_STRING
+					});
 			partitioner.connect(document);
 			document.setDocumentPartitioner(partitioner);
 		}

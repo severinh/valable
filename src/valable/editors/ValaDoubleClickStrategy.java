@@ -15,8 +15,9 @@ public class ValaDoubleClickStrategy implements ITextDoubleClickStrategy {
 
 		if (pos < 0)
 			return;
+
 		fText = part;
-			selectWord(pos);
+		selectWord(pos);
 	}
 
 	protected boolean selectWord(int caretPos) {
