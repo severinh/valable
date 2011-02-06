@@ -1,6 +1,7 @@
 /* ValaCodeScanner.java
  *
  * Copyright (C) 2007  Johann Prieur <johann.prieur@gmail.com>
+ * Copyright (C) 2011  Marco Trevisan (Treviño) <mail@3v1n0.net>
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -67,7 +68,7 @@ public class ValaCodeScanner extends RuleBasedScanner
 		rules.add(new WhitespaceRule(new WhitespaceDetector()));
 		
 		// Rule for keywords, types and constants
-		WordRule wordRule = new WordRule(new ValaWordDetector(), other);
+		WordRule wordRule = new ValaWordRule(new ValaWordDetector(), other);
 		for(String kw : keywords)
 			wordRule.addWord(kw, keyword);
 		for(String t : types)
