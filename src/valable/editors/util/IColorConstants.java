@@ -22,7 +22,7 @@ public interface IColorConstants {
 	
 	public static final RGB COMMENT = new RGB(63, 127, 95);
 	
-	public static final RGB GTKDOC_DEFAULT = new RGB(63, 127, 95);
+	public static final RGB GTKDOC_DEFAULT = COMMENT;
 	public static final RGB GTKDOC_TAG = new RGB(127, 159, 191);
 	public static final RGB GTKDOC_DOCBOOK = new RGB(127, 127, 159);
 	public static final RGB GTKDOC_OTHER = new RGB(63, 95, 191);

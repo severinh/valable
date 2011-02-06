@@ -40,11 +40,11 @@ public class ValaPartitionScanner extends RuleBasedPartitionScanner {
 		rules.add(new MultiLineRule("/*", "*/", valaMultilineComment));
 
 		// Rule for verbatim strings
-		rules.add(new MultiLineRule("\"\"\"", "\"\"\"", valaVerbatimString));
+		rules.add(new MultiLineRule("\"\"\"", "\"\"\"", valaVerbatimString, '\\'));
 
 		// Rule for multi line strings
-		rules.add(new MultiLineRule("\"", "\"", valaMultilineString, '\\'));
 		rules.add(new MultiLineRule("@\"", "\"", valaMultilineString, '\\'));
+		rules.add(new MultiLineRule("\"", "\"", valaMultilineString, '\\'));
 		
 		IPredicateRule[] r = new IPredicateRule[rules.size()];
 		rules.toArray(r);
