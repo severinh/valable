@@ -38,7 +38,6 @@ public class ValaCodeScanner extends RuleBasedScanner
 		IToken type = new Token(new TextAttribute(manager.getColor(ColorManager.TYPE)));
 		IToken number = new Token(new TextAttribute(manager.getColor(ColorManager.NUMBER)));
 		IToken character = new Token(new TextAttribute(manager.getColor(ColorManager.NUMBER)));
-		IToken string = new Token(new TextAttribute(manager.getColor(ColorManager.STRING)));
 		IToken comment = new Token(new TextAttribute(manager.getColor(ColorManager.COMMENT)));
 		IToken other = new Token(new TextAttribute(manager.getColor(ColorManager.DEFAULT)));
 		
@@ -51,10 +50,6 @@ public class ValaCodeScanner extends RuleBasedScanner
 
 		// Rule for char
 		rules.add(new SingleLineRule("'", "'", character, '\\'));
-
-		// Rule for strings
-		rules.add(new SingleLineRule("\"", "\"", string, '\\'));
-		rules.add(new SingleLineRule("@\"", "\"", string, '\\'));
 
 		// Rule for numbers
 		rules.add(new NumberRule(number));

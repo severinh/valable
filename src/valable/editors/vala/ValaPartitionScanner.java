@@ -12,7 +12,6 @@ package valable.editors.vala;
 
 import java.util.ArrayList;
 
-import org.eclipse.jface.text.rules.EndOfLineRule;
 import org.eclipse.jface.text.rules.IPredicateRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.MultiLineRule;
@@ -23,11 +22,13 @@ public class ValaPartitionScanner extends RuleBasedPartitionScanner {
 	
 	public final static String VALA_MULTILINE_COMMENT = "__vala_multiline_comment";
 	public final static String GTKDOC_COMMENT = "__gtkdoc_comment";
+	public final static String VALA_MULTILINE_STRING = "__vala_multiline_string";
 	public final static String VALA_VERBATIM_STRING = "__vala_verbatim_string";
 
 	public ValaPartitionScanner() {
 		IToken valaMultilineComment = new Token(VALA_MULTILINE_COMMENT);
 		IToken gtkdocComment = new Token(GTKDOC_COMMENT);
+		IToken valaMultilineString = new Token(VALA_MULTILINE_STRING);
 		IToken valaVerbatimString = new Token(VALA_VERBATIM_STRING);
 		
 		ArrayList<IPredicateRule> rules = new ArrayList<IPredicateRule>();
@@ -37,12 +38,13 @@ public class ValaPartitionScanner extends RuleBasedPartitionScanner {
 		
 		// Rule for multi line comments
 		rules.add(new MultiLineRule("/*", "*/", valaMultilineComment));
-		
-		// Rule for single line comments
-		rules.add(new EndOfLineRule("//", Token.UNDEFINED));
 
-		// Rule for multi line comments
+		// Rule for verbatim strings
 		rules.add(new MultiLineRule("\"\"\"", "\"\"\"", valaVerbatimString));
+
+		// Rule for multi line strings
+		rules.add(new MultiLineRule("\"", "\"", valaMultilineString, '\\'));
+		rules.add(new MultiLineRule("@\"", "\"", valaMultilineString, '\\'));
 		
 		IPredicateRule[] r = new IPredicateRule[rules.size()];
 		rules.toArray(r);
