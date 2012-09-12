@@ -38,8 +38,8 @@ public class ValaSource {
 	
 	private final ValaProject     project;
 	private final IFile           source;
-	private Set<ValaPackage>      uses  = new LinkedHashSet<ValaPackage>();
-	private Map<String, ValaType> types = new HashMap<String, ValaType>();
+	private final Set<ValaPackage> uses = new LinkedHashSet<ValaPackage>();
+	private final Map<String, ValaType> types = new HashMap<String, ValaType>();
 	
 	
 	/**
@@ -51,9 +51,10 @@ public class ValaSource {
 	public ValaSource(ValaProject project, IFile source) {
 		super();
 		
-		if (!(source.getFileExtension().equals("vala") || source.getFileExtension().equals("vapi")))
+		if (!(source.getFileExtension().equals("vala") || source
+				.getFileExtension().equals("vapi")))
 			throw new IllegalArgumentException("Only .vala / .vapi files can be represented");
-		
+
 		this.project = project;
 		this.source  = source;
 		this.project.getSources().add(this);
@@ -102,14 +103,10 @@ public class ValaSource {
 		//
 		Process output = null;
 		try {
-			output = Runtime.getRuntime().exec(new String[] { "ctags",
-				"--language-force=C#",
-				"-f", "-",
-				"-n",
-				"--sort=no",
-				"--fields=akifSt",
-				"--c#-kinds=+l",
-				source.getLocation().toOSString()});
+			output = Runtime.getRuntime().exec(
+					new String[] { "anjuta-tags", "-f", "-", "-n", "--sort=no",
+							"--fields=akifSt",
+							source.getLocation().toOSString() });
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new CoreException(Status.CANCEL_STATUS);
