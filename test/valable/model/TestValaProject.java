@@ -34,7 +34,9 @@ public class TestValaProject extends TestCase {
 		assertNotNull("Found libgee", packages.get("Gee"));
 		assertNotNull("Found vala", packages.get("Vala"));
 		
-		assertEquals("libgee part of vala", "vala-1.0", packages.get("Gee").iterator().next().getPkgConfigName());
-		assertEquals("vala VAPI", "vala-1.0", packages.get("Vala").iterator().next().getPkgConfigName());
+		assertEquals("libgee part of vala", "gee-1.0", packages.get("Gee")
+				.iterator().next().getPkgConfigName());
+		assertEquals("vala VAPI", "libvala-0.18", packages.get("Vala")
+				.iterator().next().getPkgConfigName());
 	}
 }

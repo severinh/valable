@@ -14,19 +14,25 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import valable.ValaPlugin;
+import valable.model.ValaBuildContext;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
+	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
+	 * initializeDefaultPreferences()
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
+		ValaBuildContext context = ValaBuildContext.getDefault();
+
 		IPreferenceStore store = ValaPlugin.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_VALAC_EXE, "/usr/local/bin/valac");
-		store.setDefault(PreferenceConstants.P_VAPI_PATH, "/usr/local/share/vala/vapi/");
+		store.setDefault(PreferenceConstants.P_VALAC_EXE, context
+				.getValacExecutable().getAbsolutePath());
+		store.setDefault(PreferenceConstants.P_VAPI_PATH, context
+				.getVapiDirectories().get(0).getAbsolutePath());
 		store.setDefault(PreferenceConstants.P_OUTPUT_FOLDER, "/output/");
 	}
 

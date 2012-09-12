@@ -12,6 +12,7 @@ package valable.model;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 import junit.framework.TestCase;
 
@@ -47,9 +48,10 @@ public class TestValaSource extends TestCase {
 		ValaSource source = new ValaSource(new ValaProject("Test"), file);
 		source.parse();
 		
+		Iterator<ValaPackage> usesIterator = source.getUses().iterator();
 		assertEquals("Identified using packages", 2, source.getUses().size());
-		assertEquals("Using libgee", "Gee", source.getUses().iterator().next().getName());
-		assertEquals("Using vala VAPI", "vala-1.0", source.getUses().iterator().next().getPkgConfigName());
+		assertEquals("Using libgee", "Gee", usesIterator.next().getName());
+		assertEquals("Using vala VAPI", "Vala", usesIterator.next().getName());
 		
 		assertEquals("Types found", 2, source.getTypes().size());
 		

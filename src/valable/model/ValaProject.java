@@ -12,10 +12,10 @@ package valable.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -26,7 +26,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import valable.ValaPlugin;
-import valable.preferences.PreferenceConstants;
 
 /**
  * Encapsulate information about a Vala project. A project has a number
@@ -36,8 +35,8 @@ public class ValaProject {
 	private static final Pattern NAMESPACE = Pattern.compile("^\\s*namespace (\\S+).*$");
 	
 	private final String name;
-	private Set<ValaSource>       sources = new HashSet<ValaSource>();
-	private Map<String, ValaType> types   = new HashMap<String, ValaType>();
+	private final Set<ValaSource>       sources = new HashSet<ValaSource>();
+	private final Map<String, ValaType> types   = new HashMap<String, ValaType>();
 	
 	private static Map<String, Set<ValaPackage>> knownPackages = null;
 	private static Map<String, ValaProject> projects = new HashMap<String, ValaProject>();
@@ -90,33 +89,23 @@ public class ValaProject {
 	 * @return
 	 */
 	public synchronized static Map<String, Set<ValaPackage>> getAvailablePackages() {
-		if (knownPackages != null)
+		if (knownPackages != null) {
 			return knownPackages;
-		
-		// -- Try the known locations as a fallback...
-		//
-		String vapiDir = "/usr/local/share/vala/vapi";
-		if (!new File(vapiDir).exists())
-			vapiDir = "/usr/share/vala/vapi";
-		
-		// -- Use the configuration if possible...
-		//
-		if (ValaPlugin.getDefault() != null) {
-			IPreferenceStore store = ValaPlugin.getDefault().getPreferenceStore();
-			vapiDir = store.getString(PreferenceConstants.P_VAPI_PATH);
 		}
 		
-		// -- Read a list of all the VAPI files...
-		//
-		File[] vapis = new File(vapiDir).listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.endsWith(".vapi");
-			}
-		});
+		// Use the configuration if possible
+		ValaBuildContext context;
+		if (ValaPlugin.getDefault() != null) {
+			IPreferenceStore store = ValaPlugin.getDefault().getPreferenceStore();
+			context = ValaBuildContext.of(store);
+		} else {
+			context = ValaBuildContext.getDefault();
+		}
 		
-		// -- Scan each one for namespaces...
-		//
+		// Read a list of all the VAPI files
+		List<File> vapis = context.getVapiFiles();
+
+		// Scan each one for namespaces
 		knownPackages = new HashMap<String, Set<ValaPackage>>();
 		for (File vapi : vapis) {
 			Scanner scanner;
