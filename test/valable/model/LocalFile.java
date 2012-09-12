@@ -45,7 +45,7 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
  */
 public class LocalFile implements IFile {
 	
-	private File    file;
+	private final File    file;
 	private boolean hidden = false;
 	
 	
@@ -839,8 +839,7 @@ public class LocalFile implements IFile {
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -876,9 +875,9 @@ public class LocalFile implements IFile {
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.resources.IResource#getPersistentProperties()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public Map getPersistentProperties() throws CoreException {
+	public Map<QualifiedName, String> getPersistentProperties()
+			throws CoreException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -886,9 +885,9 @@ public class LocalFile implements IFile {
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.resources.IResource#getSessionProperties()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public Map getSessionProperties() throws CoreException {
+	public Map<QualifiedName, Object> getSessionProperties()
+			throws CoreException {
 		// TODO Auto-generated method stub
 		return null;
 	}
