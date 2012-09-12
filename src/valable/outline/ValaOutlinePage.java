@@ -11,6 +11,7 @@
 package valable.outline;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
@@ -27,7 +28,7 @@ import valable.model.ValaSource;
  */
 public class ValaOutlinePage extends ContentOutlinePage {
 	
-	private ValaEditor        editor;
+	private final ValaEditor        editor;
 	
 
 	/**
@@ -57,7 +58,8 @@ public class ValaOutlinePage extends ContentOutlinePage {
 
 		TreeViewer viewer = getTreeViewer();
 		viewer.setContentProvider(new ValaContentProvider());
-		viewer.setLabelProvider(new ValaLabelProvider());
+		viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(
+				new ValaLabelProvider()));
 		viewer.addSelectionChangedListener(this);
 		viewer.setInput(currentSource);
 	}
