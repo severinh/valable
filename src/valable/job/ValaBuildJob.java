@@ -109,7 +109,7 @@ public class ValaBuildJob extends Job {
 			
 			// -- Remove any existing markers...
 			//
-			reverseFiles.put(file.getName(), file);
+			reverseFiles.put(file.getRawLocation().makeAbsolute().toOSString(), file);
 			for (IMarker marker : file.findMarkers(IMarker.PROBLEM, false, 0))
 				marker.delete();
 			
@@ -186,11 +186,6 @@ public class ValaBuildJob extends Job {
 		// Output file
 		command.append(" -o " + new File(output, project.getName().replaceAll("\\W+", "")).getAbsolutePath());
 		
-		// Packages
-		for (ValaPackage pkg : project.getUsedPackages()) {
-			command.append(" ").append(commandOutput("pkg-config", "--libs", pkg.getPkgConfigName()));
-		}
-		
 		// Object files to build
 		for (File obj : new File(output).listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
@@ -198,6 +193,11 @@ public class ValaBuildJob extends Job {
 			}
 		})) {
 			command.append(" ").append(obj.getAbsolutePath());
+		}
+		
+		// Packages (need to be stated after the object files)
+		for (ValaPackage pkg : project.getUsedPackages()) {
+			command.append(" ").append(commandOutput("pkg-config", "--libs", pkg.getPkgConfigName()));
 		}
 		
 		return command.toString();
@@ -339,7 +339,7 @@ public class ValaBuildJob extends Job {
 				
 				// Move .o files to the output dir
 				for (IFile valaFile : filesToCompile) {
-					String name = valaFile.getName().replaceAll("\\.vala$", ".o");
+					String name = valaFile.getName().concat(".o");
 					out.println(commandOutput("mv", new File(baseDir, name).getAbsolutePath(),
 							                        output + "/"));
 				}
