@@ -38,8 +38,6 @@ public class ValaProjectWizard extends Wizard implements INewWizard {
 	public static final String ID = "valable.wizard.project.ValaProject";
 
 	private IWorkbench workbench;
-	private IStructuredSelection selection;
-
 	private ValaProjectWizardPage projectPage;
 
 	public ValaProjectWizard() {
@@ -93,7 +91,7 @@ public class ValaProjectWizard extends Wizard implements INewWizard {
         final IProjectDescription description = workspace.newProjectDescription(project.getName());
         description.setLocation(projectPath);
 
-		// Instanciate a project creation operation
+		// Instantiate a project creation operation
 		WorkspaceModifyOperation projectCreation = new WorkspaceModifyOperation() {
 
 			@Override
@@ -173,7 +171,6 @@ public class ValaProjectWizard extends Wizard implements INewWizard {
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;
-		this.selection = selection;
 	}
 
 }
