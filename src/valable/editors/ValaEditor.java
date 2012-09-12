@@ -23,8 +23,8 @@ import valable.outline.ValaOutlinePage;
 
 public class ValaEditor extends TextEditor {
 
-	private ValaOutlinePage valaOutlinePage;
-	private ColorManager    colorManager;
+	private final ValaOutlinePage valaOutlinePage;
+	private final ColorManager    colorManager;
 
 	/**
 	 * Create a new ValaEditor.
@@ -54,7 +54,7 @@ public class ValaEditor extends TextEditor {
 	 * @see http://wiki.eclipse.org/FAQ_How_do_I_create_an_Outline_view_for_my_own_language_editor%3F
 	 */
 	@Override
-	public Object getAdapter(Class required) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
 		if (IContentOutlinePage.class.equals(required)) {
 			return valaOutlinePage;
 		}
