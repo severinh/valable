@@ -42,9 +42,8 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 	 * @see org.eclipse.core.resources.IncrementalProjectBuilder#build(int,
 	 *      java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
+	protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor)
 			throws CoreException {
 
 		IResourceDelta delta = null;
