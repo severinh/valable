@@ -27,6 +27,7 @@ public class ValaAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
 	/* (non-Javadoc)
 	 * Method declared on IAutoIndentStrategy
 	 */
+	@Override
 	public void customizeDocumentCommand(IDocument d, DocumentCommand c) {
 		if (c.length == 0 && c.text != null && endsWithDelimiter(d, c.text))
 			smartIndentAfterNewLine(d, c);

@@ -31,6 +31,7 @@ public class ValaEntity {
 	 * @see SourceReference#getLine()
 	 */
 	public static final Comparator<ValaEntity> SOURCE_ORDER = new Comparator<ValaEntity>() {
+		@Override
 		public int compare(ValaEntity arg0, ValaEntity arg1) {
 			return arg0.getSourceReference().getLine() -
 			       arg1.getSourceReference().getLine();

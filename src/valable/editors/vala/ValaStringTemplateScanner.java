@@ -12,14 +12,15 @@ import org.eclipse.jface.text.rules.WordPatternRule;
 import org.eclipse.swt.SWT;
 
 import valable.editors.util.ColorManager;
+import valable.editors.util.IColorConstants;
 import valable.editors.util.ParentesizedRule;
 import valable.editors.util.WhitespaceDetector;
 
 public class ValaStringTemplateScanner extends RuleBasedScanner {
 
 	public ValaStringTemplateScanner(ColorManager manager) {
-		IToken def = new Token(new TextAttribute(manager.getColor(ColorManager.STRING)));
-		IToken template = new Token(new TextAttribute(manager.getColor(ColorManager.STRING_TEMPLATE), null, SWT.BOLD));
+		IToken def = new Token(new TextAttribute(manager.getColor(IColorConstants.STRING)));
+		IToken template = new Token(new TextAttribute(manager.getColor(IColorConstants.STRING_TEMPLATE), null, SWT.BOLD));
 
 		setDefaultReturnToken(def);
 		

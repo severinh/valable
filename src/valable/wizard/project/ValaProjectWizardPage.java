@@ -95,6 +95,7 @@ public class ValaProjectWizardPage extends WizardPage {
 		projectNameText = new Text(project, SWT.BORDER | SWT.SINGLE);
 		projectNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		projectNameText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(ModifyEvent e) {
 				locationText.setText(String.format("%s%s%s" , getWorkspacePath(),
 						IPath.SEPARATOR, projectNameText.getText()));
@@ -123,6 +124,7 @@ public class ValaProjectWizardPage extends WizardPage {
 		locationText = new Text(location, SWT.BORDER | SWT.SINGLE);
 		locationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		locationText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(ModifyEvent e) {
 			}
 		});
@@ -148,6 +150,7 @@ public class ValaProjectWizardPage extends WizardPage {
 		authorEmailText = new Text(infoGroup, SWT.BORDER | SWT.SINGLE);
 		authorEmailText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		authorEmailText.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(ModifyEvent e) {
 				String content = authorEmailText.getText();
 				if(content.matches("^(^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$)?$")) {

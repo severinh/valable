@@ -32,6 +32,7 @@ public class ValaWordRule extends WordRule {
 	
 	// this method is basically copied from the super class,
 	// but looks whether the word stands alone
+	@Override
 	public IToken evaluate(ICharacterScanner scanner){
 
 		boolean isWordStart = false;

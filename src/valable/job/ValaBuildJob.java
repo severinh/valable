@@ -188,6 +188,7 @@ public class ValaBuildJob extends Job {
 		
 		// Object files to build
 		for (File obj : new File(output).listFiles(new FilenameFilter() {
+			@Override
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".o");
 			}

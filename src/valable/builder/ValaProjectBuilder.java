@@ -113,7 +113,7 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 				|| file.getName().endsWith(".vapi")
 				|| file.getName().endsWith(".c")) {
 			if (delta == null || delta.findMember(file.getProjectRelativePath()) != null)
-				files.add((IFile) file);
+				files.add(file);
 		}
 	}
 
@@ -129,6 +129,7 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 		try {
 			folder.accept(new IResourceVisitor() {
 
+				@Override
 				public boolean visit(IResource resource) {
 					if (resource instanceof IFile) {
 						files.add((IFile) resource);

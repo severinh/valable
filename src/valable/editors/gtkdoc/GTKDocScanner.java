@@ -24,18 +24,19 @@ import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
 
 import valable.editors.util.ColorManager;
+import valable.editors.util.IColorConstants;
 import valable.editors.util.WhitespaceDetector;
 
 public class GTKDocScanner extends RuleBasedScanner 
 	implements IGTKDocLanguageWords {
 
 	public GTKDocScanner(ColorManager manager) {
-		IToken def = new Token(new TextAttribute(manager.getColor(ColorManager.GTKDOC_DEFAULT)));
-		IToken tag = new Token(new TextAttribute(manager.getColor(ColorManager.GTKDOC_TAG),
+		IToken def = new Token(new TextAttribute(manager.getColor(IColorConstants.GTKDOC_DEFAULT)));
+		IToken tag = new Token(new TextAttribute(manager.getColor(IColorConstants.GTKDOC_TAG),
 												 null, SWT.BOLD));
-		IToken xml = new Token(new TextAttribute(manager.getColor(ColorManager.GTKDOC_DOCBOOK),
+		IToken xml = new Token(new TextAttribute(manager.getColor(IColorConstants.GTKDOC_DOCBOOK),
 				   								 null, SWT.BOLD));
-		IToken other = new Token(new TextAttribute(manager.getColor(ColorManager.GTKDOC_OTHER),
+		IToken other = new Token(new TextAttribute(manager.getColor(IColorConstants.GTKDOC_OTHER),
 				       							   null, SWT.BOLD));
 
 		setDefaultReturnToken(def);

@@ -26,19 +26,20 @@ import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
 
 import valable.editors.util.ColorManager;
+import valable.editors.util.IColorConstants;
 import valable.editors.util.WhitespaceDetector;
 
 public class ValaCodeScanner extends RuleBasedScanner 
 	implements IValaLanguageWords {
 
 	public ValaCodeScanner(ColorManager manager) {
-		IToken keyword = new Token(new TextAttribute(manager.getColor(ColorManager.KEYWORD), 
+		IToken keyword = new Token(new TextAttribute(manager.getColor(IColorConstants.KEYWORD), 
 													 null, SWT.BOLD));
-		IToken type = new Token(new TextAttribute(manager.getColor(ColorManager.TYPE)));
-		IToken number = new Token(new TextAttribute(manager.getColor(ColorManager.NUMBER)));
-		IToken character = new Token(new TextAttribute(manager.getColor(ColorManager.NUMBER)));
-		IToken comment = new Token(new TextAttribute(manager.getColor(ColorManager.COMMENT)));
-		IToken other = new Token(new TextAttribute(manager.getColor(ColorManager.DEFAULT)));
+		IToken type = new Token(new TextAttribute(manager.getColor(IColorConstants.TYPE)));
+		IToken number = new Token(new TextAttribute(manager.getColor(IColorConstants.NUMBER)));
+		IToken character = new Token(new TextAttribute(manager.getColor(IColorConstants.NUMBER)));
+		IToken comment = new Token(new TextAttribute(manager.getColor(IColorConstants.COMMENT)));
+		IToken other = new Token(new TextAttribute(manager.getColor(IColorConstants.DEFAULT)));
 		
 		setDefaultReturnToken(other);
 		

@@ -58,6 +58,7 @@ public class ValaMethod extends ValaEntity implements HasModifiers {
 	/**
 	 * @return the modifiers
 	 */
+	@Override
 	public Set<String> getModifiers() {
 		return modifiers;
 	}
@@ -74,6 +75,7 @@ public class ValaMethod extends ValaEntity implements HasModifiers {
 	/**
 	 * @return the visibility contained in {@link #modifiers}.
 	 */
+	@Override
 	public Visibility getVisibility() {
 		for (Visibility v : Visibility.values())
 			if (modifiers.contains(v.toString().toLowerCase()))

@@ -44,6 +44,7 @@ public class ValaImportWizardPage extends WizardNewFileCreationPage {
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#createAdvancedControls(org.eclipse.swt.widgets.Composite)
 	 */	
+	@Override
 	protected void createAdvancedControls(Composite parent) {
 		Composite fileSelectionArea = new Composite(parent, SWT.NONE);
 		GridData fileSelectionData = new GridData(GridData.GRAB_HORIZONTAL
@@ -59,6 +60,7 @@ public class ValaImportWizardPage extends WizardNewFileCreationPage {
 		
 		editor = new FileFieldEditor("fileSelect","Select File: ",fileSelectionArea); //NON-NLS-1 //NON-NLS-2
 		editor.getTextControl(fileSelectionArea).addModifyListener(new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				IPath path = new Path(ValaImportWizardPage.this.editor.getStringValue());
 				setFileName(path.lastSegment());
@@ -73,12 +75,14 @@ public class ValaImportWizardPage extends WizardNewFileCreationPage {
 	 /* (non-Javadoc)
 	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#createLinkTarget()
 	 */
+	@Override
 	protected void createLinkTarget() {
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#getInitialContents()
 	 */
+	@Override
 	protected InputStream getInitialContents() {
 		try {
 			return new FileInputStream(new File(editor.getStringValue()));
@@ -90,6 +94,7 @@ public class ValaImportWizardPage extends WizardNewFileCreationPage {
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#getNewFileLabel()
 	 */
+	@Override
 	protected String getNewFileLabel() {
 		return "New File Name:"; //NON-NLS-1
 	}
@@ -97,6 +102,7 @@ public class ValaImportWizardPage extends WizardNewFileCreationPage {
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#validateLinkedResource()
 	 */
+	@Override
 	protected IStatus validateLinkedResource() {
 		return new Status(IStatus.OK, "valable", IStatus.OK, "", null); //NON-NLS-1 //NON-NLS-2
 	}

@@ -25,10 +25,10 @@ public class ColorManager implements IColorConstants {
 	public void dispose() {
 		Iterator<Color> e = colorTable.values().iterator();
 		while (e.hasNext())
-			 ((Color) e.next()).dispose();
+			 e.next().dispose();
 	}
 	public Color getColor(RGB rgb) {
-		Color color = (Color) colorTable.get(rgb);
+		Color color = colorTable.get(rgb);
 		if (color == null) {
 			color = new Color(Display.getCurrent(), rgb);
 			colorTable.put(rgb, color);

@@ -22,6 +22,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 * 
 	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
 	 */
+	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = ValaPlugin.getDefault().getPreferenceStore();
 		store.setDefault(PreferenceConstants.P_VALAC_EXE, "/usr/local/bin/valac");

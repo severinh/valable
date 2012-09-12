@@ -40,6 +40,7 @@ public class ValaEditor extends TextEditor {
 	}
 	
 	
+	@Override
 	public void dispose() {
 		colorManager.dispose();
 		super.dispose();

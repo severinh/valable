@@ -32,6 +32,7 @@ public class ValaPreferencePage extends FieldEditorPreferencePage
 		setDescription(_("preferences.general.description"));
 	}
 	
+	@Override
 	public void createFieldEditors() {
 		addField(new FileFieldEditor(PreferenceConstants.P_VALAC_EXE, 
 				_("preferences.general.valac.executable"), getFieldEditorParent()));
@@ -44,6 +45,7 @@ public class ValaPreferencePage extends FieldEditorPreferencePage
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 	}
 	

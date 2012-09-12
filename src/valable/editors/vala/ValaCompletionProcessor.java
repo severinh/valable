@@ -48,6 +48,7 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 	/**
 	 * @see org.eclipse.jface.text.contentassist.IContentAssistProcessor#computeCompletionProposals(org.eclipse.jface.text.ITextViewer, int)
 	 */
+	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
 		IFile currentFile   = ValaPlugin.getCurrentFile();
 		ValaProject project = ValaProject.getProject(currentFile);
@@ -117,6 +118,7 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 	/**
 	 * @see org.eclipse.jface.text.contentassist.IContentAssistProcessor#computeContextInformation(org.eclipse.jface.text.ITextViewer, int)
 	 */
+	@Override
 	public IContextInformation[] computeContextInformation(ITextViewer viewer, int offset) {
 		return NO_CONTEXTS;
 	}
@@ -125,6 +127,7 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 	/**
 	 * @see org.eclipse.jface.text.contentassist.IContentAssistProcessor#getCompletionProposalAutoActivationCharacters()
 	 */
+	@Override
 	public char[] getCompletionProposalAutoActivationCharacters() {
 		return ACTIVATION_CHARS;
 	}
@@ -133,6 +136,7 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.text.contentassist.IContentAssistProcessor#getContextInformationAutoActivationCharacters()
 	 */
+	@Override
 	public char[] getContextInformationAutoActivationCharacters() {
 		// TODO Auto-generated method stub
 		return null;
@@ -141,6 +145,7 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.text.contentassist.IContentAssistProcessor#getContextInformationValidator()
 	 */
+	@Override
 	public IContextInformationValidator getContextInformationValidator() {
 		// TODO Auto-generated method stub
 		return null;
@@ -149,6 +154,7 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.text.contentassist.IContentAssistProcessor#getErrorMessage()
 	 */
+	@Override
 	public String getErrorMessage() {
 		// TODO Auto-generated method stub
 		return null;

@@ -46,6 +46,7 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		this.colorManager = colorManager;
 	}
 	
+	@Override
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
 		return new String[] {
 			IDocument.DEFAULT_CONTENT_TYPE,
@@ -79,6 +80,7 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 
 	//TODO: @"string" scanner
 
+	@Override
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 		PresentationReconciler reconciler = new PresentationReconciler();
 
@@ -147,6 +149,7 @@ public class ValaConfiguration extends SourceViewerConfiguration {
         return ca;
      }
 
+	@Override
 	public ITextDoubleClickStrategy getDoubleClickStrategy(ISourceViewer sourceViewer, String contentType) {
 		if (doubleClickStrategy == null) {
 			doubleClickStrategy = new ValaDoubleClickStrategy();

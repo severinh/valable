@@ -109,6 +109,7 @@ public class ValaProject {
 		// -- Read a list of all the VAPI files...
 		//
 		File[] vapis = new File(vapiDir).listFiles(new FilenameFilter() {
+			@Override
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".vapi");
 			}
