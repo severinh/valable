@@ -38,8 +38,8 @@ public class ValaVersionTest {
 
 	@Test
 	public void testOfString() {
-		assertEquals(VERSION_0_17_3, ValaVersion.of("0.17.3"));
-		assertEquals(VERSION_0_18_1, ValaVersion.of("0.18.1"));
+		assertEquals(VERSION_0_17_3, ValaVersion.parseVersion("0.17.3"));
+		assertEquals(VERSION_0_18_1, ValaVersion.parseVersion("0.18.1"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

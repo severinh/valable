@@ -123,7 +123,8 @@ public class ValaBuildContext {
 				if (line != null) {
 					line = line.replace("Vala ", "");
 					try {
-						ValaVersion valaVersion = ValaVersion.of(line);
+						ValaVersion valaVersion = ValaVersion
+								.parseVersion(line);
 						return valaVersion;
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
