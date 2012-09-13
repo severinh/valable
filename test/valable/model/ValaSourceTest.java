@@ -108,7 +108,7 @@ public class ValaSourceTest {
 	}
 
 	public void assertLine(int expectedLine, ValaSymbol symbol) {
-		int line = symbol.getSourceReference().getLine();
+		int line = symbol.getSourceLocation().getLine();
 		assertEquals("Incorrect line number of '" + symbol + "'", expectedLine,
 				line);
 	}

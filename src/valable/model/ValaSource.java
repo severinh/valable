@@ -135,11 +135,11 @@ public class ValaSource {
 
 			// -- Build up the model...
 			//
-			SourceReference sourceRef = new SourceReference(lineNumber, 0);
+			ValaSourceLocation location = new ValaSourceLocation(this, lineNumber, 0);
 			if (type == 'c') {
 				// TODO What about private classes?
 				ValaType typeDefn = project.getType(name);
-				typeDefn.setSourceReference(sourceRef);
+				typeDefn.setSourceLocation(location);
 				typeDefn.reset();
 
 				if (extraData.containsKey("inherits"))
@@ -152,7 +152,7 @@ public class ValaSource {
 			} else if (type == 's') {
 				// TODO What about private struct?
 				ValaType typeDefn = project.getType(name);
-				typeDefn.setSourceReference(sourceRef);
+				typeDefn.setSourceLocation(location);
 				typeDefn.reset();
 
 				if (extraData.containsKey("inherits"))
@@ -165,7 +165,7 @@ public class ValaSource {
 			} else if (type == 'f') {
 				ValaType typeDefn = findTypeForLine(lineNumber);
 				ValaField fieldDefn = new ValaField(name);
-				fieldDefn.setSourceReference(sourceRef);
+				fieldDefn.setSourceLocation(location);
 				fieldDefn.getModifiers().addAll(
 						Arrays.asList(extraData.get("access").split(",\\s*")));
 				fieldDefn.setType(typeFromLine(lines.get(lineNumber), name));
@@ -179,7 +179,7 @@ public class ValaSource {
 				// "access:"
 				ValaType typeDefn = findTypeForLine(lineNumber);
 				ValaMethod methodDefn = new ValaMethod(name);
-				methodDefn.setSourceReference(sourceRef);
+				methodDefn.setSourceLocation(location);
 				methodDefn.getModifiers().addAll(
 						Arrays.asList(extraData.get("access").split(",\\s*")));
 				methodDefn.setType(typeFromLine(lines.get(lineNumber), name));
@@ -193,7 +193,7 @@ public class ValaSource {
 				ValaType typeDefn = findTypeForLine(lineNumber);
 				ValaMethod methodDefn = typeDefn.findMethodForLine(lineNumber);
 				ValaLocalVariable varDefn = new ValaLocalVariable(name);
-				varDefn.setSourceReference(sourceRef);
+				varDefn.setSourceLocation(location);
 				varDefn.setType(typeFromLine(lines.get(lineNumber), name));
 				methodDefn.getLocalVariables().add(varDefn);
 			}
@@ -206,8 +206,8 @@ public class ValaSource {
 	/**
 	 * Find the type which is being created for the given line number. Loops
 	 * over all {@link #types} and finds the one where <var>lineNumber</var> >
-	 * {@link SourceReference#getLine()} and <var>lineNumber</var> <
-	 * {@link SourceReference#getLine()} for the next class.
+	 * {@link ValaSourceLocation#getLine()} and <var>lineNumber</var> <
+	 * {@link ValaSourceLocation#getLine()} for the next class.
 	 * 
 	 * @param lineNumber
 	 * @return ValaType enclosing the given line number.
@@ -220,8 +220,8 @@ public class ValaSource {
 		ValaType lastType = null;
 		for (ValaType type : sortedTypes) {
 			if (lastType != null
-					&& lineNumber >= lastType.getSourceReference().getLine()
-					&& lineNumber < type.getSourceReference().getLine())
+					&& lineNumber >= lastType.getSourceLocation().getLine()
+					&& lineNumber < type.getSourceLocation().getLine())
 				return lastType;
 
 			lastType = type;
@@ -294,69 +294,5 @@ public class ValaSource {
 	@Override
 	public int hashCode() {
 		return source.getName().hashCode();
-	}
-
-	/**
-	 * Encodes information on an {@link ValaSymbol}'s source location.
-	 */
-	public class SourceReference {
-
-		private final int line;
-		private final int column;
-
-		/**
-		 * Create a new reference to the given source position in this
-		 * {@link ValaSource}.
-		 * 
-		 * @param line
-		 *            Line number, starts at 1.
-		 * @param column
-		 *            Column number, starts at 1.
-		 */
-		public SourceReference(int line, int column) {
-			super();
-			this.line = line;
-			this.column = column;
-		}
-
-		public int getColumn() {
-			return column;
-		}
-
-		public int getLine() {
-			return line;
-		}
-
-		/**
-		 * @return the source file containing this {@link ValaSymbol}.
-		 */
-		public ValaSource getSource() {
-			return ValaSource.this;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
-		@Override
-		public final boolean equals(Object arg) {
-			if (arg == null || !(arg instanceof SourceReference))
-				return false;
-
-			SourceReference other = (SourceReference) arg;
-			return line == other.line && column == other.column
-					&& getSource().equals(other.getSource());
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Object#hashCode()
-		 */
-		@Override
-		public int hashCode() {
-			return line * 1000 + column + ValaSource.this.hashCode();
-		}
 	}
 }

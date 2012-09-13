@@ -11,7 +11,6 @@ package valable.model;
 import java.util.Comparator;
 import java.util.regex.Pattern;
 
-import valable.model.ValaSource.SourceReference;
 
 /**
  * Superclass for all Vala information derived from a line in a {@code .vala}
@@ -23,18 +22,18 @@ public class ValaSymbol {
 	 * A comparator which ensures that two {@link ValaSymbol}s are returned in
 	 * the order in which they are declared in the source files.
 	 * 
-	 * @see SourceReference#getLine()
+	 * @see ValaSourceLocation#getLine()
 	 */
 	public static final Comparator<ValaSymbol> SOURCE_ORDER = new Comparator<ValaSymbol>() {
 		@Override
 		public int compare(ValaSymbol arg0, ValaSymbol arg1) {
-			return arg0.getSourceReference().getLine()
-					- arg1.getSourceReference().getLine();
+			return arg0.getSourceLocation().getLine()
+					- arg1.getSourceLocation().getLine();
 		}
 	};
 
 	private final String name;
-	private SourceReference sourceReference;
+	private ValaSourceLocation sourceReference;
 
 	public static final Pattern IDENTIFIER = Pattern
 			.compile("[A-Za-z_]([A-Za-z0-9_])*");
@@ -54,11 +53,11 @@ public class ValaSymbol {
 		return name;
 	}
 
-	public SourceReference getSourceReference() {
+	public ValaSourceLocation getSourceLocation() {
 		return sourceReference;
 	}
 
-	public void setSourceReference(SourceReference sourceReference) {
+	public void setSourceLocation(ValaSourceLocation sourceReference) {
 		this.sourceReference = sourceReference;
 	}
 

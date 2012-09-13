@@ -51,8 +51,8 @@ public class ValaType extends ValaSymbol {
 		ValaMethod lastMethod = null;
 		for (ValaMethod method : methods) {
 			if (lastMethod != null
-					&& lineNumber >= lastMethod.getSourceReference().getLine()
-					&& lineNumber < method.getSourceReference().getLine())
+					&& lineNumber >= lastMethod.getSourceLocation().getLine()
+					&& lineNumber < method.getSourceLocation().getLine())
 				return lastMethod;
 
 			lastMethod = method;
