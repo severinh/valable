@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package valable.model;
+package valable.outline;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,6 +17,12 @@ import org.eclipse.jface.viewers.TreeNode;
 import org.junit.Test;
 
 import valable.ValaPluginConstants;
+import valable.model.LocalFile;
+import valable.model.ValaField;
+import valable.model.ValaMethod;
+import valable.model.ValaPackage;
+import valable.model.ValaProject;
+import valable.model.ValaSource;
 import valable.outline.ValaLabelProvider;
 
 /**
