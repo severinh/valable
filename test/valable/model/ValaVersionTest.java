@@ -8,13 +8,11 @@
  */
 package valable.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import junit.framework.TestCase;
 
 import org.junit.Test;
 
-public class ValaVersionTest {
+public class ValaVersionTest extends TestCase {
 
 	private static final ValaVersion VERSION_0_17_3 = new ValaVersion(0, 17, 3);
 	private static final ValaVersion VERSION_0_18_1 = new ValaVersion(0, 18, 1);

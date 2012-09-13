@@ -8,18 +8,14 @@
  */
 package valable.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.util.Arrays;
 
+import junit.framework.TestCase;
+
 import org.junit.Test;
 
-public class ValaBuildContextTest {
+public class ValaBuildContextTest extends TestCase {
 
 	@Test
 	public void testDefault() {
