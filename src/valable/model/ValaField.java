@@ -69,4 +69,10 @@ public class ValaField extends ValaEntity implements HasModifiers {
 		
 		return ValaSymbolAccessibility.INTERNAL;
 	}
+
+	@Override
+	public <R> R accept(ValaEntityVisitor<R> visitor) {
+		return visitor.visitField(this);
+	}
+
 }

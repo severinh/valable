@@ -25,13 +25,13 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 import org.eclipse.swt.graphics.Image;
 
 import valable.ValaPlugin;
-import valable.ValaPlugin.ImageType;
 import valable.model.ValaEntity;
+import valable.model.ValaEntityImageProvider;
 import valable.model.ValaField;
+import valable.model.ValaLocalVariable;
 import valable.model.ValaMethod;
 import valable.model.ValaProject;
 import valable.model.ValaSource;
-import valable.model.ValaSymbolAccessibility;
 import valable.model.ValaType;
 
 /**
@@ -68,22 +68,27 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 		List<ICompletionProposal> localVars = new ArrayList<ICompletionProposal>();
 		for (ValaType type : source.getTypes().values()) {
 			for (ValaField field : type.getFields()) {
-				addProposal(proposals, ImageType.FIELD, field.getAccessibility(), field.getName(), field.getType() + " - " + type.getName(), filter, offset, 0);
+				addProposal(proposals, field,
+						field.getType() + " - " + type.getName(), filter,
+						offset, 0);
 			}
 			for (ValaMethod method : type.getMethods()) {
 				// Add all local variables from all methods at head of list
-				for (ValaField var : method.getLocalVariables())
-					addProposal(localVars, ImageType.VARIABLE,  ValaSymbolAccessibility.INTERNAL, var.getName(), var.getType(), filter, offset, 0);
+				for (ValaLocalVariable var : method.getLocalVariables())
+					addProposal(localVars, var, var.getType(), filter, offset,
+							0);
 				
 				// TODO Signature
-				addProposal(proposals, ImageType.METHOD, method.getAccessibility(), method.getName() + "()", method.getType() + " - " + type.getName(), filter, offset, -1);
+				addProposal(proposals, method,
+						method.getType() + " - " + type.getName(), filter,
+						offset, -1);
 			}
 		}
 		
 		// -- Add types in the project...
 		//
 		for (ValaType type : project.getTypes()) {
-			addProposal(proposals, ImageType.CLASS, ValaSymbolAccessibility.INTERNAL, type.getName(), "", filter, offset, 0);
+			addProposal(proposals, type, "", filter, offset, 0);
 		}
 		
 		proposals.addAll(0, localVars); // Local vars at the beginning
@@ -97,19 +102,21 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 	 * from the end of <var>value</var>.
 	 * 
 	 * @param proposals
-	 * @param value
 	 * @param filter
 	 * @param endOffset
 	 */
-	private void addProposal(List<ICompletionProposal> proposals, ImageType type, ValaSymbolAccessibility accessibility, String value, String description, String filter, int start, int endOffset) {
-		if (value.substring(0, filter.length()).toLowerCase().equals(filter)) {
-			Image image = ValaPlugin.getDefault()
-					.findImage(type, accessibility);
+	private void addProposal(List<ICompletionProposal> proposals,
+			ValaEntity entity, String description, String filter, int start,
+			int endOffset) {
+		String name = entity.getName();
+		if (name.substring(0, filter.length()).toLowerCase().equals(filter)) {
+			ValaPlugin valaPlugin = ValaPlugin.getDefault();
+			Image image = ValaEntityImageProvider.getImage(valaPlugin, entity);
 			int replacementOffset = start - filter.length();
 			int replacementLength = filter.length();
-			int cursorPosition = value.length() + endOffset;
-			String displayString = value + "    " + description;
-			proposals.add(new CompletionProposal(value, replacementOffset,
+			int cursorPosition = name.length() + endOffset;
+			String displayString = name + "    " + description;
+			proposals.add(new CompletionProposal(name, replacementOffset,
 					replacementLength, cursorPosition, image, displayString,
 					null, ""));
 		}

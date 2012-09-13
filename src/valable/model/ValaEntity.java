@@ -77,6 +77,9 @@ public class ValaEntity {
 		this.sourceReference = sourceReference;
 	}
 	
+	public <R> R accept(ValaEntityVisitor<R> visitor) {
+		return visitor.visitEntity(this);
+	}
 	
 	/**
 	 * @see java.lang.Object#toString()

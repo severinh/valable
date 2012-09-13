@@ -25,11 +25,11 @@ public class ValaType extends ValaEntity {
 	/**
 	 * Dependencies: build up during analysis.
 	 */
-	private List<ValaType> dependencies = new ArrayList<ValaType>();
+	private final List<ValaType> dependencies = new ArrayList<ValaType>();
 	
-	private SortedSet<ValaField>  fields   = new TreeSet<ValaField>(ValaEntity.SOURCE_ORDER);
-	private SortedSet<ValaMethod> methods  = new TreeSet<ValaMethod>(ValaEntity.SOURCE_ORDER);
-	private Set<ValaType>         inherits = new LinkedHashSet<ValaType>();
+	private final SortedSet<ValaField>  fields   = new TreeSet<ValaField>(ValaEntity.SOURCE_ORDER);
+	private final SortedSet<ValaMethod> methods  = new TreeSet<ValaMethod>(ValaEntity.SOURCE_ORDER);
+	private final Set<ValaType>         inherits = new LinkedHashSet<ValaType>();
 	
 	
 	/**
@@ -103,4 +103,10 @@ public class ValaType extends ValaEntity {
 		methods.clear();
 		inherits.clear();
 	}
+
+	@Override
+	public <R> R accept(ValaEntityVisitor<R> visitor) {
+		return visitor.visitType(this);
+	}
+
 }

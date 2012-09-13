@@ -10,6 +10,7 @@
  */
 package valable.outline;
 
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
@@ -17,13 +18,13 @@ import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.swt.graphics.Image;
 
 import valable.ValaPlugin;
-import valable.ValaPlugin.ImageType;
+import valable.ValaPluginConstants;
+import valable.model.ValaEntity;
+import valable.model.ValaEntityImageProvider;
 import valable.model.ValaField;
 import valable.model.ValaMethod;
 import valable.model.ValaPackage;
 import valable.model.ValaSource;
-import valable.model.ValaSymbolAccessibility;
-import valable.model.ValaType;
 
 /**
  * Provide a label for a given element.
@@ -45,29 +46,20 @@ class ValaLabelProvider extends LabelProvider implements IStyledLabelProvider {
 	public Image getImage(Object element) {
 		element = maybeGetTreeNodeValue(element);
 
-		ImageType imageType = null;
-		ValaSymbolAccessibility accessibility = ValaSymbolAccessibility.INTERNAL;
-		if (element instanceof ValaSource) {
-			imageType = ImageType.FILE;
-		} else if (element instanceof ValaType) {
-			imageType = ImageType.CLASS;
+		ValaPlugin valaPlugin = ValaPlugin.getDefault();
+		ImageRegistry imageRegistry = valaPlugin.getImageRegistry();
+		Image image = null;
+
+		if (element instanceof ValaEntity) {
+			ValaEntity entity = (ValaEntity) element;
+			image = ValaEntityImageProvider.getImage(valaPlugin, entity);
+		} else if (element instanceof ValaSource) {
+			image = imageRegistry.get(ValaPluginConstants.IMG_OBJECT_VALA);
 		} else if (element instanceof ValaPackage) {
-			imageType = ImageType.PACKAGE;
-		} else if (element instanceof ValaField) {
-			imageType = ImageType.FIELD;
-			accessibility = ((ValaField) element).getAccessibility();
-		} else if (element instanceof ValaMethod) {
-			imageType = ImageType.METHOD;
-			accessibility = ((ValaMethod) element).getAccessibility();
+			image = imageRegistry.get(ValaPluginConstants.IMG_OBJECT_PACKAGE);
 		}
 
-		if (imageType == null) {
-			return super.getImage(element);
-		} else {
-			Image image = ValaPlugin.getDefault().findImage(imageType,
-					accessibility);
-			return image;
-		}
+		return image;
 	}
 
 	/*

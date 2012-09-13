@@ -187,7 +187,7 @@ public class ValaSource {
 			} else if (type == 'l') {
 				ValaType   typeDefn   = findTypeForLine(lineNumber);
 				ValaMethod methodDefn = typeDefn.findMethodForLine(lineNumber);
-				ValaField  varDefn    = new ValaField(name);
+				ValaLocalVariable varDefn = new ValaLocalVariable(name);
 				varDefn.setSourceReference(sourceRef);
 				varDefn.setType(typeFromLine(lines.get(lineNumber - 1), name));
 				methodDefn.getLocalVariables().add(varDefn);

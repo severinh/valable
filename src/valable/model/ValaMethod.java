@@ -26,7 +26,7 @@ public class ValaMethod extends ValaEntity implements HasModifiers {
 
 	// This should really be a more complete AST, taking into account
 	// blocks, scoping and types...
-	private final Set<ValaField>  localVariables = new HashSet<ValaField>();
+	private final Set<ValaLocalVariable> localVariables = new HashSet<ValaLocalVariable>();
 	
 	
 	/**
@@ -89,7 +89,13 @@ public class ValaMethod extends ValaEntity implements HasModifiers {
 	/**
 	 * @return the localVariables
 	 */
-	public Set<ValaField> getLocalVariables() {
+	public Set<ValaLocalVariable> getLocalVariables() {
 		return localVariables;
 	}
+
+	@Override
+	public <R> R accept(ValaEntityVisitor<R> visitor) {
+		return visitor.visitMethod(this);
+	}
+
 }

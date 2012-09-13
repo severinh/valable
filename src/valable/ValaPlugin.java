@@ -37,7 +37,6 @@ import org.osgi.framework.BundleContext;
 
 import valable.builder.ValaProjectBuilder;
 import valable.editors.ValaEditor;
-import valable.model.ValaSymbolAccessibility;
 
 public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants {
 
@@ -191,79 +190,6 @@ public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants 
 			desc = ImageDescriptor.getMissingImageDescriptor();
 		}
 		getImageRegistry().put(key, desc);
-	}
-
-	/**
-	 * Find an {@link Image} which can be used to represent the given type of
-	 * object with the specified {@link ValaSymbolAccessibility}. If no
-	 * {@link Image} for the given {@link ValaSymbolAccessibility} can be found,
-	 * the first for <var>type</var> is used.
-	 */
-	public Image findImage(ImageType type, ValaSymbolAccessibility visibility) {
-		String key;
-		switch (type) {
-		case CLASS:
-			key = IMG_OBJECT_CLASS;
-			break;
-		case ENUM:
-			key = IMG_OBJECT_ENUM;
-			break;
-		case FIELD:
-			switch (visibility) {
-			case PRIVATE:
-				key = IMG_OBJECT_FIELD_PRIVATE;
-				break;
-			case PROTECTED:
-				key = IMG_OBJECT_FIELD_PROTECTED;
-				break;
-			case PUBLIC:
-				key = IMG_OBJECT_FIELD_PUBLIC;
-				break;
-			case INTERNAL:
-				// Fall-through
-			default:
-				key = IMG_OBJECT_FIELD_DEFAULT;
-				break;
-			}
-			break;
-		case FILE:
-			key = IMG_OBJECT_VALA;
-			break;
-		case INTERFACE:
-			key = IMG_OBJECT_INTERFACE;
-			break;
-		case METHOD:
-			switch (visibility) {
-			case PRIVATE:
-				key = IMG_OBJECT_METHOD_PRIVATE;
-				break;
-			case PROTECTED:
-				key = IMG_OBJECT_METHOD_PROTECTED;
-				break;
-			case PUBLIC:
-				key = IMG_OBJECT_METHOD_PUBLIC;
-				break;
-			case INTERNAL:
-				// Fall-through
-			default:
-				key = IMG_OBJECT_METHOD_DEFAULT;
-				break;
-			}
-			break;
-		case PACKAGE:
-			key = IMG_OBJECT_PACKAGE;
-			break;
-		case VARIABLE:
-			key = IMG_OBJECT_LOCAL_VARIABLE;
-			break;
-		case UNKNOWN:
-			// Fall-through
-		default:
-			key = IMG_OBJECT_UNKNOWN;
-			break;
-		}
-		Image image = getImageRegistry().get(key);
-		return image;
 	}
 
 }
