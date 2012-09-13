@@ -82,15 +82,29 @@ public class ValaSourceTest {
 				.size());
 
 		assertLine(6, simple);
-		assertLine(7, simple.getField("age"));
-		assertLine(8, simple.getField("name"));
-		assertLine(9, simple.getField("count"));
-		assertLine(11, simple.getMethod("main"));
-		assertLine(22, simple.getMethod("doThing"));
-		assertLine(27, simple.getMethod("getParent"));
+		assertField("int", 7, simple.getField("age"));
+		assertField("string", 8, simple.getField("name"));
+		assertField("int", 9, simple.getField("count"));
+		assertMethod("int", 11, simple.getMethod("main"));
+		assertMethod("void", 22, simple.getMethod("doThing"));
+		assertMethod("Simple", 27, simple.getMethod("getParent"));
 		assertLine(33, foo);
-		assertLine(34, foo.getMethod("getParent"));
-		assertLine(38, foo.getMethod("removeParent"));
+		assertMethod("Simple", 34, foo.getMethod("getParent"));
+		assertMethod("void", 38, foo.getMethod("removeParent"));
+	}
+
+	public void assertField(String expectedType, int expectedLine,
+			ValaField field) {
+		assertEquals("Incorrect type of '" + field + "'", expectedType,
+				field.getType());
+		assertLine(expectedLine, field);
+	}
+
+	public void assertMethod(String expectedReturnType, int expectedLine,
+			ValaMethod method) {
+		assertEquals("Incorrect return type of '" + method + "'",
+				expectedReturnType, method.getType());
+		assertLine(expectedLine, method);
 	}
 
 	public void assertLine(int expectedLine, ValaEntity entity) {
