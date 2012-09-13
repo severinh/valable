@@ -2,9 +2,6 @@
  * Comments should be ignored.
  */
 
-using Gee;
-using Vala;
-
 public class Simple : Object {
   private int age;
   string name;

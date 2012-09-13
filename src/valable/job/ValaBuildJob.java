@@ -1,12 +1,11 @@
-/* ValaBuildJob.java
- *
+/**
  * Copyright (C) 2008  Johann Prieur <johann.prieur@gmail.com>
- *
+ * Copyright (C) 2012  Severin Heiniger <severinheiniger@gmail.com>
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
  */
 package valable.job;
 
@@ -66,18 +65,18 @@ public class ValaBuildJob extends Job {
 
 	private ValaProject project;
 	private String baseDir;
-	private Set<IFile> filesToCompile;
-	private String valac;
-	private String vapi;
-	private String output;
-	private Set<String> packages = new HashSet<String>();
+	private final Set<IFile> filesToCompile;
+	private final String valac;
+	private final String vapi;
+	private final String output;
+	private final Set<String> packages = new HashSet<String>();
 	
-	private Map<IFile, List<String>> lines = new HashMap<IFile, List<String>>();
+	private final Map<IFile, List<String>> lines = new HashMap<IFile, List<String>>();
 	
 	/**
 	 * Used to retrieve {@link IFile}s from leaf filenames.
 	 */
-	private Map<String, IFile> reverseFiles = new HashMap<String, IFile>();
+	private final Map<String, IFile> reverseFiles = new HashMap<String, IFile>();
 
 	
 	public ValaBuildJob(Set<IFile> filesToCompile, String valac, String vapi,
