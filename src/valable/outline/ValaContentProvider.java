@@ -18,37 +18,37 @@ import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import valable.model.ValaSource;
 import valable.model.ValaType;
 
-
 /**
  * Provide a tree of content for {@link ValaSource} and its children.
  */
 public class ValaContentProvider extends TreeNodeContentProvider {
-	
+
 	/**
 	 * @see org.eclipse.jface.viewers.TreeNodeContentProvider#getChildren(java.lang.Object)
 	 */
 	@Override
 	public TreeNode[] getElements(Object parent) {
 		List<Object> elements = new ArrayList<Object>();
-		
+
 		if (parent instanceof ValaSource) {
-			elements.addAll(((ValaSource)parent).getUses());
-			elements.addAll(((ValaSource)parent).getTypes().values());
-			
+			elements.addAll(((ValaSource) parent).getUses());
+			elements.addAll(((ValaSource) parent).getTypes().values());
+
 		} else if (parent instanceof ValaType) {
-			elements.addAll(((ValaType)parent).getFields());
-			elements.addAll(((ValaType)parent).getMethods());
+			elements.addAll(((ValaType) parent).getFields());
+			elements.addAll(((ValaType) parent).getMethods());
 		}
-		
+
 		TreeNode[] results = new TreeNode[elements.size()];
 		for (int i = 0; i < elements.size(); i++) {
 			results[i] = new TreeNode(elements.get(i));
-			
+
 			if (results[i].getValue() instanceof ValaType) {
 				results[i].setChildren(getElements(results[i].getValue()));
 			}
 		}
-		
+
 		return results;
 	}
+
 }
