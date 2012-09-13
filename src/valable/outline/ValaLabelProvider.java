@@ -26,9 +26,10 @@ import valable.model.ValaPackage;
 import valable.model.ValaSource;
 
 /**
- * Provide a label for a given element.
+ * Provides a label for a given element in the outline.
  */
-class ValaLabelProvider extends LabelProvider implements IStyledLabelProvider {
+public class ValaLabelProvider extends LabelProvider implements
+		IStyledLabelProvider {
 
 	/**
 	 * The {@link String} between the main part of the label and the type, if
@@ -43,22 +44,29 @@ class ValaLabelProvider extends LabelProvider implements IStyledLabelProvider {
 	 */
 	@Override
 	public Image getImage(Object element) {
-		element = maybeGetTreeNodeValue(element);
-
 		ValaPlugin valaPlugin = ValaPlugin.getDefault();
+		String key = getImageKey(element);
 		ImageRegistry imageRegistry = valaPlugin.getImageRegistry();
-		Image image = null;
-
-		if (element instanceof ValaEntity) {
-			ValaEntity entity = (ValaEntity) element;
-			image = ValaEntityImageProvider.getImage(valaPlugin, entity);
-		} else if (element instanceof ValaSource) {
-			image = imageRegistry.get(ValaPluginConstants.IMG_OBJECT_VALA);
-		} else if (element instanceof ValaPackage) {
-			image = imageRegistry.get(ValaPluginConstants.IMG_OBJECT_PACKAGE);
-		}
+		Image image = imageRegistry.get(key);
 
 		return image;
+	}
+
+	public String getImageKey(Object element) {
+		element = maybeGetTreeNodeValue(element);
+
+		String key = null;
+		if (element instanceof ValaEntity) {
+			ValaEntity entity = (ValaEntity) element;
+			key = ValaEntityImageProvider.getKey(entity);
+		} else if (element instanceof ValaSource) {
+			key = ValaPluginConstants.IMG_OBJECT_VALA;
+		} else if (element instanceof ValaPackage) {
+			key = ValaPluginConstants.IMG_OBJECT_PACKAGE;
+		} else {
+			key = ValaPluginConstants.IMG_OBJECT_UNKNOWN;
+		}
+		return key;
 	}
 
 	/*
