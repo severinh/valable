@@ -259,14 +259,18 @@ public class ValaSource {
 		return types;
 	}
 
-
-	/**
-	 * @return the uses
-	 */
 	public Set<ValaPackage> getUses() {
 		return uses;
 	}
 	
+	public ValaPackage getUse(String name) {
+		for (ValaPackage use : getUses()) {
+			if (use.getName().equals(name)) {
+				return use;
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * @see java.lang.Object#equals(java.lang.Object)

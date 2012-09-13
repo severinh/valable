@@ -35,6 +35,7 @@ public class ValaContentProviderTest {
 
 		ValaType sampleType = source.getTypes().get("Simple");
 		ValaType fooType = source.getTypes().get("Foo");
+		TreeNode geeUseTreeNode = new TreeNode(source.getUse("Gee"));
 		TreeNode sampleTreeNode = new TreeNode(sampleType);
 		sampleTreeNode.setChildren(new TreeNode[] {
 				new TreeNode(sampleType.getField("age")),
@@ -48,7 +49,8 @@ public class ValaContentProviderTest {
 				new TreeNode(fooType.getMethod("getParent")),
 				new TreeNode(fooType.getMethod("removeParent")) });
 
-		TreeNode[] expectedTreeNodes = { sampleTreeNode, fooTreeNode };
+		TreeNode[] expectedTreeNodes = { geeUseTreeNode, sampleTreeNode,
+				fooTreeNode };
 
 		ValaContentProvider contentProvider = new ValaContentProvider();
 		TreeNode[] treeNodes = contentProvider.getElements(source);
