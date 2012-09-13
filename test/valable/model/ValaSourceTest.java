@@ -80,6 +80,23 @@ public class ValaSourceTest {
 
 		assertEquals("Incorrect number of fields in 'Foo'", 0, foo.getFields()
 				.size());
+
+		assertLine(6, simple);
+		assertLine(7, simple.getField("age"));
+		assertLine(8, simple.getField("name"));
+		assertLine(9, simple.getField("count"));
+		assertLine(11, simple.getMethod("main"));
+		assertLine(22, simple.getMethod("doThing"));
+		assertLine(27, simple.getMethod("getParent"));
+		assertLine(33, foo);
+		assertLine(34, foo.getMethod("getParent"));
+		assertLine(38, foo.getMethod("removeParent"));
+	}
+
+	public void assertLine(int expectedLine, ValaEntity entity) {
+		int line = entity.getSourceReference().getLine();
+		assertEquals("Incorrect line number of '" + entity + "'", expectedLine,
+				line);
 	}
 
 }
