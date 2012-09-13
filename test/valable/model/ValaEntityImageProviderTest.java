@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import valable.ValaPluginConstants;
 
+/**
+ * Tests {@link ValaEntityImageProvider}.
+ */
 public class ValaEntityImageProviderTest extends TestCase {
 
 	private static final String NAME = "foo";
@@ -53,12 +56,20 @@ public class ValaEntityImageProviderTest extends TestCase {
 				ValaEntityImageProvider.getKey(type));
 	}
 
+	/**
+	 * Creates a new stub {@link ValaField} with a given
+	 * {@link ValaSymbolAccessibility}.
+	 */
 	private ValaField makeStubField(ValaSymbolAccessibility accessibility) {
 		ValaField field = new ValaField(NAME);
 		field.getModifiers().add(accessibility.toString());
 		return field;
 	}
 
+	/**
+	 * Creates a new stub {@link ValaMethod} with a given
+	 * {@link ValaSymbolAccessibility}.
+	 */
 	private ValaMethod makeStubMethod(ValaSymbolAccessibility accessibility) {
 		ValaMethod method = new ValaMethod(NAME);
 		method.getModifiers().add(accessibility.toString());

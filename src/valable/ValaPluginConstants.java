@@ -13,6 +13,9 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Various global constants.
+ */
 public interface ValaPluginConstants {
 
 	public static final String PLUGIN_ID = "valable";

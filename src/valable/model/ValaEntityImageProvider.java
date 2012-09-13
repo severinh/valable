@@ -13,6 +13,12 @@ import org.eclipse.swt.graphics.Image;
 import valable.ValaPlugin;
 import valable.ValaPluginConstants;
 
+/**
+ * Provides the {@link Image}s used to visually represent {@link ValaEntity}
+ * objects.
+ * 
+ * This class is a singleton.
+ */
 public class ValaEntityImageProvider implements ValaEntityVisitor<String> {
 
 	private static final ValaEntityImageProvider instance = new ValaEntityImageProvider();
