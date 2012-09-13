@@ -62,6 +62,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void appendContents(InputStream source, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -73,6 +74,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void appendContents(InputStream source, boolean force,
 			boolean keepHistory, IProgressMonitor monitor) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -84,6 +86,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void create(InputStream source, boolean force,
 			IProgressMonitor monitor) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -95,6 +98,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void create(InputStream source, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -107,6 +111,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void createLink(IPath localLocation, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -118,6 +123,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void createLink(URI location, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -129,6 +135,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void delete(boolean force, boolean keepHistory,
 			IProgressMonitor monitor) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/**
@@ -162,7 +169,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IContentDescription getContentDescription() throws CoreException {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/**
@@ -214,7 +221,7 @@ public class LocalFile implements IFile {
 	@Override
 	public IFileState[] getHistory(IProgressMonitor monitor)
 			throws CoreException {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/**
@@ -245,6 +252,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void move(IPath destination, boolean force, boolean keepHistory,
 			IProgressMonitor monitor) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -254,6 +262,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public void setCharset(String newCharset) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -265,6 +274,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setCharset(String newCharset, IProgressMonitor monitor)
 			throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -276,6 +286,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setContents(InputStream source, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -288,6 +299,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setContents(IFileState source, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -299,7 +311,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setContents(InputStream source, boolean force,
 			boolean keepHistory, IProgressMonitor monitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -312,7 +324,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setContents(IFileState source, boolean force,
 			boolean keepHistory, IProgressMonitor monitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -324,7 +336,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public void accept(IResourceVisitor visitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -337,6 +349,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void accept(IResourceProxyVisitor visitor, int memberFlags)
 			throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -349,6 +362,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void accept(IResourceVisitor visitor, int depth,
 			boolean includePhantoms) throws CoreException {
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -361,6 +375,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void accept(IResourceVisitor visitor, int depth, int memberFlags)
 			throws CoreException {
+		throw new IllegalStateException("not implemented");
 
 	}
 
@@ -373,7 +388,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public void clearHistory(IProgressMonitor monitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -386,7 +401,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void copy(IPath destination, boolean force, IProgressMonitor monitor)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -399,7 +414,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void copy(IPath destination, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -412,7 +427,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void copy(IProjectDescription description, boolean force,
 			IProgressMonitor monitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -425,7 +440,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void copy(IProjectDescription description, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -435,7 +450,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IMarker createMarker(String type) throws CoreException {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -445,7 +460,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IResourceProxy createProxy() {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -457,7 +472,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void delete(boolean force, IProgressMonitor monitor)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -469,7 +484,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void delete(int updateFlags, IProgressMonitor monitor)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -481,7 +496,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void deleteMarkers(String type, boolean includeSubtypes, int depth)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -491,7 +506,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public boolean exists() {
-		return false;
+		return true;
 	}
 
 	/*
@@ -501,7 +516,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IMarker findMarker(long id) throws CoreException {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -513,7 +528,7 @@ public class LocalFile implements IFile {
 	@Override
 	public IMarker[] findMarkers(String type, boolean includeSubtypes, int depth)
 			throws CoreException {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/**
@@ -550,7 +565,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public URI getLocationURI() {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -560,7 +575,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IMarker getMarker(long id) {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -580,7 +595,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IContainer getParent() {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -592,7 +607,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public String getPersistentProperty(QualifiedName key) throws CoreException {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -602,7 +617,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IProject getProject() {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -612,7 +627,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IPath getProjectRelativePath() {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -622,7 +637,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IPath getRawLocation() {
-		return null;
+		return new Path(file.getAbsolutePath());
 	}
 
 	/*
@@ -632,7 +647,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public URI getRawLocationURI() {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -642,7 +657,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public ResourceAttributes getResourceAttributes() {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -654,7 +669,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public Object getSessionProperty(QualifiedName key) throws CoreException {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -664,7 +679,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public int getType() {
-		return 0;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -674,7 +689,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IWorkspace getWorkspace() {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -684,7 +699,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public boolean isAccessible() {
-		return false;
+		return true;
 	}
 
 	/*
@@ -724,7 +739,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public boolean isLocal(int depth) {
-		return false;
+		return true;
 	}
 
 	/*
@@ -767,7 +782,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void move(IPath destination, boolean force, IProgressMonitor monitor)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -780,7 +795,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void move(IPath destination, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -793,7 +808,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void move(IProjectDescription description, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -807,7 +822,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void move(IProjectDescription description, boolean force,
 			boolean keepHistory, IProgressMonitor monitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -819,7 +834,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void refreshLocal(int depth, IProgressMonitor monitor)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -829,7 +844,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public void revertModificationStamp(long value) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -839,7 +854,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public void setDerived(boolean isDerived) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -851,7 +866,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setLocal(boolean flag, int depth, IProgressMonitor monitor)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -861,7 +876,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public long setLocalTimeStamp(long value) throws CoreException {
-		return 0;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -874,7 +889,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setPersistentProperty(QualifiedName key, String value)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -884,7 +899,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public void setReadOnly(boolean readOnly) {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -897,7 +912,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setResourceAttributes(ResourceAttributes attributes)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -910,7 +925,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setSessionProperty(QualifiedName key, Object value)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -921,7 +936,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setTeamPrivateMember(boolean isTeamPrivate)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -932,7 +947,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public void touch(IProgressMonitor monitor) throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -942,7 +957,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -954,7 +969,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public boolean contains(ISchedulingRule rule) {
-		return false;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -966,7 +981,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public boolean isConflicting(ISchedulingRule rule) {
-		return false;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -990,7 +1005,7 @@ public class LocalFile implements IFile {
 	@Override
 	public Map<QualifiedName, String> getPersistentProperties()
 			throws CoreException {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -1001,7 +1016,7 @@ public class LocalFile implements IFile {
 	@Override
 	public Map<QualifiedName, Object> getSessionProperties()
 			throws CoreException {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -1037,7 +1052,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public IPathVariableManager getPathVariableManager() {
-		return null;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -1047,7 +1062,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public boolean isHidden(int arg0) {
-		return false;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -1057,7 +1072,7 @@ public class LocalFile implements IFile {
 	 */
 	@Override
 	public boolean isTeamPrivateMember(int arg0) {
-		return false;
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -1079,7 +1094,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void setDerived(boolean arg0, IProgressMonitor arg1)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 	/*
@@ -1092,7 +1107,7 @@ public class LocalFile implements IFile {
 	@Override
 	public void accept(IResourceProxyVisitor visitor, int depth, int memberFlags)
 			throws CoreException {
-
+		throw new IllegalStateException("not implemented");
 	}
 
 }
