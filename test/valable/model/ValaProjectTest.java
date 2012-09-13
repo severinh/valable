@@ -20,7 +20,7 @@ import org.junit.Test;
 /**
  * Test that {@link ValaProject} works correctly.
  */
-public class TestValaProject {
+public class ValaProjectTest {
 	
 	/**
 	 * {@link ValaProject#getAvailablePackages()} should return a list

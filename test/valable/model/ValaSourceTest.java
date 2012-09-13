@@ -24,7 +24,7 @@ import org.junit.Test;
 /**
  * Test that {@link ValaSource} works correctly.
  */
-public class TestValaSource {
+public class ValaSourceTest {
 	
 	/**
 	 * Test that simple Vala files can be parsed correctly. This

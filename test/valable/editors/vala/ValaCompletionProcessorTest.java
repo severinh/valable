@@ -21,7 +21,7 @@ import valable.model.ValaEntity;
 /**
  * Test that {@link ValaCompletionProcessor} works correctly.
  */
-public class TestValaCompletionProcessor {
+public class ValaCompletionProcessorTest {
 	
 	/**
 	 * Test that {@link ValaEntity#IDENTIFIER}

@@ -17,7 +17,7 @@ import org.junit.Test;
 /**
  * Test that {@link ValaWordDetector} works correctly.
  */
-public class TestValaWordDetector {
+public class ValaWordDetectorTest {
 	
 	private final IWordDetector detector = new ValaWordDetector();
 	
