@@ -27,3 +27,4 @@ Export-Package: valable,
  valable.wizard.file,
  valable.wizard.project
 Import-Package: org.eclipse.ui.texteditor
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
