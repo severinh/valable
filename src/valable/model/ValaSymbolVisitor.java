@@ -8,9 +8,9 @@
  */
 package valable.model;
 
-public interface ValaEntityVisitor<R> {
+public interface ValaSymbolVisitor<R> {
 
-	public R visitEntity(ValaEntity entity);
+	public R visitSymbol(ValaSymbol symbol);
 
 	public R visitField(ValaField field);
 

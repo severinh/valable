@@ -18,7 +18,7 @@ import java.util.TreeSet;
 /**
  * Encapsulate information about a Vala class.
  */
-public class ValaType extends ValaEntity {
+public class ValaType extends ValaSymbol {
 
 	/**
 	 * Dependencies: build up during analysis.
@@ -26,9 +26,9 @@ public class ValaType extends ValaEntity {
 	private final List<ValaType> dependencies = new ArrayList<ValaType>();
 
 	private final SortedSet<ValaField> fields = new TreeSet<ValaField>(
-			ValaEntity.SOURCE_ORDER);
+			ValaSymbol.SOURCE_ORDER);
 	private final SortedSet<ValaMethod> methods = new TreeSet<ValaMethod>(
-			ValaEntity.SOURCE_ORDER);
+			ValaSymbol.SOURCE_ORDER);
 	private final Set<ValaType> inherits = new LinkedHashSet<ValaType>();
 
 	/**
@@ -111,7 +111,7 @@ public class ValaType extends ValaEntity {
 	}
 
 	@Override
-	public <R> R accept(ValaEntityVisitor<R> visitor) {
+	public <R> R accept(ValaSymbolVisitor<R> visitor) {
 		return visitor.visitType(this);
 	}
 

@@ -209,7 +209,7 @@ public class ValaSource {
 	 * @return ValaType enclosing the given line number.
 	 */
 	public ValaType findTypeForLine(int lineNumber) {
-		SortedSet<ValaType> sortedTypes = new TreeSet<ValaType>(ValaEntity.SOURCE_ORDER);
+		SortedSet<ValaType> sortedTypes = new TreeSet<ValaType>(ValaSymbol.SOURCE_ORDER);
 		sortedTypes.addAll(types.values());
 
 		ValaType lastType = null;
@@ -238,7 +238,7 @@ public class ValaSource {
 	 * @return
 	 */
 	private String typeFromLine(String line, String name) {
-		Pattern pattern = Pattern.compile(".*?\\b(" + ValaEntity.IDENTIFIER.pattern() + ")\\s+" + name + "\\b.*");
+		Pattern pattern = Pattern.compile(".*?\\b(" + ValaSymbol.IDENTIFIER.pattern() + ")\\s+" + name + "\\b.*");
 		Matcher matcher = pattern.matcher(line);
 		
 		return matcher.matches() ? matcher.group(1) : "";
@@ -297,7 +297,7 @@ public class ValaSource {
 	
 	
 	/**
-	 * Encode information on an entities source location.
+	 * Encode information on an {@link ValaSymbol}'s source location.
 	 */
 	public class SourceReference {
 		private final int line;
@@ -332,7 +332,7 @@ public class ValaSource {
 		
 		
 		/**
-		 * @return the source file containing this entity.
+		 * @return the source file containing this {@link ValaSymbol}.
 		 */
 		public ValaSource getSource() {
 			return ValaSource.this;

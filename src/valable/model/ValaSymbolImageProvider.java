@@ -14,17 +14,17 @@ import valable.ValaPlugin;
 import valable.ValaPluginConstants;
 
 /**
- * Provides the {@link Image}s used to visually represent {@link ValaEntity}
+ * Provides the {@link Image}s used to visually represent {@link ValaSymbol}
  * objects.
  * 
  * This class is a singleton.
  */
-public class ValaEntityImageProvider implements ValaEntityVisitor<String> {
+public class ValaSymbolImageProvider implements ValaSymbolVisitor<String> {
 
-	private static final ValaEntityImageProvider instance = new ValaEntityImageProvider();
+	private static final ValaSymbolImageProvider instance = new ValaSymbolImageProvider();
 
 	@Override
-	public String visitEntity(ValaEntity entity) {
+	public String visitSymbol(ValaSymbol symbol) {
 		return ValaPluginConstants.IMG_OBJECT_UNKNOWN;
 	}
 
@@ -70,23 +70,23 @@ public class ValaEntityImageProvider implements ValaEntityVisitor<String> {
 		return ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE;
 	}
 
-	public static ValaEntityImageProvider getInstance() {
+	public static ValaSymbolImageProvider getInstance() {
 		return instance;
 	}
 
-	public static String getKey(ValaEntity entity) {
-		if (entity == null) {
-			throw new IllegalArgumentException("ValaEntity must not be null");
+	public static String getKey(ValaSymbol symbol) {
+		if (symbol == null) {
+			throw new IllegalArgumentException("ValaSymbol must not be null");
 		}
-		String key = entity.accept(getInstance());
+		String key = symbol.accept(getInstance());
 		return key;
 	}
 
-	public static Image getImage(ValaPlugin valaPlugin, ValaEntity entity) {
+	public static Image getImage(ValaPlugin valaPlugin, ValaSymbol symbol) {
 		if (valaPlugin == null) {
 			throw new IllegalArgumentException("ValaPlugin must not be null");
 		}
-		String key = getKey(entity);
+		String key = getKey(symbol);
 		Image image = valaPlugin.getImageRegistry().get(key);
 		return image;
 	}

@@ -107,9 +107,9 @@ public class ValaSourceTest {
 		assertLine(expectedLine, method);
 	}
 
-	public void assertLine(int expectedLine, ValaEntity entity) {
-		int line = entity.getSourceReference().getLine();
-		assertEquals("Incorrect line number of '" + entity + "'", expectedLine,
+	public void assertLine(int expectedLine, ValaSymbol symbol) {
+		int line = symbol.getSourceReference().getLine();
+		assertEquals("Incorrect line number of '" + symbol + "'", expectedLine,
 				line);
 	}
 

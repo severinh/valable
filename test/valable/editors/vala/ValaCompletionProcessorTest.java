@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 
 import org.junit.Test;
 
-import valable.model.ValaEntity;
+import valable.model.ValaSymbol;
 
 /**
  * Test that {@link ValaCompletionProcessor} works correctly.
@@ -24,17 +24,17 @@ import valable.model.ValaEntity;
 public class ValaCompletionProcessorTest {
 	
 	/**
-	 * Test that {@link ValaEntity#IDENTIFIER}
+	 * Test that {@link ValaSymbol#IDENTIFIER}
 	 * and {@link ValaCompletionProcessor#LAST_IDENTIFIER} are
 	 * correct.
 	 */
 	@Test
 	public void testRegexps() {
 		String text = "foo";
-		assertTrue("Simple identifier", ValaEntity.IDENTIFIER.matcher(text).matches());
+		assertTrue("Simple identifier", ValaSymbol.IDENTIFIER.matcher(text).matches());
 
 		text = "foo bar";
-		assertFalse("Two identifiers", ValaEntity.IDENTIFIER.matcher(text).matches());
+		assertFalse("Two identifiers", ValaSymbol.IDENTIFIER.matcher(text).matches());
 
 		text = "hello {\n  wor";
 		Matcher matcher = ValaCompletionProcessor.LAST_IDENTIFIER.matcher(text);

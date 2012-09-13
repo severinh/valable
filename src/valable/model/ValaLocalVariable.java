@@ -8,7 +8,7 @@
  */
 package valable.model;
 
-public class ValaLocalVariable extends ValaEntity {
+public class ValaLocalVariable extends ValaSymbol {
 
 	private String type;
 
@@ -25,7 +25,7 @@ public class ValaLocalVariable extends ValaEntity {
 	}
 
 	@Override
-	public <R> R accept(ValaEntityVisitor<R> visitor) {
+	public <R> R accept(ValaSymbolVisitor<R> visitor) {
 		return visitor.visitLocalVariable(this);
 	}
 

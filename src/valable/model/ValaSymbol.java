@@ -17,17 +17,17 @@ import valable.model.ValaSource.SourceReference;
  * Superclass for all Vala information derived from a line in a
  * {@code .vala} file.
  */
-public class ValaEntity {
+public class ValaSymbol {
 
 	/**
-	 * A comparator which ensures that two {@link ValaEntity}s are returned
+	 * A comparator which ensures that two {@link ValaSymbol}s are returned
 	 * in the order in which they are declared in the source files.
 	 * 
 	 * @see SourceReference#getLine()
 	 */
-	public static final Comparator<ValaEntity> SOURCE_ORDER = new Comparator<ValaEntity>() {
+	public static final Comparator<ValaSymbol> SOURCE_ORDER = new Comparator<ValaSymbol>() {
 		@Override
-		public int compare(ValaEntity arg0, ValaEntity arg1) {
+		public int compare(ValaSymbol arg0, ValaSymbol arg1) {
 			return arg0.getSourceReference().getLine() -
 			       arg1.getSourceReference().getLine();
 		}
@@ -42,11 +42,12 @@ public class ValaEntity {
 	
 	
 	/**
-	 * Create a new entity from a {@code .vala} source file.
+	 * Create a new {@link ValaSymbol} from a {@code .vala} source file.
 	 * 
-	 * @param name Name of this entity.
+	 * @param name
+	 *            Name of this {@link ValaSymbol}.
 	 */
-	public ValaEntity(String name) {
+	public ValaSymbol(String name) {
 		super();
 		this.name = name;
 	}
@@ -75,8 +76,8 @@ public class ValaEntity {
 		this.sourceReference = sourceReference;
 	}
 	
-	public <R> R accept(ValaEntityVisitor<R> visitor) {
-		return visitor.visitEntity(this);
+	public <R> R accept(ValaSymbolVisitor<R> visitor) {
+		return visitor.visitSymbol(this);
 	}
 	
 	/**
@@ -96,7 +97,7 @@ public class ValaEntity {
 		if (arg == null || !arg.getClass().equals(this.getClass()))
 			return false;
 		
-		ValaEntity other = (ValaEntity)arg;
+		ValaSymbol other = (ValaSymbol)arg;
 		return name.equals(other.name) && sourceReference.equals(other.sourceReference);
 	}
 	

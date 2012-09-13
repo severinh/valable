@@ -11,18 +11,18 @@ package valable.model;
 import java.util.Set;
 
 /**
- * Common methods on {@link ValaEntity}s which have
+ * Common methods on {@link ValaSymbol}s which have
  * {@link ValaSymbolAccessibility}, and other modifier, information.
  */
 public interface HasModifiers {
 	
 	/**
-	 * @return a list of all the modifiers on this entity.
+	 * @return a list of all the modifiers on this {@link ValaSymbol}.
 	 */
 	public Set<String> getModifiers();
 
 	/**
-	 * @return the {@link ValaSymbolAccessibility} of this {@link ValaEntity},
+	 * @return the {@link ValaSymbolAccessibility} of this {@link ValaSymbol},
 	 *         or {@link ValaSymbolAccessibility#INTERNAL} if unknown.
 	 */
 	public ValaSymbolAccessibility getAccessibility();

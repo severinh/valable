@@ -8,31 +8,31 @@
  */
 package valable.model;
 
-public class AbstractValaEntityVisitor<R> implements ValaEntityVisitor<R> {
+public class AbstractValaSymbolVisitor<R> implements ValaSymbolVisitor<R> {
 
 	@Override
-	public R visitEntity(ValaEntity entity) {
+	public R visitSymbol(ValaSymbol symbol) {
 		return null;
 	}
 
 	@Override
 	public R visitField(ValaField field) {
-		return visitEntity(field);
+		return visitSymbol(field);
 	}
 
 	@Override
 	public R visitMethod(ValaMethod method) {
-		return visitEntity(method);
+		return visitSymbol(method);
 	}
 
 	@Override
 	public R visitType(ValaType type) {
-		return visitEntity(type);
+		return visitSymbol(type);
 	}
 
 	@Override
 	public R visitLocalVariable(ValaLocalVariable localVariable) {
-		return visitEntity(localVariable);
+		return visitSymbol(localVariable);
 	}
 
 }

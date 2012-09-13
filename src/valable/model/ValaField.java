@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * Encapsulate information about a field in a {@link ValaType}.
  */
-public class ValaField extends ValaEntity implements HasModifiers {
+public class ValaField extends ValaSymbol implements HasModifiers {
 	private final Set<String>  modifiers = new HashSet<String>();
 	private String       type;
 	
@@ -69,7 +69,7 @@ public class ValaField extends ValaEntity implements HasModifiers {
 	}
 
 	@Override
-	public <R> R accept(ValaEntityVisitor<R> visitor) {
+	public <R> R accept(ValaSymbolVisitor<R> visitor) {
 		return visitor.visitField(this);
 	}
 

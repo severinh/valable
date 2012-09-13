@@ -23,8 +23,8 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 import org.eclipse.swt.graphics.Image;
 
 import valable.ValaPlugin;
-import valable.model.ValaEntity;
-import valable.model.ValaEntityImageProvider;
+import valable.model.ValaSymbol;
+import valable.model.ValaSymbolImageProvider;
 import valable.model.ValaField;
 import valable.model.ValaLocalVariable;
 import valable.model.ValaMethod;
@@ -41,7 +41,7 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 	private static final IContextInformation[] NO_CONTEXTS      = new IContextInformation[0];
     private static final char[]                ACTIVATION_CHARS = new char[] { '.' };
     
-    public static final Pattern               LAST_IDENTIFIER  = Pattern.compile("(?s).*?(" + ValaEntity.IDENTIFIER.pattern() + ")$");
+    public static final Pattern               LAST_IDENTIFIER  = Pattern.compile("(?s).*?(" + ValaSymbol.IDENTIFIER.pattern() + ")$");
 
 
 	/**
@@ -104,12 +104,12 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 	 * @param endOffset
 	 */
 	private void addProposal(List<ICompletionProposal> proposals,
-			ValaEntity entity, String description, String filter, int start,
+			ValaSymbol symbol, String description, String filter, int start,
 			int endOffset) {
-		String name = entity.getName();
+		String name = symbol.getName();
 		if (name.substring(0, filter.length()).toLowerCase().equals(filter)) {
 			ValaPlugin valaPlugin = ValaPlugin.getDefault();
-			Image image = ValaEntityImageProvider.getImage(valaPlugin, entity);
+			Image image = ValaSymbolImageProvider.getImage(valaPlugin, symbol);
 			int replacementOffset = start - filter.length();
 			int replacementLength = filter.length();
 			int cursorPosition = name.length() + endOffset;

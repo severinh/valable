@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * Encapsulate information about a method in a {@link ValaType}.
  */
-public class ValaMethod extends ValaEntity implements HasModifiers {
+public class ValaMethod extends ValaSymbol implements HasModifiers {
 	private final Set<String>  modifiers = new HashSet<String>();
 	private String       type;
 	private final Map<String, String> signature = new LinkedHashMap<String, String>();
@@ -92,7 +92,7 @@ public class ValaMethod extends ValaEntity implements HasModifiers {
 	}
 
 	@Override
-	public <R> R accept(ValaEntityVisitor<R> visitor) {
+	public <R> R accept(ValaSymbolVisitor<R> visitor) {
 		return visitor.visitMethod(this);
 	}
 

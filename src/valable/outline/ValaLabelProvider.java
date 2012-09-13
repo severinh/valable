@@ -18,8 +18,8 @@ import org.eclipse.swt.graphics.Image;
 
 import valable.ValaPlugin;
 import valable.ValaPluginConstants;
-import valable.model.ValaEntity;
-import valable.model.ValaEntityImageProvider;
+import valable.model.ValaSymbol;
+import valable.model.ValaSymbolImageProvider;
 import valable.model.ValaField;
 import valable.model.ValaMethod;
 import valable.model.ValaPackage;
@@ -56,9 +56,9 @@ public class ValaLabelProvider extends LabelProvider implements
 		element = maybeGetTreeNodeValue(element);
 
 		String key = null;
-		if (element instanceof ValaEntity) {
-			ValaEntity entity = (ValaEntity) element;
-			key = ValaEntityImageProvider.getKey(entity);
+		if (element instanceof ValaSymbol) {
+			ValaSymbol symbol = (ValaSymbol) element;
+			key = ValaSymbolImageProvider.getKey(symbol);
 		} else if (element instanceof ValaSource) {
 			key = ValaPluginConstants.IMG_OBJECT_VALA;
 		} else if (element instanceof ValaPackage) {

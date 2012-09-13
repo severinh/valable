@@ -15,53 +15,53 @@ import org.junit.Test;
 import valable.ValaPluginConstants;
 
 /**
- * Tests {@link ValaEntityImageProvider}.
+ * Tests {@link ValaSymbolImageProvider}.
  */
-public class ValaEntityImageProviderTest {
+public class ValaSymbolImageProviderTest {
 
 	private static final String NAME = "foo";
 
 	@Test
 	public void test() {
-		ValaEntity entity = new ValaEntity(NAME);
+		ValaSymbol symbol = new ValaSymbol(NAME);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_UNKNOWN,
-				ValaEntityImageProvider.getKey(entity));
+				ValaSymbolImageProvider.getKey(symbol));
 
 		ValaField field;
 		field = makeStubField(ValaSymbolAccessibility.PRIVATE);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_FIELD_PRIVATE,
-				ValaEntityImageProvider.getKey(field));
+				ValaSymbolImageProvider.getKey(field));
 		field = makeStubField(ValaSymbolAccessibility.INTERNAL);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_FIELD_DEFAULT,
-				ValaEntityImageProvider.getKey(field));
+				ValaSymbolImageProvider.getKey(field));
 		field = makeStubField(ValaSymbolAccessibility.PROTECTED);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_FIELD_PROTECTED,
-				ValaEntityImageProvider.getKey(field));
+				ValaSymbolImageProvider.getKey(field));
 		field = makeStubField(ValaSymbolAccessibility.PUBLIC);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_FIELD_PUBLIC,
-				ValaEntityImageProvider.getKey(field));
+				ValaSymbolImageProvider.getKey(field));
 
 		ValaMethod method;
 		method = makeStubMethod(ValaSymbolAccessibility.PRIVATE);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_METHOD_PRIVATE,
-				ValaEntityImageProvider.getKey(method));
+				ValaSymbolImageProvider.getKey(method));
 		method = makeStubMethod(ValaSymbolAccessibility.INTERNAL);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_METHOD_DEFAULT,
-				ValaEntityImageProvider.getKey(method));
+				ValaSymbolImageProvider.getKey(method));
 		method = makeStubMethod(ValaSymbolAccessibility.PROTECTED);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_METHOD_PROTECTED,
-				ValaEntityImageProvider.getKey(method));
+				ValaSymbolImageProvider.getKey(method));
 		method = makeStubMethod(ValaSymbolAccessibility.PUBLIC);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_METHOD_PUBLIC,
-				ValaEntityImageProvider.getKey(method));
+				ValaSymbolImageProvider.getKey(method));
 
 		ValaLocalVariable localVariable = new ValaLocalVariable(NAME);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE,
-				ValaEntityImageProvider.getKey(localVariable));
+				ValaSymbolImageProvider.getKey(localVariable));
 
 		ValaType type = new ValaType(NAME);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_CLASS,
-				ValaEntityImageProvider.getKey(type));
+				ValaSymbolImageProvider.getKey(type));
 	}
 
 	/**
