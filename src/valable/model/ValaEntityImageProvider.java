@@ -68,14 +68,19 @@ public class ValaEntityImageProvider implements ValaEntityVisitor<String> {
 		return instance;
 	}
 
-	public static Image getImage(ValaPlugin valaPlugin, ValaEntity entity) {
-		if (valaPlugin == null) {
-			throw new IllegalArgumentException("ValaPlugin must not be null");
-		}
+	public static String getKey(ValaEntity entity) {
 		if (entity == null) {
 			throw new IllegalArgumentException("ValaEntity must not be null");
 		}
 		String key = entity.accept(getInstance());
+		return key;
+	}
+
+	public static Image getImage(ValaPlugin valaPlugin, ValaEntity entity) {
+		if (valaPlugin == null) {
+			throw new IllegalArgumentException("ValaPlugin must not be null");
+		}
+		String key = getKey(entity);
 		Image image = valaPlugin.getImageRegistry().get(key);
 		return image;
 	}

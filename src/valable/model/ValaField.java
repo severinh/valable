@@ -62,7 +62,7 @@ public class ValaField extends ValaEntity implements HasModifiers {
 	@Override
 	public ValaSymbolAccessibility getAccessibility() {
 		for (ValaSymbolAccessibility v : ValaSymbolAccessibility.values())
-			if (modifiers.contains(v.toString().toLowerCase()))
+			if (modifiers.contains(v.toString()))
 				return v;
 		
 		return ValaSymbolAccessibility.INTERNAL;

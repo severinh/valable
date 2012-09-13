@@ -12,4 +12,9 @@ public enum ValaSymbolAccessibility {
 
 	PRIVATE, INTERNAL, PROTECTED, PUBLIC;
 
+	@Override
+	public final String toString() {
+		return super.toString().toLowerCase();
+	}
+
 }
