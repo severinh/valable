@@ -27,7 +27,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -163,32 +162,13 @@ public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants 
 	 */
 	@Override
 	protected void initializeImageRegistry(ImageRegistry registry) {
-		declareImage(IMG_OBJECT_VALA);
-		declareImage(IMG_OBJECT_UNKNOWN);
-		declareImage(IMG_OBJECT_PACKAGE);
-		declareImage(IMG_OBJECT_CLASS);
-		declareImage(IMG_OBJECT_INTERFACE);
-		declareImage(IMG_OBJECT_ENUM);
-		declareImage(IMG_OBJECT_LOCAL_VARIABLE);
-		declareImage(IMG_OBJECT_FIELD_DEFAULT);
-		declareImage(IMG_OBJECT_FIELD_PRIVATE);
-		declareImage(IMG_OBJECT_FIELD_PUBLIC);
-		declareImage(IMG_OBJECT_FIELD_PROTECTED);
-		declareImage(IMG_OBJECT_METHOD_DEFAULT);
-		declareImage(IMG_OBJECT_METHOD_PRIVATE);
-		declareImage(IMG_OBJECT_METHOD_PUBLIC);
-		declareImage(IMG_OBJECT_METHOD_PROTECTED);
-	}
-
-	/**
-	 * Declares an {@link Image} in the {@link ImageRegistry}.
-	 */
-	protected void declareImage(String key) {
-		ImageDescriptor desc = imageDescriptorFromPlugin(PLUGIN_ID, key);
-		if (desc == null) {
-			desc = ImageDescriptor.getMissingImageDescriptor();
+		for (String key : IMG_KEYS) {
+			ImageDescriptor desc = imageDescriptorFromPlugin(PLUGIN_ID, key);
+			if (desc == null) {
+				desc = ImageDescriptor.getMissingImageDescriptor();
+			}
+			getImageRegistry().put(key, desc);
 		}
-		getImageRegistry().put(key, desc);
 	}
 
 }
