@@ -164,7 +164,7 @@ public class ValaSource {
 				ValaField fieldDefn = new ValaField(name);
 				fieldDefn.setSourceReference(sourceRef);
 				fieldDefn.getModifiers().addAll(Arrays.asList(extraData.get("access").split(",\\s*")));
-				fieldDefn.setType(typeFromLine(lines.get(lineNumber - 1), name));
+				fieldDefn.setType(typeFromLine(lines.get(lineNumber), name));
 				
 				// typeDefn may be null
 				if (typeDefn != null)
@@ -176,7 +176,7 @@ public class ValaSource {
 				ValaMethod methodDefn = new ValaMethod(name);
 				methodDefn.setSourceReference(sourceRef);
 				methodDefn.getModifiers().addAll(Arrays.asList(extraData.get("access").split(",\\s*")));
-				methodDefn.setType(typeFromLine(lines.get(lineNumber - 1), name));
+				methodDefn.setType(typeFromLine(lines.get(lineNumber), name));
 				// TODO Signature
 				
 				// typeDefn may be null
@@ -188,7 +188,7 @@ public class ValaSource {
 				ValaMethod methodDefn = typeDefn.findMethodForLine(lineNumber);
 				ValaLocalVariable varDefn = new ValaLocalVariable(name);
 				varDefn.setSourceReference(sourceRef);
-				varDefn.setType(typeFromLine(lines.get(lineNumber - 1), name));
+				varDefn.setType(typeFromLine(lines.get(lineNumber), name));
 				methodDefn.getLocalVariables().add(varDefn);
 			}
 		}
