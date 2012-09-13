@@ -26,80 +26,75 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import valable.ValaPlugin;
 
 /**
- * Encapsulate information about a Vala project. A project has a number
- * of source files, and indexes to other information contained therein.
+ * Encapsulates information about a Vala project. A project has a number of
+ * source files, and indexes to other information contained therein.
  */
 public class ValaProject {
-	private static final Pattern NAMESPACE = Pattern.compile("^\\s*namespace (\\S+).*$");
-	
+
+	private static final Pattern NAMESPACE = Pattern
+			.compile("^\\s*namespace (\\S+).*$");
+
 	private final String name;
-	private final Set<ValaSource>       sources = new HashSet<ValaSource>();
-	private final Map<String, ValaType> types   = new HashMap<String, ValaType>();
-	
+	private final Set<ValaSource> sources = new HashSet<ValaSource>();
+	private final Map<String, ValaType> types = new HashMap<String, ValaType>();
+
 	private static Map<String, Set<ValaPackage>> knownPackages = null;
 	private static Map<String, ValaProject> projects = new HashMap<String, ValaProject>();
-	
-	
+
 	/**
-	 * Create a new instance containing no sources.
+	 * Creates a new instance containing no sources.
 	 * 
-	 * @param name Name of the project.
+	 * @param name
+	 *            the name of the project.
 	 */
 	public ValaProject(String name) {
 		super();
 		this.name = name;
 		projects.put(name, this);
 	}
-	
-	
+
 	/**
-	 * Get a previously created project, or create a new one. 
+	 * Gets a previously created {@link ValaProject}, or create a new one.
 	 * 
-	 * @param name Name of the project, corresponding to the name of the
-	 *     project in the workspace.
+	 * @param name
+	 *            the name of the project, corresponding to the name of the
+	 *            project in the workspace.
 	 * @return An existing, or new project.
 	 */
 	public synchronized static ValaProject getProject(String name) {
 		if (projects.containsKey(name))
 			return projects.get(name);
-		
+
 		return new ValaProject(name);
 	}
-	
-	
+
 	/**
-	 * Get the project for the given file.
-	 * 
-	 * @param file
-	 * @return
+	 * Gets the project for the given file.
 	 */
 	public static ValaProject getProject(IFile file) {
 		return getProject(file.getProject().getName());
 	}
-	
 
 	/**
-	 * Return the map of packages. The key corresponds to
-	 * {@code using {@var Name};} in Vala source files, and the
-	 * {@link ValaPackage} provides information on the VAPI
-	 * file required.
-	 * 
-	 * @return
+	 * Returns the map of packages. The key corresponds to
+	 * <code>using {@var Name};</code> in Vala source files, and the
+	 * {@link ValaPackage} provides information on the VAPI file required.
 	 */
 	public synchronized static Map<String, Set<ValaPackage>> getAvailablePackages() {
 		if (knownPackages != null) {
 			return knownPackages;
 		}
-		
+
 		// Use the configuration if possible
 		ValaBuildContext context;
 		if (ValaPlugin.getDefault() != null) {
-			IPreferenceStore store = ValaPlugin.getDefault().getPreferenceStore();
+			IPreferenceStore store = ValaPlugin.getDefault()
+					.getPreferenceStore();
 			context = ValaBuildContext.of(store);
 		} else {
 			context = ValaBuildContext.getDefault();
 		}
-		
+
 		// Read a list of all the VAPI files
 		List<File> vapis = context.getVapiFiles();
 
@@ -113,50 +108,49 @@ public class ValaProject {
 				e.printStackTrace();
 				continue;
 			}
-			
+
 			while (scanner.hasNextLine()) {
 				Matcher matcher = NAMESPACE.matcher(scanner.nextLine());
 				if (matcher.matches()) {
 					ValaPackage pkg = new ValaPackage(matcher.group(1));
-					pkg.setPkgConfigName(vapi.getName().replaceFirst("\\.vapi$", ""));
+					pkg.setPkgConfigName(vapi.getName().replaceFirst(
+							"\\.vapi$", ""));
 					pkg.setVapiFile(vapi);
-					
-					Set<ValaPackage> providers = knownPackages.get(pkg.getName());
+
+					Set<ValaPackage> providers = knownPackages.get(pkg
+							.getName());
 					if (providers == null) {
 						providers = new HashSet<ValaPackage>();
 						knownPackages.put(pkg.getName(), providers);
 					}
-					
+
 					providers.add(pkg);
 				}
 			}
 			scanner.close();
 		}
-		
+
 		return knownPackages;
 	}
-	
-	
+
 	/**
-	 * Does this project contain a class with the given name?
+	 * Whether this project contains a class with the given name.
 	 * 
-	 * @param name Name of the class.
 	 * @return true if {@link #getType(String)} has been called for
-	 *       <var>name</var> previously.
+	 *         <var>name</var> previously.
 	 */
 	public synchronized boolean hasType(String name) {
 		return types.containsKey(name);
 	}
-	
-	
+
 	/**
-	 * Return the type definition for the given class name.
-	 * This should be used to ensure that all references to a given
-	 * class use the same instance. If the class is not known,
-	 * an empty result is returned.
+	 * Returns the type definition for the given class name. This should be used
+	 * to ensure that all references to a given class use the same instance. If
+	 * the class is not known, an empty result is returned.
 	 * 
-	 * @param name Name of the class.
-	 * @return Existing, or new, instance of the class.
+	 * @param name
+	 *            the name of the class.
+	 * @return existing, or new, instance of the class.
 	 */
 	public synchronized ValaType getType(String name) {
 		ValaType result = types.get(name);
@@ -164,73 +158,59 @@ public class ValaProject {
 			result = new ValaType(name);
 			types.put(name, result);
 		}
-		
+
 		return result;
 	}
-	
-	
+
 	/**
-	 * Get the {@link ValaSource} representation for the given
-	 * workspace file, creating a new one if necessary.
+	 * Gets the {@link ValaSource} representation for the given workspace file,
+	 * creating a new one if necessary.
 	 * 
-	 * @param file File corresponding to {@link ValaSource#getSource()}
+	 * @param file
+	 *            File corresponding to {@link ValaSource#getSource()}
 	 * @return New or existing {@linkplain ValaSource} in this project.
 	 */
 	public ValaSource getSource(IFile file) {
 		for (ValaSource source : sources)
 			if (source.getSource().equals(file))
 				return source;
-		
+
 		return new ValaSource(this, file);
 	}
 
-
 	/**
-	 * Get the {@link ValaSource} representation containing the
-	 * given type.
+	 * Get the {@link ValaSource} representation containing the given type.
 	 * 
-	 * @param type Class to find.
+	 * @param type
+	 *            Class to find.
 	 * @return Existing {@link ValaSource} or <var>null</var> if none.
 	 */
 	public ValaSource getSource(ValaType type) {
-		for (ValaSource source : sources) 
+		for (ValaSource source : sources)
 			if (source.getTypes().containsValue(type))
 				return source;
 
 		return null;
 	}
 
-
-	/**
-	 * @return the name
-	 */
 	public String getName() {
 		return name;
 	}
 
-
-	/**
-	 * @return the sources
-	 */
 	public Set<ValaSource> getSources() {
 		return sources;
 	}
 
-
-	/**
-	 * @return the known global types
-	 */
 	public Collection<ValaType> getTypes() {
 		return types.values();
 	}
-	
-	
+
 	/**
-	 * @return a list of all packages used in this project. 
+	 * Returns a list of all packages used in this project.
 	 */
 	public Set<ValaPackage> getUsedPackages() {
 		Set<ValaPackage> result = new HashSet<ValaPackage>();
-		
+
 		for (ValaSource source : sources)
 			result.addAll(source.getUses());
 
@@ -238,7 +218,8 @@ public class ValaProject {
 		ValaPackage glibPackage = new ValaPackage("GLib");
 		glibPackage.setPkgConfigName("gobject-2.0");
 		result.add(glibPackage);
-		
+
 		return result;
 	}
+
 }

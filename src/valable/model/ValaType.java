@@ -16,7 +16,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * Encapsulate information about a Vala class.
+ * Encapsulates information about a Vala class.
  */
 public class ValaType extends ValaSymbol {
 
@@ -61,9 +61,6 @@ public class ValaType extends ValaSymbol {
 		return lastMethod;
 	}
 
-	/**
-	 * @return the dependencies
-	 */
 	public List<ValaType> getDependencies() {
 		return dependencies;
 	}
@@ -94,15 +91,12 @@ public class ValaType extends ValaSymbol {
 		return null;
 	}
 
-	/**
-	 * @return the inherits
-	 */
 	public Set<ValaType> getInherits() {
 		return inherits;
 	}
 
 	/**
-	 * Reset the contents of this class, ready for rebuilding.
+	 * Resets the contents of this class, ready for rebuilding.
 	 */
 	public void reset() {
 		fields.clear();

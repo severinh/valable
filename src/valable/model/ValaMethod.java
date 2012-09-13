@@ -13,80 +13,56 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-
 /**
- * Encapsulate information about a method in a {@link ValaType}.
+ * Encapsulates information about a method in a {@link ValaType}.
  */
 public class ValaMethod extends ValaSymbol implements HasModifiers {
-	private final Set<String>  modifiers = new HashSet<String>();
-	private String       type;
+
+	private final Set<String> modifiers = new HashSet<String>();
+	private String type;
 	private final Map<String, String> signature = new LinkedHashMap<String, String>();
 
-	// This should really be a more complete AST, taking into account
-	// blocks, scoping and types...
+	// TODO: This should really be a more complete AST, taking into account
+	// blocks, scoping and types.
 	private final Set<ValaLocalVariable> localVariables = new HashSet<ValaLocalVariable>();
-	
-	
+
 	/**
 	 * Create a new instance with the given name.
-	 * 
-	 * @param source
 	 */
 	public ValaMethod(String name) {
 		super(name);
 	}
 
-
-	/**
-	 * @return the type
-	 */
 	public String getType() {
 		return type;
 	}
 
-
-	/**
-	 * @param type the type to set
-	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
-
-	/**
-	 * @return the modifiers
-	 */
 	@Override
 	public Set<String> getModifiers() {
 		return modifiers;
 	}
 
-
-	/**
-	 * @return the signature
-	 */
 	public Map<String, String> getSignature() {
 		return signature;
 	}
-	
-	
+
 	/**
-	 * @return the {@link ValaSymbolAccessibility} contained in
-	 *         {@link #modifiers}.
+	 * Returns the {@link ValaSymbolAccessibility} contained in
+	 * {@link #modifiers}.
 	 */
 	@Override
 	public ValaSymbolAccessibility getAccessibility() {
 		for (ValaSymbolAccessibility v : ValaSymbolAccessibility.values())
 			if (modifiers.contains(v.toString()))
 				return v;
-		
+
 		return ValaSymbolAccessibility.INTERNAL;
 	}
 
-
-	/**
-	 * @return the localVariables
-	 */
 	public Set<ValaLocalVariable> getLocalVariables() {
 		return localVariables;
 	}

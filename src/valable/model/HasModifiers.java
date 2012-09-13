@@ -12,18 +12,18 @@ import java.util.Set;
 
 /**
  * Common methods on {@link ValaSymbol}s which have
- * {@link ValaSymbolAccessibility}, and other modifier, information.
+ * {@link ValaSymbolAccessibility}, and other modifier information.
  */
 public interface HasModifiers {
-	
+
 	/**
-	 * @return a list of all the modifiers on this {@link ValaSymbol}.
+	 * Returns all modifiers on this {@link ValaSymbol}.
 	 */
 	public Set<String> getModifiers();
 
 	/**
-	 * @return the {@link ValaSymbolAccessibility} of this {@link ValaSymbol},
-	 *         or {@link ValaSymbolAccessibility#INTERNAL} if unknown.
+	 * Returns the {@link ValaSymbolAccessibility} of this {@link ValaSymbol},
+	 * or {@link ValaSymbolAccessibility#INTERNAL} if unknown.
 	 */
 	public ValaSymbolAccessibility getAccessibility();
 
