@@ -33,7 +33,7 @@ public class ValaSymbol {
 	};
 
 	private final String name;
-	private ValaSourceLocation sourceReference;
+	private ValaSourceLocation sourceLocation;
 
 	public static final Pattern IDENTIFIER = Pattern
 			.compile("[A-Za-z_]([A-Za-z0-9_])*");
@@ -54,11 +54,11 @@ public class ValaSymbol {
 	}
 
 	public ValaSourceLocation getSourceLocation() {
-		return sourceReference;
+		return sourceLocation;
 	}
 
-	public void setSourceLocation(ValaSourceLocation sourceReference) {
-		this.sourceReference = sourceReference;
+	public void setSourceLocation(ValaSourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 
 	public <R> R accept(ValaSymbolVisitor<R> visitor) {
@@ -87,7 +87,7 @@ public class ValaSymbol {
 
 		ValaSymbol other = (ValaSymbol) arg;
 		return name.equals(other.name)
-				&& sourceReference.equals(other.sourceReference);
+				&& sourceLocation.equals(other.sourceLocation);
 	}
 
 	/*
@@ -98,7 +98,7 @@ public class ValaSymbol {
 	@Override
 	public int hashCode() {
 		return (name != null ? name.hashCode() : 0)
-				+ (sourceReference != null ? sourceReference.hashCode() : 0);
+				+ (sourceLocation != null ? sourceLocation.hashCode() : 0);
 	}
 
 }
