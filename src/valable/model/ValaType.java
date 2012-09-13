@@ -19,17 +19,18 @@ import java.util.TreeSet;
  * Encapsulate information about a Vala class.
  */
 public class ValaType extends ValaEntity {
-	
+
 	/**
 	 * Dependencies: build up during analysis.
 	 */
 	private final List<ValaType> dependencies = new ArrayList<ValaType>();
-	
-	private final SortedSet<ValaField>  fields   = new TreeSet<ValaField>(ValaEntity.SOURCE_ORDER);
-	private final SortedSet<ValaMethod> methods  = new TreeSet<ValaMethod>(ValaEntity.SOURCE_ORDER);
-	private final Set<ValaType>         inherits = new LinkedHashSet<ValaType>();
-	
-	
+
+	private final SortedSet<ValaField> fields = new TreeSet<ValaField>(
+			ValaEntity.SOURCE_ORDER);
+	private final SortedSet<ValaMethod> methods = new TreeSet<ValaMethod>(
+			ValaEntity.SOURCE_ORDER);
+	private final Set<ValaType> inherits = new LinkedHashSet<ValaType>();
+
 	/**
 	 * Create a new instance for the named type.
 	 * 
@@ -38,8 +39,7 @@ public class ValaType extends ValaEntity {
 	public ValaType(String name) {
 		super(name);
 	}
-	
-	
+
 	/**
 	 * Find the method which contains the given line number.
 	 * 
@@ -50,16 +50,16 @@ public class ValaType extends ValaEntity {
 	public ValaMethod findMethodForLine(int lineNumber) {
 		ValaMethod lastMethod = null;
 		for (ValaMethod method : methods) {
-			if (lastMethod != null && lineNumber >= lastMethod.getSourceReference().getLine() &&
-					lineNumber < method.getSourceReference().getLine())
+			if (lastMethod != null
+					&& lineNumber >= lastMethod.getSourceReference().getLine()
+					&& lineNumber < method.getSourceReference().getLine())
 				return lastMethod;
-			
+
 			lastMethod = method;
 		}
-		
+
 		return lastMethod;
 	}
-
 
 	/**
 	 * @return the dependencies
@@ -68,22 +68,31 @@ public class ValaType extends ValaEntity {
 		return dependencies;
 	}
 
-
-	/**
-	 * @return the fields
-	 */
 	public SortedSet<ValaField> getFields() {
 		return fields;
 	}
 
+	public ValaField getField(String name) {
+		for (ValaField field : getFields()) {
+			if (field.getName().equals(name)) {
+				return field;
+			}
+		}
+		return null;
+	}
 
-	/**
-	 * @return the methods
-	 */
 	public SortedSet<ValaMethod> getMethods() {
 		return methods;
 	}
 
+	public ValaMethod getMethod(String name) {
+		for (ValaMethod method : getMethods()) {
+			if (method.getName().equals(name)) {
+				return method;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * @return the inherits
@@ -91,7 +100,6 @@ public class ValaType extends ValaEntity {
 	public Set<ValaType> getInherits() {
 		return inherits;
 	}
-
 
 	/**
 	 * Reset the contents of this class, ready for rebuilding.
