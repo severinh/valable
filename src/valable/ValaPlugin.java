@@ -10,9 +10,7 @@
  */
 package valable;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -28,6 +26,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -37,59 +37,65 @@ import org.osgi.framework.BundleContext;
 
 import valable.builder.ValaProjectBuilder;
 import valable.editors.ValaEditor;
-import valable.model.ValaEntity.Visibility;
+import valable.model.ValaSymbolAccessibility;
 
-public class ValaPlugin extends AbstractUIPlugin {
+public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants {
 
-	public enum ImageType  { FILE, CLASS, INTERFACE, ENUM, FIELD, METHOD, PACKAGE, VARIABLE, UNKNOWN; }
-	public static final String PLUGIN_ID = "valable";
+	public enum ImageType {
+		FILE, CLASS, INTERFACE, ENUM, FIELD, METHOD, PACKAGE, VARIABLE, UNKNOWN;
+	}
 
 	private static ValaPlugin plugin;
-	private static ResourceBundle resourceBundle = 
-			ResourceBundle.getBundle("valable.data.ValaPluginMessages");
-	
-	/**
-	 * A map of images for entities with a particular visibility. 
-	 */
-	private static final Map<ImageType, Map<Visibility, Image>> images = new HashMap<ImageType, Map<Visibility,Image>>();
-	
-	
+	private static ResourceBundle resourceBundle = ResourceBundle
+			.getBundle("valable.data.ValaPluginMessages");
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
-		// -- If the plugin's being initialised twice, only run the setup code once...
+		// -- If the plugin's being initialised twice, only run the setup code
+		// once...
 		//
 		synchronized (ValaPlugin.class) {
 			if (plugin != null)
 				return;
-	
+
 			plugin = this;
-			
-			loadIcons();
-			
+
 			// -- Compile all Vala projects from scratch...
 			//
-			Set<String> scheduledTobuild = new HashSet<String>(); 
-			project: for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-				if (!project.isOpen() || scheduledTobuild.contains(project.getName()))
+			Set<String> scheduledTobuild = new HashSet<String>();
+			project: for (IProject project : ResourcesPlugin.getWorkspace()
+					.getRoot().getProjects()) {
+				if (!project.isOpen()
+						|| scheduledTobuild.contains(project.getName()))
 					continue;
-				
+
 				IProjectDescription desc = project.getDescription();
 				for (ICommand builder : desc.getBuildSpec()) {
-					if (builder.getBuilderName().equals(ValaProjectBuilder.class.getName())) {
+					if (builder.getBuilderName().equals(
+							ValaProjectBuilder.class.getName())) {
 						scheduledTobuild.add(project.getName());
 						final IProject valaProject = project;
-						WorkspaceJob job = new WorkspaceJob("Rebuilding " + valaProject.getName()) {
+						WorkspaceJob job = new WorkspaceJob("Rebuilding "
+								+ valaProject.getName()) {
 							@Override
-							public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+							public IStatus runInWorkspace(
+									IProgressMonitor monitor)
+									throws CoreException {
 								try {
-									valaProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-									valaProject.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
+									valaProject.refreshLocal(
+											IResource.DEPTH_INFINITE, monitor);
+									valaProject
+											.build(IncrementalProjectBuilder.FULL_BUILD,
+													monitor);
 								} catch (Throwable t) {
 									t.printStackTrace();
 									return Status.CANCEL_STATUS;
@@ -108,18 +114,20 @@ public class ValaPlugin extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		unloadIcons();
 		super.stop(context);
 	}
 
 	/**
 	 * Returns the shared instance
-	 *
+	 * 
 	 * @return the shared instance
 	 */
 	public static ValaPlugin getDefault() {
@@ -133,96 +141,129 @@ public class ValaPlugin extends AbstractUIPlugin {
 		return resourceBundle;
 	}
 
-	
 	/**
 	 * Find the active Vala text file editor, if any.
 	 * 
 	 * @return Current Vala file being edited, or null if none.
 	 */
 	public static IFile getCurrentFile() {
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-        IEditorPart editor = window.getActivePage().getActiveEditor();
-        if (!(editor instanceof ValaEditor))
-        	return null;
-        
-        return (IFile)editor.getEditorInput().getAdapter(IFile.class);
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow();
+		IEditorPart editor = window.getActivePage().getActiveEditor();
+		if (!(editor instanceof ValaEditor))
+			return null;
+
+		return (IFile) editor.getEditorInput().getAdapter(IFile.class);
 	}
-	
-	
-	/**
-	 * Find an image which can be used to represent the given type of object
-	 * with the specified visibility. If no image for the given visibility
-	 * can be found, the first for <var>type</var> is used. 
+
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param type
-	 * @param visibility
-	 * @return
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#initializeImageRegistry(org.eclipse
+	 * .jface.resource.ImageRegistry)
 	 */
-	public static Image findImage(ImageType type, Visibility visibility) {
-		if (images.get(type) == null)
-			return type == ImageType.UNKNOWN ? null :findImage(ImageType.UNKNOWN, visibility);
-		
-		Image result = images.get(type).get(visibility);
-		if (result == null)
-			return images.get(type).values().iterator().next();
-		
-		return result;
+	@Override
+	protected void initializeImageRegistry(ImageRegistry registry) {
+		declareImage(IMG_OBJECT_VALA);
+		declareImage(IMG_OBJECT_UNKNOWN);
+		declareImage(IMG_OBJECT_PACKAGE);
+		declareImage(IMG_OBJECT_CLASS);
+		declareImage(IMG_OBJECT_INTERFACE);
+		declareImage(IMG_OBJECT_ENUM);
+		declareImage(IMG_OBJECT_LOCAL_VARIABLE);
+		declareImage(IMG_OBJECT_FIELD_DEFAULT);
+		declareImage(IMG_OBJECT_FIELD_PRIVATE);
+		declareImage(IMG_OBJECT_FIELD_PUBLIC);
+		declareImage(IMG_OBJECT_FIELD_PROTECTED);
+		declareImage(IMG_OBJECT_METHOD_DEFAULT);
+		declareImage(IMG_OBJECT_METHOD_PRIVATE);
+		declareImage(IMG_OBJECT_METHOD_PUBLIC);
+		declareImage(IMG_OBJECT_METHOD_PROTECTED);
 	}
-	
-	
+
 	/**
-	 * Load all known icons from {@code icons}.
+	 * Declares an {@link Image} in the {@link ImageRegistry}.
 	 */
-	private void loadIcons() {
-		addIcon(ImageType.FILE,  Visibility.DEFAULT, "vala_obj.gif");
-		addIcon(ImageType.UNKNOWN, Visibility.DEFAULT, "unknown_obj.gif");
-		addIcon(ImageType.PACKAGE, Visibility.DEFAULT, "package_obj.gif");
-		addIcon(ImageType.CLASS, Visibility.DEFAULT, "class_obj.gif");
-		addIcon(ImageType.INTERFACE, Visibility.DEFAULT, "int_obj.gif");
-		addIcon(ImageType.ENUM,  Visibility.DEFAULT, "enum_obj.gif");
-		addIcon(ImageType.VARIABLE, Visibility.DEFAULT, "localvariable_obj.gif");
-		addIcon(ImageType.FIELD, Visibility.DEFAULT, "field_default_obj.gif");
-		addIcon(ImageType.FIELD, Visibility.PRIVATE, "field_private_obj.gif");
-		addIcon(ImageType.FIELD, Visibility.PUBLIC,  "field_public_obj.gif");
-		addIcon(ImageType.FIELD, Visibility.PROTECTED, "field_protected_obj.gif");
-		addIcon(ImageType.METHOD, Visibility.DEFAULT, "methdef_obj.gif");
-		addIcon(ImageType.METHOD, Visibility.PRIVATE, "methpri_obj.gif");
-		addIcon(ImageType.METHOD, Visibility.PUBLIC,  "methpub_obj.gif");
-		addIcon(ImageType.METHOD, Visibility.PROTECTED, "methpro_obj.gif");
-	}
-	
-	
-	/**
-	 * Add an entry to {@link #images} for the given args.
-	 * 
-	 * @param type
-	 * @param visibility
-	 * @param name
-	 */
-	private void addIcon(ImageType type, Visibility visibility, String name) {
-		Map<Visibility, Image> typeMap = images.get(type);
-		if (typeMap == null) {
-			typeMap = new HashMap<Visibility, Image>();
-			images.put(type, typeMap);
-		} else if (typeMap.containsKey(visibility)) {
-			return;
+	protected void declareImage(String key) {
+		ImageDescriptor desc = imageDescriptorFromPlugin(PLUGIN_ID, key);
+		if (desc == null) {
+			desc = ImageDescriptor.getMissingImageDescriptor();
 		}
-		
-		Image image = imageDescriptorFromPlugin(PLUGIN_ID, "icons/" + name).createImage();
-		System.out.println("Loaded image [" + image + "] for " + name);
-		typeMap.put(visibility, image);
+		getImageRegistry().put(key, desc);
 	}
-	
-	
+
 	/**
-	 * Unload all the icons in {@link #images}.
+	 * Find an {@link Image} which can be used to represent the given type of
+	 * object with the specified {@link ValaSymbolAccessibility}. If no
+	 * {@link Image} for the given {@link ValaSymbolAccessibility} can be found,
+	 * the first for <var>type</var> is used.
 	 */
-	private void unloadIcons() {
-		for (Map<Visibility, Image> type : images.values()) {
-			for (Image image : type.values()) {
-				image.dispose();
+	public Image findImage(ImageType type, ValaSymbolAccessibility visibility) {
+		String key;
+		switch (type) {
+		case CLASS:
+			key = IMG_OBJECT_CLASS;
+			break;
+		case ENUM:
+			key = IMG_OBJECT_ENUM;
+			break;
+		case FIELD:
+			switch (visibility) {
+			case PRIVATE:
+				key = IMG_OBJECT_FIELD_PRIVATE;
+				break;
+			case PROTECTED:
+				key = IMG_OBJECT_FIELD_PROTECTED;
+				break;
+			case PUBLIC:
+				key = IMG_OBJECT_FIELD_PUBLIC;
+				break;
+			case INTERNAL:
+				// Fall-through
+			default:
+				key = IMG_OBJECT_FIELD_DEFAULT;
+				break;
 			}
+			break;
+		case FILE:
+			key = IMG_OBJECT_VALA;
+			break;
+		case INTERFACE:
+			key = IMG_OBJECT_INTERFACE;
+			break;
+		case METHOD:
+			switch (visibility) {
+			case PRIVATE:
+				key = IMG_OBJECT_METHOD_PRIVATE;
+				break;
+			case PROTECTED:
+				key = IMG_OBJECT_METHOD_PROTECTED;
+				break;
+			case PUBLIC:
+				key = IMG_OBJECT_METHOD_PUBLIC;
+				break;
+			case INTERNAL:
+				// Fall-through
+			default:
+				key = IMG_OBJECT_METHOD_DEFAULT;
+				break;
+			}
+			break;
+		case PACKAGE:
+			key = IMG_OBJECT_PACKAGE;
+			break;
+		case VARIABLE:
+			key = IMG_OBJECT_LOCAL_VARIABLE;
+			break;
+		case UNKNOWN:
+			// Fall-through
+		default:
+			key = IMG_OBJECT_UNKNOWN;
+			break;
 		}
-		images.clear();
+		Image image = getImageRegistry().get(key);
+		return image;
 	}
+
 }

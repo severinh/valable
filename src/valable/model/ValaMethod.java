@@ -20,13 +20,13 @@ import java.util.Set;
  * Encapsulate information about a method in a {@link ValaType}.
  */
 public class ValaMethod extends ValaEntity implements HasModifiers {
-	private Set<String>  modifiers = new HashSet<String>();
+	private final Set<String>  modifiers = new HashSet<String>();
 	private String       type;
-	private Map<String, String> signature = new LinkedHashMap<String, String>();
+	private final Map<String, String> signature = new LinkedHashMap<String, String>();
 
 	// This should really be a more complete AST, taking into account
 	// blocks, scoping and types...
-	private Set<ValaField>  localVariables = new HashSet<ValaField>();
+	private final Set<ValaField>  localVariables = new HashSet<ValaField>();
 	
 	
 	/**
@@ -73,15 +73,16 @@ public class ValaMethod extends ValaEntity implements HasModifiers {
 	
 	
 	/**
-	 * @return the visibility contained in {@link #modifiers}.
+	 * @return the {@link ValaSymbolAccessibility} contained in
+	 *         {@link #modifiers}.
 	 */
 	@Override
-	public Visibility getVisibility() {
-		for (Visibility v : Visibility.values())
+	public ValaSymbolAccessibility getAccessibility() {
+		for (ValaSymbolAccessibility v : ValaSymbolAccessibility.values())
 			if (modifiers.contains(v.toString().toLowerCase()))
 				return v;
 		
-		return Visibility.DEFAULT;
+		return ValaSymbolAccessibility.INTERNAL;
 	}
 
 

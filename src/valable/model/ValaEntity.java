@@ -21,9 +21,6 @@ import valable.model.ValaSource.SourceReference;
  */
 public class ValaEntity {
 
-	public enum Visibility { DEFAULT, PUBLIC, PROTECTED, PRIVATE; }
-
-	
 	/**
 	 * A comparator which ensures that two {@link ValaEntity}s are returned
 	 * in the order in which they are declared in the source files.

@@ -18,11 +18,11 @@ import org.eclipse.swt.graphics.Image;
 
 import valable.ValaPlugin;
 import valable.ValaPlugin.ImageType;
-import valable.model.ValaEntity.Visibility;
 import valable.model.ValaField;
 import valable.model.ValaMethod;
 import valable.model.ValaPackage;
 import valable.model.ValaSource;
+import valable.model.ValaSymbolAccessibility;
 import valable.model.ValaType;
 
 /**
@@ -46,7 +46,7 @@ class ValaLabelProvider extends LabelProvider implements IStyledLabelProvider {
 		element = maybeGetTreeNodeValue(element);
 
 		ImageType imageType = null;
-		Visibility visibility = Visibility.DEFAULT;
+		ValaSymbolAccessibility accessibility = ValaSymbolAccessibility.INTERNAL;
 		if (element instanceof ValaSource) {
 			imageType = ImageType.FILE;
 		} else if (element instanceof ValaType) {
@@ -55,16 +55,17 @@ class ValaLabelProvider extends LabelProvider implements IStyledLabelProvider {
 			imageType = ImageType.PACKAGE;
 		} else if (element instanceof ValaField) {
 			imageType = ImageType.FIELD;
-			visibility = ((ValaField) element).getVisibility();
+			accessibility = ((ValaField) element).getAccessibility();
 		} else if (element instanceof ValaMethod) {
 			imageType = ImageType.METHOD;
-			visibility = ((ValaMethod) element).getVisibility();
+			accessibility = ((ValaMethod) element).getAccessibility();
 		}
 
 		if (imageType == null) {
 			return super.getImage(element);
 		} else {
-			Image image = ValaPlugin.findImage(imageType, visibility);
+			Image image = ValaPlugin.getDefault().findImage(imageType,
+					accessibility);
 			return image;
 		}
 	}

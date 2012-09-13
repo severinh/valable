@@ -18,7 +18,7 @@ import java.util.Set;
  * Encapsulate information about a field in a {@link ValaType}.
  */
 public class ValaField extends ValaEntity implements HasModifiers {
-	private Set<String>  modifiers = new HashSet<String>();
+	private final Set<String>  modifiers = new HashSet<String>();
 	private String       type;
 	
 	
@@ -58,14 +58,15 @@ public class ValaField extends ValaEntity implements HasModifiers {
 	
 	
 	/**
-	 * @return the visibility contained in {@link #modifiers}.
+	 * @return the {@link ValaSymbolAccessibility} contained in
+	 *         {@link #modifiers}.
 	 */
 	@Override
-	public Visibility getVisibility() {
-		for (Visibility v : Visibility.values())
+	public ValaSymbolAccessibility getAccessibility() {
+		for (ValaSymbolAccessibility v : ValaSymbolAccessibility.values())
 			if (modifiers.contains(v.toString().toLowerCase()))
 				return v;
 		
-		return Visibility.DEFAULT;
+		return ValaSymbolAccessibility.INTERNAL;
 	}
 }

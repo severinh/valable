@@ -12,11 +12,9 @@ package valable.model;
 
 import java.util.Set;
 
-import valable.model.ValaEntity.Visibility;
-
 /**
- * Common methods on {@link ValaEntity}s which have visibility, and
- * other modifier, information.
+ * Common methods on {@link ValaEntity}s which have
+ * {@link ValaSymbolAccessibility}, and other modifier, information.
  */
 public interface HasModifiers {
 	
@@ -24,11 +22,11 @@ public interface HasModifiers {
 	 * @return a list of all the modifiers on this entity.
 	 */
 	public Set<String> getModifiers();
-	
 
 	/**
-	 * @return the visibility of this entity, or {@link Visibility#DEFAULT} if
-	 *     unknown. 
+	 * @return the {@link ValaSymbolAccessibility} of this {@link ValaEntity},
+	 *         or {@link ValaSymbolAccessibility#INTERNAL} if unknown.
 	 */
-	public Visibility getVisibility();
+	public ValaSymbolAccessibility getAccessibility();
+
 }
