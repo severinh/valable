@@ -120,8 +120,9 @@ public class ValaSource {
 			// -- Parse the ctags output...
 			//
 			String name = cols[0];
-			//String file = cols[1];
-			int    lineNumber = Integer.parseInt(cols[2].replaceAll("\\D", ""));
+
+			// The system uses 0 for the first line, while ctags uses 1
+			int lineNumber = Integer.parseInt(cols[2].replaceAll("\\D", "")) - 1;
 			char   type = cols[3].charAt(0);
 			
 			// Use a map for extra data in the form 'key:value'
