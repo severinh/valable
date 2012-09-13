@@ -47,4 +47,20 @@ public class ValaLabelProviderTest {
 				labelProvider.getImageKey(fieldTreeNode));
 	}
 
+	@Test
+	public void testText() {
+		ValaLabelProvider labelProvider = new ValaLabelProvider();
+		ValaField field = new ValaField("field");
+		TreeNode fieldTreeNode = new TreeNode(field);
+		field.setType("Type");
+		String expectedFieldText = "field : Type";
+
+		assertEquals(expectedFieldText, labelProvider.getText(field));
+		assertEquals(expectedFieldText, labelProvider.getText(fieldTreeNode));
+
+		ValaMethod method = new ValaMethod("method");
+		method.setType("Type");
+		assertEquals("method() : Type", labelProvider.getText(method));
+	}
+
 }
