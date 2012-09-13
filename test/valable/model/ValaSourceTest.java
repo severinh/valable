@@ -25,56 +25,61 @@ import org.junit.Test;
  * Test that {@link ValaSource} works correctly.
  */
 public class ValaSourceTest {
-	
+
 	/**
-	 * Test that simple Vala files can be parsed correctly. This
-	 * actually checks multiple things:
+	 * Test that simple Vala files can be parsed correctly. This actually checks
+	 * multiple things:
 	 * 
 	 * <ol>
 	 * <li>That parsing a file does not throw any exceptions.</li>
-	 * <li>That 'using' lines are identified and {@link ValaPackage}s
-	 * looked up in the central list.</li>
+	 * <li>That 'using' lines are identified and {@link ValaPackage}s looked up
+	 * in the central list.</li>
 	 * <li>That multiple types in a Vala file can be identified.</li>
 	 * <li>That inheritance information is resolved.</li>
-	 * <li>That multiple references to the same {@link ValaType} all use
-	 * the same instance.</li>
+	 * <li>That multiple references to the same {@link ValaType} all use the
+	 * same instance.</li>
 	 * <li>That 'Simple' contains 3 fields, and 'Foo' none.</li>
 	 * </ol>
 	 * 
-	 * @throws IOException 
-	 * @throws CoreException 
+	 * @throws IOException
+	 * @throws CoreException
 	 */
 	@Test
 	public void testParse() throws CoreException, IOException {
 		IFile file = new LocalFile(new File("test/simple.vala"));
-		
 		ValaSource source = new ValaSource(new ValaProject("Test"), file);
 		source.parse();
-		
+
 		Iterator<ValaPackage> usesIterator = source.getUses().iterator();
-		assertEquals("Identified using packages", 2, source.getUses().size());
-		assertEquals("Using libgee", "Gee", usesIterator.next().getName());
-		assertEquals("Using vala VAPI", "Vala", usesIterator.next().getName());
-		
-		assertEquals("Types found", 2, source.getTypes().size());
-		
+		assertEquals("Incorrect number of used packages", 1, source.getUses()
+				.size());
+		assertEquals("'Gee' package use not detected", "Gee", usesIterator
+				.next().getName());
+
+		assertEquals("Incorrect number of types", 2, source.getTypes().size());
+
 		ValaType simple = source.getTypes().get("Simple");
-		ValaType foo    = source.getTypes().get("Foo");
-		assertNotNull("Found 'Simple' type", simple);
-		assertNotNull("Found 'Foo' type",    foo);
-		
-		assertEquals("Single ancestor for Simple", 1, simple.getInherits().size());
-		assertEquals("Object ancestor for Simple", "Object", simple.getInherits().iterator().next().getName());
-		
-		assertEquals("Single ancestor for Foo", 1, foo.getInherits().size());
-		assertSame("Foo ancestor == Simple", simple, foo.getInherits().iterator().next());
-		
-		assertEquals("Simple field count", 3, simple.getFields().size());
-		assertEquals("Simple field names", "[age, name, count]", simple.getFields().toString());
-		
-		assertEquals("Foo field count", 0, foo.getFields().size());
+		ValaType foo = source.getTypes().get("Foo");
+		assertNotNull("'Simple' type not found", simple);
+		assertNotNull("'Foo' type not found", foo);
+
+		assertEquals("Incorrect number of ancestors of 'Simple'", 1, simple
+				.getInherits().size());
+		assertEquals("Ancestor of 'Simple' is not 'Object'", "Object", simple
+				.getInherits().iterator().next().getName());
+
+		assertEquals("Incorrect number of ancestors of 'Foo'", 1, foo
+				.getInherits().size());
+		assertSame("Ancestor of 'Foo' is not 'Simple'", simple, foo
+				.getInherits().iterator().next());
+
+		assertEquals("Incorrect number of fields in 'Simple'", 3, simple
+				.getFields().size());
+		assertEquals("Incorrect field names of 'Simple'", "[age, name, count]",
+				simple.getFields().toString());
+
+		assertEquals("Incorrect number of fields in 'Foo'", 0, foo.getFields()
+				.size());
 	}
 
 }
-
-

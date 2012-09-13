@@ -2,6 +2,8 @@
  * Comments should be ignored.
  */
 
+using Gee;
+
 public class Simple : Object {
   private int age;
   string name;
