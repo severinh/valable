@@ -9,19 +9,22 @@
  */
 package valable.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
-import junit.framework.TestCase;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.junit.Test;
 
 /**
  * Test that {@link ValaSource} works correctly.
  */
-public class TestValaSource extends TestCase {
+public class TestValaSource {
 	
 	/**
 	 * Test that simple Vala files can be parsed correctly. This
@@ -41,6 +44,7 @@ public class TestValaSource extends TestCase {
 	 * @throws IOException 
 	 * @throws CoreException 
 	 */
+	@Test
 	public void testParse() throws CoreException, IOException {
 		IFile file = new LocalFile(new File("test/simple.vala"));
 		
@@ -70,6 +74,7 @@ public class TestValaSource extends TestCase {
 		
 		assertEquals("Foo field count", 0, foo.getFields().size());
 	}
+
 }
 
 

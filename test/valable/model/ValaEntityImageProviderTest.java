@@ -8,7 +8,7 @@
  */
 package valable.model;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ import valable.ValaPluginConstants;
 /**
  * Tests {@link ValaEntityImageProvider}.
  */
-public class ValaEntityImageProviderTest extends TestCase {
+public class ValaEntityImageProviderTest {
 
 	private static final String NAME = "foo";
 

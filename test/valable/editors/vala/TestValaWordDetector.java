@@ -8,14 +8,16 @@
  */
 package valable.editors.vala;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.jface.text.rules.IWordDetector;
+import org.junit.Test;
 
 /**
  * Test that {@link ValaWordDetector} works correctly.
  */
-public class TestValaWordDetector extends TestCase {
+public class TestValaWordDetector {
 	
 	private final IWordDetector detector = new ValaWordDetector();
 	
@@ -24,6 +26,7 @@ public class TestValaWordDetector extends TestCase {
 	 * Test that all the keywords in {@link IValaLanguageWords}
 	 * return true.
 	 */
+	@Test
 	public void testKeywords() {
 		for (String kw : IValaLanguageWords.keywords)
 			assertTrue("Keyword: " + kw, check(detector, kw));
@@ -34,6 +37,7 @@ public class TestValaWordDetector extends TestCase {
 	 * Test that all the base types in {@link IValaLanguageWords}
 	 * return true.
 	 */
+	@Test
 	public void testBaseTypes() {
 		for (String type : IValaLanguageWords.types)
 			assertTrue("Types: " + type, check(detector, type));
@@ -44,6 +48,7 @@ public class TestValaWordDetector extends TestCase {
 	 * Test that all the constants in {@link IValaLanguageWords}
 	 * return true.
 	 */
+	@Test
 	public void testConstants() {
 		for (String constant : IValaLanguageWords.constants)
 			assertTrue("Constants: " + constant, check(detector, constant));
@@ -53,6 +58,7 @@ public class TestValaWordDetector extends TestCase {
 	/**
 	 * Test that other arbitrary identfiers are correctly handled.
 	 */
+	@Test
 	public void testRandomStrings() {
 		assertCheck(true, "Bob");
 		assertCheck(false, "Bob and Me");
@@ -66,6 +72,7 @@ public class TestValaWordDetector extends TestCase {
 	 * In Vala, keywords can be used as identifiers if they start
 	 * with '@'.
 	 */
+	@Test
 	public void testKeywordsAsIdentifiers() {
 		assertCheck(true, "@bob");
 		assertCheck(false, "!bob");

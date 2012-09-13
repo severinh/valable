@@ -9,21 +9,25 @@
  */
 package valable.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * Test that {@link ValaProject} works correctly.
  */
-public class TestValaProject extends TestCase {
+public class TestValaProject {
 	
 	/**
 	 * {@link ValaProject#getAvailablePackages()} should return a list
 	 * of {@link ValaPackage} - which should always include
 	 * {@code Gee} and {@code Vala}.
 	 */
+	@Test
 	public void testGetPackages() {
 		Map<String, Set<ValaPackage>> packages = ValaProject.getAvailablePackages();
 		
@@ -38,4 +42,5 @@ public class TestValaProject extends TestCase {
 		assertEquals("vala VAPI", "libvala-0.18", packages.get("Vala")
 				.iterator().next().getPkgConfigName());
 	}
+
 }

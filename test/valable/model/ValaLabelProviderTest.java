@@ -8,9 +8,9 @@
  */
 package valable.model;
 
-import java.io.File;
+import static org.junit.Assert.assertEquals;
 
-import junit.framework.TestCase;
+import java.io.File;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.TreeNode;
@@ -22,7 +22,7 @@ import valable.outline.ValaLabelProvider;
 /**
  * Tests {@link ValaLabelProvider}.
  */
-public class ValaLabelProviderTest extends TestCase {
+public class ValaLabelProviderTest {
 
 	@Test
 	public void testImageKey() {

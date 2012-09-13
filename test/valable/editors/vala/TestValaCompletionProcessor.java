@@ -8,22 +8,27 @@
  */
 package valable.editors.vala;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.regex.Matcher;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
 import valable.model.ValaEntity;
 
 /**
  * Test that {@link ValaCompletionProcessor} works correctly.
  */
-public class TestValaCompletionProcessor extends TestCase {
-	
+public class TestValaCompletionProcessor {
 	
 	/**
 	 * Test that {@link ValaEntity#IDENTIFIER}
 	 * and {@link ValaCompletionProcessor#LAST_IDENTIFIER} are
 	 * correct.
 	 */
+	@Test
 	public void testRegexps() {
 		String text = "foo";
 		assertTrue("Simple identifier", ValaEntity.IDENTIFIER.matcher(text).matches());
