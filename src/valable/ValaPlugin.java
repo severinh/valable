@@ -38,10 +38,6 @@ import valable.editors.ValaEditor;
 
 public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants {
 
-	public enum ImageType {
-		FILE, CLASS, INTERFACE, ENUM, FIELD, METHOD, PACKAGE, VARIABLE, UNKNOWN;
-	}
-
 	private static ValaPlugin plugin;
 	private static ResourceBundle resourceBundle = ResourceBundle
 			.getBundle("valable.data.ValaPluginMessages");
