@@ -28,3 +28,6 @@ Export-Package: valable,
  valable.wizard.project
 Import-Package: org.eclipse.ui.texteditor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .,
+ lib/commons-lang3-3.1.jar,
+ lib/gtk-4.1.jar
