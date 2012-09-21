@@ -11,6 +11,7 @@ package valable.model;
 import org.eclipse.swt.graphics.Image;
 import org.gnome.vala.Class;
 import org.gnome.vala.Field;
+import org.gnome.vala.LocalVariable;
 import org.gnome.vala.Method;
 import org.gnome.vala.Symbol;
 import org.gnome.vala.SymbolAccessibility;
@@ -61,6 +62,10 @@ public class ValaSymbolImageProvider {
 		return ValaPluginConstants.IMG_OBJECT_CLASS;
 	}
 
+	public String visitLocalVariable(LocalVariable localVariable) {
+		return ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE;
+	}
+
 	public static ValaSymbolImageProvider getInstance() {
 		return instance;
 	}
@@ -77,6 +82,8 @@ public class ValaSymbolImageProvider {
 			key = getInstance().visitMethod((Method) symbol);
 		} else if (symbol instanceof Field) {
 			key = getInstance().visitField((Field) symbol);
+		} else if (symbol instanceof LocalVariable) {
+			key = getInstance().visitLocalVariable((LocalVariable) symbol);
 		} else if (symbol instanceof Class) {
 			key = getInstance().visitClass((Class) symbol);
 		} else {

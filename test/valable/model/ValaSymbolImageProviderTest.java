@@ -14,31 +14,26 @@ import org.gnome.vala.Class;
 import org.gnome.vala.Field;
 import org.gnome.vala.LocalVariable;
 import org.gnome.vala.Method;
-import org.gnome.vala.Symbol;
 import org.gnome.vala.SymbolAccessibility;
-import org.junit.Ignore;
+import org.gnome.vala.VoidType;
 import org.junit.Test;
 
+import valable.AbstractTest;
 import valable.ValaPluginConstants;
 
 /**
  * Tests {@link ValaSymbolImageProvider}.
- * 
- * @todo Currently commented-out because the Vala parser binding does not
- *       support instantiating fields and methods yet.
  */
-@Ignore
-public class ValaSymbolImageProviderTest {
+public class ValaSymbolImageProviderTest extends AbstractTest {
 
-	@SuppressWarnings("unused")
 	private static final String NAME = "foo";
 
 	@Test
 	public void test() {
-		Symbol symbol = null;
+		// TODO: It is not possible to instantiate the abstract class Symbol
 		// Symbol symbol = new Symbol(NAME);
-		assertEquals(ValaPluginConstants.IMG_OBJECT_UNKNOWN,
-				ValaSymbolImageProvider.getKey(symbol));
+		// assertEquals(ValaPluginConstants.IMG_OBJECT_UNKNOWN,
+		// ValaSymbolImageProvider.getKey(symbol));
 
 		Field field;
 		field = makeStubField(SymbolAccessibility.PRIVATE);
@@ -68,13 +63,11 @@ public class ValaSymbolImageProviderTest {
 		assertEquals(ValaPluginConstants.IMG_OBJECT_METHOD_PUBLIC,
 				ValaSymbolImageProvider.getKey(method));
 
-		LocalVariable localVariable = null;
-		// LocalVariable localVariable = new LocalVariable(NAME);
+		LocalVariable localVariable = new LocalVariable(NAME, new VoidType());
 		assertEquals(ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE,
 				ValaSymbolImageProvider.getKey(localVariable));
 
-		Class cls = null;
-		// Class cls = new Class(NAME);
+		Class cls = new Class(NAME);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_CLASS,
 				ValaSymbolImageProvider.getKey(cls));
 	}
@@ -83,10 +76,8 @@ public class ValaSymbolImageProviderTest {
 	 * Creates a new stub {@link Field} with a given {@link SymbolAccessibility}
 	 * .
 	 */
-	@SuppressWarnings("null")
 	private Field makeStubField(SymbolAccessibility accessibility) {
-		Field field = null;
-		// Field field = new Field(NAME);
+		Field field = new Field(NAME, new VoidType());
 		field.setAccessibility(accessibility);
 		return field;
 	}
@@ -95,10 +86,8 @@ public class ValaSymbolImageProviderTest {
 	 * Creates a new stub {@link Method} with a given
 	 * {@link SymbolAccessibility}.
 	 */
-	@SuppressWarnings("null")
 	private Method makeStubMethod(SymbolAccessibility accessibility) {
-		Method method = null;
-		// Method method = new Method(NAME);
+		Method method = new Method(NAME, new VoidType());
 		method.setAccessibility(accessibility);
 		return method;
 	}
