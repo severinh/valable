@@ -21,10 +21,12 @@ public class ColorManager implements IColorConstants {
 	protected Map<RGB, Color> colorTable = new HashMap<RGB, Color>(10);
 
 	public void dispose() {
-		Iterator<Color> e = colorTable.values().iterator();
-		while (e.hasNext())
-			 e.next().dispose();
+		Iterator<Color> iterator = colorTable.values().iterator();
+		while (iterator.hasNext()) {
+			iterator.next().dispose();
+		}
 	}
+
 	public Color getColor(RGB rgb) {
 		Color color = colorTable.get(rgb);
 		if (color == null) {
@@ -33,4 +35,5 @@ public class ColorManager implements IColorConstants {
 		}
 		return color;
 	}
+
 }

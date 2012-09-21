@@ -22,19 +22,17 @@ public class ValaDocumentProvider extends FileDocumentProvider {
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
 		if (document != null) {
-			IDocumentPartitioner partitioner =
-				new FastPartitioner(
-					new ValaPartitionScanner(),
-					new String[] {
-						ValaPartitionScanner.GTKDOC_COMMENT,
-						ValaPartitionScanner.VALA_MULTILINE_COMMENT,
-						ValaPartitionScanner.VALA_MULTILINE_STRING,
-						ValaPartitionScanner.VALA_VERBATIM_STRING,
-						ValaPartitionScanner.VALA_STRING_TEMPLATES
-					});
+			IDocumentPartitioner partitioner = new FastPartitioner(
+					new ValaPartitionScanner(), new String[] {
+							ValaPartitionScanner.GTKDOC_COMMENT,
+							ValaPartitionScanner.VALA_MULTILINE_COMMENT,
+							ValaPartitionScanner.VALA_MULTILINE_STRING,
+							ValaPartitionScanner.VALA_VERBATIM_STRING,
+							ValaPartitionScanner.VALA_STRING_TEMPLATES });
 			partitioner.connect(document);
 			document.setDocumentPartitioner(partitioner);
 		}
 		return document;
 	}
+
 }

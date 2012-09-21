@@ -22,45 +22,43 @@ import valable.outline.ValaOutlinePage;
 public class ValaEditor extends TextEditor {
 
 	private final ValaOutlinePage valaOutlinePage;
-	private final ColorManager    colorManager;
+	private final ColorManager colorManager;
 
 	/**
 	 * Create a new ValaEditor.
 	 */
 	public ValaEditor() {
 		super();
-		
+
 		colorManager = new ColorManager();
 		setSourceViewerConfiguration(new ValaConfiguration(colorManager));
 		setDocumentProvider(new ValaDocumentProvider());
-		
+
 		valaOutlinePage = new ValaOutlinePage(this);
 	}
-	
-	
+
 	@Override
 	public void dispose() {
 		colorManager.dispose();
 		super.dispose();
 	}
-	
-	
+
 	/**
 	 * Return the required adapter.
 	 * 
 	 * @see org.eclipse.ui.editors.text.TextEditor#getAdapter(java.lang.Class)
-	 * @see http://wiki.eclipse.org/FAQ_How_do_I_create_an_Outline_view_for_my_own_language_editor%3F
+	 * @see http://wiki.eclipse.org/
+	 *      FAQ_How_do_I_create_an_Outline_view_for_my_own_language_editor%3F
 	 */
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
 		if (IContentOutlinePage.class.equals(required)) {
 			return valaOutlinePage;
 		}
-		
+
 		return super.getAdapter(required);
 	}
-	
-	
+
 	/**
 	 * Additional actions in the Vala editor.
 	 * 
@@ -69,19 +67,19 @@ public class ValaEditor extends TextEditor {
 	@Override
 	protected void createActions() {
 		super.createActions();
-		
-		Action action = new ContentAssistAction(ValaPlugin.getResourceBundle(), "ContentAssistProposal.", this); 
+
+		Action action = new ContentAssistAction(ValaPlugin.getResourceBundle(),
+				"ContentAssistProposal.", this);
 		String id = ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS;
 		action.setActionDefinitionId(id);
-		setAction("ContentAssistProposal", action); 
+		setAction("ContentAssistProposal", action);
 		markAsStateDependentAction("ContentAssistProposal", true);
 	}
-	
-	
+
 	/**
 	 * @return the file represented in this editor.
 	 */
 	public IFile getCurrentFile() {
-        return (IFile)this.getEditorInput().getAdapter(IFile.class);
+		return (IFile) this.getEditorInput().getAdapter(IFile.class);
 	}
 }

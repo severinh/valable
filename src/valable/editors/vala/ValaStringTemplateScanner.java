@@ -28,7 +28,7 @@ public class ValaStringTemplateScanner extends RuleBasedScanner {
 
 	public ValaStringTemplateScanner(ColorManager manager) {
 		IToken defaultToken = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.STRING)));
+				manager.getColor(IColorConstants.STRING_COLOR)));
 		IToken templateToken = new Token(new TextAttribute(
 				manager.getColor(IColorConstants.STRING_TEMPLATE), null,
 				SWT.BOLD));

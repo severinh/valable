@@ -22,6 +22,7 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 
 import valable.editors.util.ColorManager;
 import valable.editors.util.IColorConstants;
@@ -31,18 +32,20 @@ public class ValaCodeScanner extends RuleBasedScanner implements
 		IValaLanguageWords {
 
 	public ValaCodeScanner(ColorManager manager) {
-		IToken keywordToken = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.KEYWORD), null, SWT.BOLD));
-		IToken typeToken = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.TYPE)));
-		IToken numberToken = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.NUMBER)));
-		IToken characterToken = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.NUMBER)));
-		IToken commentToken = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.COMMENT)));
-		IToken defaultToken = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.DEFAULT)));
+		Color keywordColor = manager.getColor(IColorConstants.KEYWORD_COLOR);
+		Color typeColor = manager.getColor(IColorConstants.TYPE_COLOR);
+		Color numberColor = manager.getColor(IColorConstants.NUMBER_COLOR);
+		Color commentColor = manager.getColor(IColorConstants.COMMENT_COLOR);
+		Color defaultColor = manager.getColor(IColorConstants.DEFAULT_COLOR);
+
+		IToken keywordToken = new Token(new TextAttribute(keywordColor, null,
+				SWT.BOLD));
+		IToken typeToken = new Token(new TextAttribute(typeColor, null,
+				SWT.BOLD));
+		IToken numberToken = new Token(new TextAttribute(numberColor));
+		IToken characterToken = new Token(new TextAttribute(numberColor));
+		IToken commentToken = new Token(new TextAttribute(commentColor));
+		IToken defaultToken = new Token(new TextAttribute(defaultColor));
 
 		setDefaultReturnToken(defaultToken);
 
@@ -54,15 +57,15 @@ public class ValaCodeScanner extends RuleBasedScanner implements
 		// Rule for char
 		rules.add(new SingleLineRule("'", "'", characterToken, '\\'));
 
-		// Rule for whitespaces
+		// Rule for whitespace
 		rules.add(new WhitespaceRule(new WhitespaceDetector()));
 
 		// Rule for numbers
 		rules.add(new NumberRule(numberToken));
 
 		// Rule for keywords, types and constants
-		WordRule wordRule = new ValaWordRule(new ValaWordDetector(),
-				defaultToken);
+		ValaWordDetector wordDetector = new ValaWordDetector();
+		WordRule wordRule = new ValaWordRule(wordDetector, defaultToken);
 		for (String keyword : KEYWORDS) {
 			wordRule.addWord(keyword, keywordToken);
 		}

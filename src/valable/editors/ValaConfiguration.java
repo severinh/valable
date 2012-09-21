@@ -33,7 +33,7 @@ import valable.editors.vala.ValaPartitionScanner;
 import valable.editors.vala.ValaStringTemplateScanner;
 
 public class ValaConfiguration extends SourceViewerConfiguration {
-	
+
 	private ValaCodeScanner codeScanner;
 	private GTKDocScanner docScanner;
 	ValaStringTemplateScanner templateScanner;
@@ -43,16 +43,14 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 	public ValaConfiguration(ColorManager colorManager) {
 		this.colorManager = colorManager;
 	}
-	
+
 	@Override
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
-		return new String[] {
-			IDocument.DEFAULT_CONTENT_TYPE,
-			ValaPartitionScanner.VALA_MULTILINE_COMMENT,
-			ValaPartitionScanner.VALA_MULTILINE_STRING,
-			ValaPartitionScanner.VALA_VERBATIM_STRING,
-			ValaPartitionScanner.VALA_STRING_TEMPLATES
-		};
+		return new String[] { IDocument.DEFAULT_CONTENT_TYPE,
+				ValaPartitionScanner.VALA_MULTILINE_COMMENT,
+				ValaPartitionScanner.VALA_MULTILINE_STRING,
+				ValaPartitionScanner.VALA_VERBATIM_STRING,
+				ValaPartitionScanner.VALA_STRING_TEMPLATES };
 	}
 
 	protected ValaCodeScanner getValaScanner() {
@@ -61,7 +59,7 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		}
 		return codeScanner;
 	}
-	
+
 	protected GTKDocScanner getGTKDocScanner() {
 		if (docScanner == null) {
 			docScanner = new GTKDocScanner(colorManager);
@@ -76,10 +74,10 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		return templateScanner;
 	}
 
-	//TODO: @"string" scanner
-
+	// TODO: @"string" scanner
 	@Override
-	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
+	public IPresentationReconciler getPresentationReconciler(
+			ISourceViewer sourceViewer) {
 		PresentationReconciler reconciler = new PresentationReconciler();
 
 		// Rule for code
@@ -91,11 +89,11 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		dr = new DefaultDamagerRepairer(getGTKDocScanner());
 		reconciler.setDamager(dr, ValaPartitionScanner.GTKDOC_COMMENT);
 		reconciler.setRepairer(dr, ValaPartitionScanner.GTKDOC_COMMENT);
-		
+
 		// Rule for multi line comments
 		RuleBasedScanner multilineScanner = new RuleBasedScanner();
 		multilineScanner.setDefaultReturnToken(new Token(new TextAttribute(
-					colorManager.getColor(IColorConstants.COMMENT))));
+				colorManager.getColor(IColorConstants.COMMENT_COLOR))));
 		dr = new DefaultDamagerRepairer(multilineScanner);
 		reconciler.setDamager(dr, ValaPartitionScanner.VALA_MULTILINE_COMMENT);
 		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_MULTILINE_COMMENT);
@@ -103,7 +101,7 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		// Rule for multiline strings
 		RuleBasedScanner stringScanner = new RuleBasedScanner();
 		stringScanner.setDefaultReturnToken(new Token(new TextAttribute(
-					colorManager.getColor(IColorConstants.STRING))));
+				colorManager.getColor(IColorConstants.STRING_COLOR))));
 		dr = new DefaultDamagerRepairer(stringScanner);
 		reconciler.setDamager(dr, ValaPartitionScanner.VALA_MULTILINE_STRING);
 		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_MULTILINE_STRING);
@@ -111,7 +109,7 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		// Rule for verbatim strings
 		RuleBasedScanner verbatimScanner = new RuleBasedScanner();
 		verbatimScanner.setDefaultReturnToken(new Token(new TextAttribute(
-					colorManager.getColor(IColorConstants.STRING))));
+				colorManager.getColor(IColorConstants.STRING_COLOR))));
 		dr = new DefaultDamagerRepairer(verbatimScanner);
 		reconciler.setDamager(dr, ValaPartitionScanner.VALA_VERBATIM_STRING);
 		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_VERBATIM_STRING);
@@ -120,7 +118,7 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		dr = new DefaultDamagerRepairer(getStringTemplateScanner());
 		reconciler.setDamager(dr, ValaPartitionScanner.VALA_STRING_TEMPLATES);
 		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_STRING_TEMPLATES);
-		
+
 		return reconciler;
 	}
 
@@ -131,18 +129,18 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		return indent;
 	}
 
-	
 	@Override
-    public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
-        ContentAssistant ca = new ContentAssistant();
-        IContentAssistProcessor cap = new ValaCompletionProcessor();
-        ca.setContentAssistProcessor(cap, IDocument.DEFAULT_CONTENT_TYPE);
-        ca.setInformationControlCreator(getInformationControlCreator(sourceViewer));
-        return ca;
-     }
+	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
+		ContentAssistant ca = new ContentAssistant();
+		IContentAssistProcessor cap = new ValaCompletionProcessor();
+		ca.setContentAssistProcessor(cap, IDocument.DEFAULT_CONTENT_TYPE);
+		ca.setInformationControlCreator(getInformationControlCreator(sourceViewer));
+		return ca;
+	}
 
 	@Override
-	public ITextDoubleClickStrategy getDoubleClickStrategy(ISourceViewer sourceViewer, String contentType) {
+	public ITextDoubleClickStrategy getDoubleClickStrategy(
+			ISourceViewer sourceViewer, String contentType) {
 		if (doubleClickStrategy == null) {
 			doubleClickStrategy = new ValaDoubleClickStrategy();
 		}

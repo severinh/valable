@@ -29,13 +29,17 @@ public class GTKDocScanner extends RuleBasedScanner
 	implements IGTKDocLanguageWords {
 
 	public GTKDocScanner(ColorManager manager) {
-		IToken def = new Token(new TextAttribute(manager.getColor(IColorConstants.GTKDOC_DEFAULT)));
-		IToken tag = new Token(new TextAttribute(manager.getColor(IColorConstants.GTKDOC_TAG),
-												 null, SWT.BOLD));
-		IToken xml = new Token(new TextAttribute(manager.getColor(IColorConstants.GTKDOC_DOCBOOK),
-				   								 null, SWT.BOLD));
-		IToken other = new Token(new TextAttribute(manager.getColor(IColorConstants.GTKDOC_OTHER),
-				       							   null, SWT.BOLD));
+		IToken def = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.GTKDOC_DEFAULT_COLOR)));
+		IToken tag = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.GTKDOC_TAG_COLOR), null,
+				SWT.BOLD));
+		IToken xml = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.GTKDOC_DOCBOOK_COLOR), null,
+				SWT.BOLD));
+		IToken other = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.GTKDOC_OTHER_COLOR), null,
+				SWT.BOLD));
 
 		setDefaultReturnToken(def);
 		
