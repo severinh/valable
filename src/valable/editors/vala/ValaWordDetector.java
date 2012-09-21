@@ -22,4 +22,5 @@ public class ValaWordDetector implements IWordDetector, IValaLanguageWords {
 		// In Vala you can use any keyword when using '@' as prefix.
 		return Character.isJavaIdentifierStart(c) || c == '@' || c == '#';
 	}
+
 }

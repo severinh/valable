@@ -27,21 +27,26 @@ import valable.editors.util.WhitespaceDetector;
 public class ValaStringTemplateScanner extends RuleBasedScanner {
 
 	public ValaStringTemplateScanner(ColorManager manager) {
-		IToken def = new Token(new TextAttribute(manager.getColor(IColorConstants.STRING)));
-		IToken template = new Token(new TextAttribute(manager.getColor(IColorConstants.STRING_TEMPLATE), null, SWT.BOLD));
+		IToken defaultToken = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.STRING)));
+		IToken templateToken = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.STRING_TEMPLATE), null,
+				SWT.BOLD));
 
-		setDefaultReturnToken(def);
-		
+		setDefaultReturnToken(defaultToken);
+
 		ArrayList<IRule> rules = new ArrayList<IRule>();
 
 		// Rule for whitespaces
 		rules.add(new WhitespaceRule(new WhitespaceDetector()));
-		
-		rules.add(new ParentesizedRule("$", template));
-		rules.add(new WordPatternRule(new ValaWordDetector(), "$", "", template));
-		
-		IRule[] r = new IRule[rules.size()];
-		rules.toArray(r);
-		setRules(r);
+
+		rules.add(new ParentesizedRule("$", templateToken));
+		rules.add(new WordPatternRule(new ValaWordDetector(), "$", "",
+				templateToken));
+
+		IRule[] rulesArray = new IRule[rules.size()];
+		rules.toArray(rulesArray);
+		setRules(rulesArray);
 	}
+
 }

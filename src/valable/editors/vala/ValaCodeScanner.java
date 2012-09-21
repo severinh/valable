@@ -27,46 +27,56 @@ import valable.editors.util.ColorManager;
 import valable.editors.util.IColorConstants;
 import valable.editors.util.WhitespaceDetector;
 
-public class ValaCodeScanner extends RuleBasedScanner 
-	implements IValaLanguageWords {
+public class ValaCodeScanner extends RuleBasedScanner implements
+		IValaLanguageWords {
 
 	public ValaCodeScanner(ColorManager manager) {
-		IToken keyword = new Token(new TextAttribute(manager.getColor(IColorConstants.KEYWORD), 
-													 null, SWT.BOLD));
-		IToken type = new Token(new TextAttribute(manager.getColor(IColorConstants.TYPE)));
-		IToken number = new Token(new TextAttribute(manager.getColor(IColorConstants.NUMBER)));
-		IToken character = new Token(new TextAttribute(manager.getColor(IColorConstants.NUMBER)));
-		IToken comment = new Token(new TextAttribute(manager.getColor(IColorConstants.COMMENT)));
-		IToken other = new Token(new TextAttribute(manager.getColor(IColorConstants.DEFAULT)));
-		
-		setDefaultReturnToken(other);
-		
+		IToken keywordToken = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.KEYWORD), null, SWT.BOLD));
+		IToken typeToken = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.TYPE)));
+		IToken numberToken = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.NUMBER)));
+		IToken characterToken = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.NUMBER)));
+		IToken commentToken = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.COMMENT)));
+		IToken defaultToken = new Token(new TextAttribute(
+				manager.getColor(IColorConstants.DEFAULT)));
+
+		setDefaultReturnToken(defaultToken);
+
 		ArrayList<IRule> rules = new ArrayList<IRule>();
-		
+
 		// Rule for single line comment
-		rules.add(new EndOfLineRule("//", comment));
+		rules.add(new EndOfLineRule("//", commentToken));
 
 		// Rule for char
-		rules.add(new SingleLineRule("'", "'", character, '\\'));
-		
+		rules.add(new SingleLineRule("'", "'", characterToken, '\\'));
+
 		// Rule for whitespaces
 		rules.add(new WhitespaceRule(new WhitespaceDetector()));
 
 		// Rule for numbers
-		rules.add(new NumberRule(number));
-		
+		rules.add(new NumberRule(numberToken));
+
 		// Rule for keywords, types and constants
-		WordRule wordRule = new ValaWordRule(new ValaWordDetector(), other);
-		for(String kw : keywords)
-			wordRule.addWord(kw, keyword);
-		for(String t : types)
-			wordRule.addWord(t, type);
-		for(String c : constants)
-			wordRule.addWord(c, type);
+		WordRule wordRule = new ValaWordRule(new ValaWordDetector(),
+				defaultToken);
+		for (String keyword : KEYWORDS) {
+			wordRule.addWord(keyword, keywordToken);
+		}
+		for (String type : TYPES) {
+			wordRule.addWord(type, typeToken);
+		}
+		for (String constant : CONSTANTS) {
+			wordRule.addWord(constant, typeToken);
+		}
 		rules.add(wordRule);
 
-		IRule[] r = new IRule[rules.size()];
-		rules.toArray(r);
-		setRules(r);
+		IRule[] rulesArray = new IRule[rules.size()];
+		rules.toArray(rulesArray);
+		setRules(rulesArray);
 	}
+
 }

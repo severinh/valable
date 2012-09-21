@@ -9,8 +9,8 @@
 package valable.editors.vala;
 
 public interface IValaLanguageWords {
-	//TODO add CCode
-	String[] keywords = { "#if",
+	// TODO Add keywords for CCode
+	String[] KEYWORDS = { "#if",
 						  "#elif",
 			  			  "#else",
 			  			  "#endif",
@@ -77,7 +77,7 @@ public interface IValaLanguageWords {
 						  "yield",
 						  "yields" };
 	
-	String[] types = { "bool",
+	String[] TYPES = { "bool",
 					   "char",
 					   "delegate", 
 					   "double",
@@ -104,7 +104,7 @@ public interface IValaLanguageWords {
 					   "ushort",
 					   "void" };
 	
-	String[] constants = { "false", 
+	String[] CONSTANTS = { "false",
 						   "null", 
 						   "true" };
 

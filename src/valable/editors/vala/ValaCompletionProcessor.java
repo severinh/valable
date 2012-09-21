@@ -38,6 +38,7 @@ import valable.model.ValaSymbolImageProvider;
  *       information.
  */
 public class ValaCompletionProcessor implements IContentAssistProcessor {
+
 	private static final IContextInformation[] NO_CONTEXTS = new IContextInformation[0];
 	private static final char[] ACTIVATION_CHARS = new char[] { '.' };
 
@@ -58,11 +59,11 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 		String text = viewer.getDocument().get().substring(0, offset);
 		Matcher lastIdMatcher = LAST_IDENTIFIER.matcher(text);
 		String filter = ""; // Only include values which match this
-		if (lastIdMatcher.matches())
+		if (lastIdMatcher.matches()) {
 			filter = lastIdMatcher.group(1);
+		}
 
-		// -- Add fields and methods in the current source file...
-		//
+		// Add fields and methods in the current source file
 		List<ICompletionProposal> localVars = new ArrayList<ICompletionProposal>();
 		for (Class type : source.getClasses().values()) {
 			for (Field field : type.getFields()) {
@@ -81,8 +82,7 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 			}
 		}
 
-		// -- Add types in the project...
-		//
+		// Add types in the project...
 		for (TypeSymbol type : project.getClasses()) {
 			addProposal(proposals, type, "", filter, offset, 0);
 		}
@@ -146,4 +146,5 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

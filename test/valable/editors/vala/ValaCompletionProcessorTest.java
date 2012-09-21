@@ -40,4 +40,5 @@ public class ValaCompletionProcessorTest {
 		assertTrue("Last identifier found", matcher.matches());
 		assertEquals("Last identifier value", "wor", matcher.group(1));
 	}
+
 }
