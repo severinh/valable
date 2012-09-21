@@ -13,6 +13,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ContentAssistAction;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
+import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import valable.ValaPlugin;
@@ -21,7 +22,7 @@ import valable.outline.ValaOutlinePage;
 
 public class ValaEditor extends TextEditor {
 
-	private final ValaOutlinePage valaOutlinePage;
+	private final ContentOutlinePage outlinePage;
 	private final ColorManager colorManager;
 
 	/**
@@ -34,7 +35,7 @@ public class ValaEditor extends TextEditor {
 		setSourceViewerConfiguration(new ValaConfiguration(colorManager));
 		setDocumentProvider(new ValaDocumentProvider());
 
-		valaOutlinePage = new ValaOutlinePage(this);
+		outlinePage = new ValaOutlinePage(this);
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class ValaEditor extends TextEditor {
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
 		if (IContentOutlinePage.class.equals(required)) {
-			return valaOutlinePage;
+			return outlinePage;
 		}
 
 		return super.getAdapter(required);
@@ -77,7 +78,7 @@ public class ValaEditor extends TextEditor {
 	}
 
 	/**
-	 * @return the file represented in this editor.
+	 * Returns the file represented in this editor.
 	 */
 	public IFile getCurrentFile() {
 		return (IFile) this.getEditorInput().getAdapter(IFile.class);
