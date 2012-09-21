@@ -16,7 +16,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
-import org.junit.Ignore;
+import org.gnome.vala.SymbolAccessibility;
+import org.gnome.vala.VoidType;
 import org.junit.Test;
 
 import valable.AbstractTest;
@@ -28,11 +29,7 @@ import valable.model.ValaSource;
 
 /**
  * Tests {@link ValaLabelProvider}.
- * 
- * @todo Currently commented-out because the Vala parser binding does not
- *       support instantiating fields and methods yet.
  */
-@Ignore
 public class ValaLabelProviderTest extends AbstractTest {
 
 	@Test
@@ -42,8 +39,8 @@ public class ValaLabelProviderTest extends AbstractTest {
 		ValaProject project = new ValaProject("project");
 		ValaSource source = new ValaSource(project, file);
 		ValaPackage valaPackage = new ValaPackage("package");
-		Field field = null;
-		// Field field = new Field("field");
+		Field field = new Field("field", new VoidType());
+		field.setAccessibility(SymbolAccessibility.INTERNAL);
 
 		assertEquals(ValaPluginConstants.IMG_OBJECT_VALA,
 				labelProvider.getImageKey(source));
@@ -62,17 +59,15 @@ public class ValaLabelProviderTest extends AbstractTest {
 	@Test
 	public void testText() {
 		ValaLabelProvider labelProvider = new ValaLabelProvider();
-		Field field = null;
-		// Field field = new Field("field", "Type");
+		Field field = new Field("field", new VoidType());
 		TreeNode fieldTreeNode = new TreeNode(field);
-		String expectedFieldText = "field : Type";
+		String expectedFieldText = "field : void";
 
 		assertEquals(expectedFieldText, labelProvider.getText(field));
 		assertEquals(expectedFieldText, labelProvider.getText(fieldTreeNode));
 
-		Method method = null;
-		// Method method = new Method("method", "Type");
-		assertEquals("method() : Type", labelProvider.getText(method));
+		Method method = new Method("method", new VoidType());
+		assertEquals("method() : void", labelProvider.getText(method));
 	}
 
 }
