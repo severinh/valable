@@ -9,7 +9,6 @@
 package valable.editors.vala;
 
 public interface IValaLanguageWords {
-	// TODO Add keywords for CCode
 	String[] KEYWORDS = { "#if",
 						  "#elif",
 			  			  "#else",

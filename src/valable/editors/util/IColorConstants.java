@@ -19,6 +19,7 @@ public interface IColorConstants {
 	public static final RGB STRING_COLOR = new RGB(42, 0, 255);
 	public static final RGB STRING_TEMPLATE = new RGB(46, 52, 175);
 	public static final RGB COMMENT_COLOR = new RGB(63, 127, 95);
+	public static final RGB CCODE_COLOR = new RGB(64, 64, 64);
 
 	public static final RGB GTKDOC_DEFAULT_COLOR = COMMENT_COLOR;
 	public static final RGB GTKDOC_TAG_COLOR = new RGB(127, 159, 191);

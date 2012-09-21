@@ -146,4 +146,5 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		}
 		return doubleClickStrategy;
 	}
+
 }

@@ -37,6 +37,7 @@ public class ValaCodeScanner extends RuleBasedScanner implements
 		Color numberColor = manager.getColor(IColorConstants.NUMBER_COLOR);
 		Color commentColor = manager.getColor(IColorConstants.COMMENT_COLOR);
 		Color defaultColor = manager.getColor(IColorConstants.DEFAULT_COLOR);
+		Color ccodeColor = manager.getColor(IColorConstants.CCODE_COLOR);
 
 		IToken keywordToken = new Token(new TextAttribute(keywordColor, null,
 				SWT.BOLD));
@@ -46,6 +47,7 @@ public class ValaCodeScanner extends RuleBasedScanner implements
 		IToken characterToken = new Token(new TextAttribute(numberColor));
 		IToken commentToken = new Token(new TextAttribute(commentColor));
 		IToken defaultToken = new Token(new TextAttribute(defaultColor));
+		IToken ccodeToken = new Token(new TextAttribute(ccodeColor));
 
 		setDefaultReturnToken(defaultToken);
 
@@ -76,6 +78,9 @@ public class ValaCodeScanner extends RuleBasedScanner implements
 			wordRule.addWord(constant, typeToken);
 		}
 		rules.add(wordRule);
+
+		// Rule for CCode
+		rules.add(new SingleLineRule("[", "]", ccodeToken, '\\'));
 
 		IRule[] rulesArray = new IRule[rules.size()];
 		rules.toArray(rulesArray);

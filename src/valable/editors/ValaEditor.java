@@ -82,4 +82,5 @@ public class ValaEditor extends TextEditor {
 	public IFile getCurrentFile() {
 		return (IFile) this.getEditorInput().getAdapter(IFile.class);
 	}
+
 }
