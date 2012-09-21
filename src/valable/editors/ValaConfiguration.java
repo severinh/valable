@@ -124,9 +124,6 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		return reconciler;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getAutoEditStrategies(org.eclipse.jface.text.source.ISourceViewer, java.lang.String)
-	 */
 	@Override
 	public IAutoEditStrategy[] getAutoEditStrategies(
 			ISourceViewer sourceViewer, String contentType) {
@@ -135,9 +132,6 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 	}
 
 	
-	/**
-	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getContentAssistant(org.eclipse.jface.text.source.ISourceViewer)
-	 */
 	@Override
     public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
         ContentAssistant ca = new ContentAssistant();

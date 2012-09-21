@@ -14,18 +14,19 @@ import java.io.IOException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.TreeNode;
+import org.gnome.vala.Class;
 import org.junit.Assert;
 import org.junit.Test;
 
+import valable.AbstractTest;
 import valable.model.LocalFile;
 import valable.model.ValaProject;
 import valable.model.ValaSource;
-import valable.model.ValaType;
 
 /**
  * Tests {@link ValaContentProvider}.
  */
-public class ValaContentProviderTest {
+public class ValaContentProviderTest extends AbstractTest {
 
 	@Test
 	public void testParse() throws CoreException, IOException {
@@ -33,21 +34,21 @@ public class ValaContentProviderTest {
 		ValaSource source = new ValaSource(new ValaProject("Test"), file);
 		source.parse();
 
-		ValaType sampleType = source.getTypes().get("Simple");
-		ValaType fooType = source.getTypes().get("Foo");
+		Class sampleClass = source.getClasses().get("Simple");
+		Class fooClass = source.getClasses().get("Foo");
 		TreeNode geeUseTreeNode = new TreeNode(source.getUse("Gee"));
-		TreeNode sampleTreeNode = new TreeNode(sampleType);
+		TreeNode sampleTreeNode = new TreeNode(sampleClass);
 		sampleTreeNode.setChildren(new TreeNode[] {
-				new TreeNode(sampleType.getField("age")),
-				new TreeNode(sampleType.getField("name")),
-				new TreeNode(sampleType.getField("count")),
-				new TreeNode(sampleType.getMethod("main")),
-				new TreeNode(sampleType.getMethod("doThing")),
-				new TreeNode(sampleType.getMethod("getParent")) });
-		TreeNode fooTreeNode = new TreeNode(fooType);
+				new TreeNode(sampleClass.getField("age")),
+				new TreeNode(sampleClass.getField("name")),
+				new TreeNode(sampleClass.getField("count")),
+				new TreeNode(sampleClass.getMethod("main")),
+				new TreeNode(sampleClass.getMethod("doThing")),
+				new TreeNode(sampleClass.getMethod("getParent")) });
+		TreeNode fooTreeNode = new TreeNode(fooClass);
 		fooTreeNode.setChildren(new TreeNode[] {
-				new TreeNode(fooType.getMethod("getParent")),
-				new TreeNode(fooType.getMethod("removeParent")) });
+				new TreeNode(fooClass.getMethod("getParent")),
+				new TreeNode(fooClass.getMethod("removeParent")) });
 
 		TreeNode[] expectedTreeNodes = { geeUseTreeNode, sampleTreeNode,
 				fooTreeNode };

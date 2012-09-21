@@ -8,24 +8,24 @@
  */
 package valable.model;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Status;
+import org.gnome.vala.Class;
+import org.gnome.vala.CodeContext;
+import org.gnome.vala.Namespace;
+import org.gnome.vala.Parser;
+import org.gnome.vala.SourceFile;
 
 /**
  * Encapsulates information about a Vala source file. A source file can consist
@@ -36,10 +36,9 @@ public class ValaSource {
 	private static final Pattern USING = Pattern
 			.compile("^\\s*using (\\S+)\\s*;\\s*$");
 
-	private final ValaProject project;
 	private final IFile source;
 	private final Set<ValaPackage> uses = new LinkedHashSet<ValaPackage>();
-	private final Map<String, ValaType> types = new HashMap<String, ValaType>();
+	private final Map<String, Class> classes = new HashMap<String, Class>();
 
 	/**
 	 * Creates a new instance for the given source file within a project.
@@ -52,28 +51,40 @@ public class ValaSource {
 			throw new IllegalArgumentException(
 					"Only .vala / .vapi files can be represented");
 
-		this.project = project;
 		this.source = source;
-		this.project.getSources().add(this);
+	}
+
+	public IFile getSource() {
+		return source;
+	}
+
+	public Map<String, Class> getClasses() {
+		return classes;
+	}
+
+	public Set<ValaPackage> getUses() {
+		return uses;
+	}
+
+	public ValaPackage getUse(String name) {
+		for (ValaPackage use : getUses()) {
+			if (use.getName().equals(name)) {
+				return use;
+			}
+		}
+		return null;
 	}
 
 	/**
 	 * Parse the source file to build up a tree of types, uses etc.
 	 * 
-	 * <p>
-	 * Current implementation is a mix of file parsing and {@code ctags}: in
-	 * future this should use an <acronym title="Abstract Source Tree">AST</a>.
-	 * </p>
-	 * 
 	 * @throws CoreException
 	 *             if the file is unparseable
 	 */
-	public List<String> parse() throws CoreException {
+	public List<String> parse() {
 		uses.clear();
-		types.clear();
 
-		// -- Find usings...
-		//
+		// Find usings
 		InputStream contents;
 		try {
 			contents = source.getContents();
@@ -98,201 +109,28 @@ public class ValaSource {
 		}
 		scanner.close();
 
-		// -- Parse types...
-		//
-		Process output = null;
-		try {
-			output = Runtime.getRuntime().exec(
-					new String[] { "anjuta-tags", "-f", "-", "-n", "--sort=no",
-							"--fields=akifSt",
-							source.getLocation().toOSString() });
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new CoreException(Status.CANCEL_STATUS);
-		}
+		String sourceFilename = getSource().getRawLocation().toOSString();
 
-		System.out.println("\n\n+++ ctags for " + source);
-		scanner = new Scanner(output.getInputStream());
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();
-			String[] cols = line.split("\\t");
-			System.out.println(line);
+		CodeContext codeContext = new CodeContext();
+		CodeContext.push(codeContext);
+		codeContext.addExternalPackage("glib-2.0");
+		codeContext.addExternalPackage("gobject-2.0");
+		codeContext.addExternalPackage("gee-1.0");
+		codeContext.addSourceFilename(sourceFilename, false, false);
 
-			// -- Parse the ctags output...
-			//
-			String name = cols[0];
+		Parser parser = new Parser();
+		parser.parse(codeContext);
+		codeContext.check();
 
-			// The system uses 0 for the first line, while ctags uses 1
-			int lineNumber = Integer.parseInt(cols[2].replaceAll("\\D", "")) - 1;
-			char type = cols[3].charAt(0);
-
-			// Use a map for extra data in the form 'key:value'
-			Map<String, String> extraData = new HashMap<String, String>();
-			for (int i = 4; i < cols.length; i++) {
-				String[] keyValue = cols[i].split(":", 2);
-				extraData.put(keyValue[0], keyValue[1]);
-			}
-
-			// -- Build up the model...
-			//
-			ValaSourceLocation location = new ValaSourceLocation(this, lineNumber, 0);
-			if (type == 'c') {
-				// TODO What about private classes?
-				ValaType typeDefn = project.getType(name);
-				typeDefn.setSourceLocation(location);
-				typeDefn.reset();
-
-				if (extraData.containsKey("inherits"))
-					for (String superType : extraData.get("inherits").split(
-							",\\s*"))
-						typeDefn.getInherits().add(project.getType(superType));
-
-				types.put(name, typeDefn);
-
-			} else if (type == 's') {
-				// TODO What about private struct?
-				ValaType typeDefn = project.getType(name);
-				typeDefn.setSourceLocation(location);
-				typeDefn.reset();
-
-				if (extraData.containsKey("inherits"))
-					for (String superType : extraData.get("inherits").split(
-							",\\s*"))
-						typeDefn.getInherits().add(project.getType(superType));
-
-				types.put(name, typeDefn);
-
-			} else if (type == 'f') {
-				ValaType typeDefn = findTypeForLine(lineNumber);
-				ValaField fieldDefn = new ValaField(name);
-				fieldDefn.setSourceLocation(location);
-				fieldDefn.getModifiers().addAll(
-						Arrays.asList(extraData.get("access").split(",\\s*")));
-				fieldDefn.setType(typeFromLine(lines.get(lineNumber), name));
-
-				// typeDefn may be null
-				if (typeDefn != null)
-					typeDefn.getFields().add(fieldDefn);
-
-			} else if (type == 'm' && extraData.get("access") != null) {
-				// Method invocations also included unless we check for
-				// "access:"
-				ValaType typeDefn = findTypeForLine(lineNumber);
-				ValaMethod methodDefn = new ValaMethod(name);
-				methodDefn.setSourceLocation(location);
-				methodDefn.getModifiers().addAll(
-						Arrays.asList(extraData.get("access").split(",\\s*")));
-				methodDefn.setType(typeFromLine(lines.get(lineNumber), name));
-				// TODO Signature
-
-				// typeDefn may be null
-				if (typeDefn != null)
-					typeDefn.getMethods().add(methodDefn);
-
-			} else if (type == 'l') {
-				ValaType typeDefn = findTypeForLine(lineNumber);
-				ValaMethod methodDefn = typeDefn.findMethodForLine(lineNumber);
-				ValaLocalVariable varDefn = new ValaLocalVariable(name);
-				varDefn.setSourceLocation(location);
-				varDefn.setType(typeFromLine(lines.get(lineNumber), name));
-				methodDefn.getLocalVariables().add(varDefn);
+		Namespace root = codeContext.getRoot();
+		for (Class cls : root.getClasses()) {
+			SourceFile sourceFile = cls.getSourceReference().getSourceFile();
+			String filename = sourceFile.getFilename();
+			if (filename.equals(sourceFilename)) {
+				classes.put(cls.getName(), cls);
 			}
 		}
-		scanner.close();
-
 		return lines;
 	}
 
-	/**
-	 * Find the type which is being created for the given line number. Loops
-	 * over all {@link #types} and finds the one where <var>lineNumber</var> >
-	 * {@link ValaSourceLocation#getLine()} and <var>lineNumber</var> <
-	 * {@link ValaSourceLocation#getLine()} for the next class.
-	 * 
-	 * @param lineNumber
-	 * @return ValaType enclosing the given line number.
-	 */
-	public ValaType findTypeForLine(int lineNumber) {
-		SortedSet<ValaType> sortedTypes = new TreeSet<ValaType>(
-				ValaSymbol.SOURCE_ORDER);
-		sortedTypes.addAll(types.values());
-
-		ValaType lastType = null;
-		for (ValaType type : sortedTypes) {
-			if (lastType != null
-					&& lineNumber >= lastType.getSourceLocation().getLine()
-					&& lineNumber < type.getSourceLocation().getLine())
-				return lastType;
-
-			lastType = type;
-		}
-
-		return lastType;
-	}
-
-	/**
-	 * Find the declaration of <var>name</var> on the given line and return the
-	 * immediately preceding identifier, assuming that this will be the type.
-	 * 
-	 * <p>
-	 * This is obviously prone to error, but may work in the majority of cases
-	 * until a {@code libvala} wrapper is available.
-	 * </p>
-	 * 
-	 * @param line
-	 * @param name
-	 * @return
-	 */
-	private String typeFromLine(String line, String name) {
-		Pattern pattern = Pattern.compile(".*?\\b("
-				+ ValaSymbol.IDENTIFIER.pattern() + ")\\s+" + name + "\\b.*");
-		Matcher matcher = pattern.matcher(line);
-
-		return matcher.matches() ? matcher.group(1) : "";
-	}
-
-	public IFile getSource() {
-		return source;
-	}
-
-	public Map<String, ValaType> getTypes() {
-		return types;
-	}
-
-	public Set<ValaPackage> getUses() {
-		return uses;
-	}
-
-	public ValaPackage getUse(String name) {
-		for (ValaPackage use : getUses()) {
-			if (use.getName().equals(name)) {
-				return use;
-			}
-		}
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public final boolean equals(Object arg) {
-		if (arg == null || !(arg instanceof ValaSource))
-			return false;
-
-		ValaSource other = (ValaSource) arg;
-		return source.getName().equals(other.source.getName());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return source.getName().hashCode();
-	}
 }

@@ -9,80 +9,84 @@
 package valable.model;
 
 import org.eclipse.swt.graphics.Image;
+import org.gnome.vala.Class;
+import org.gnome.vala.Field;
+import org.gnome.vala.Method;
+import org.gnome.vala.Symbol;
+import org.gnome.vala.SymbolAccessibility;
 
 import valable.ValaPlugin;
 import valable.ValaPluginConstants;
 
 /**
- * Provides the {@link Image}s used to visually represent {@link ValaSymbol}
- * objects.
+ * Provides the images used to visually represent symbols.
  * 
  * This class is a singleton.
  */
-public class ValaSymbolImageProvider implements ValaSymbolVisitor<String> {
+public class ValaSymbolImageProvider {
 
 	private static final ValaSymbolImageProvider instance = new ValaSymbolImageProvider();
 
-	@Override
-	public String visitSymbol(ValaSymbol symbol) {
+	public String visitSymbol(Symbol symbol) {
 		return ValaPluginConstants.IMG_OBJECT_UNKNOWN;
 	}
 
-	@Override
-	public String visitField(ValaField field) {
-		switch (field.getAccessibility()) {
-		case PRIVATE:
+	public String visitField(Field field) {
+		SymbolAccessibility accessibility = field.getAccessibility();
+		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
 			return ValaPluginConstants.IMG_OBJECT_FIELD_PRIVATE;
-		case PROTECTED:
+		} else if (accessibility.equals(SymbolAccessibility.PROTECTED)) {
 			return ValaPluginConstants.IMG_OBJECT_FIELD_PROTECTED;
-		case PUBLIC:
+		} else if (accessibility.equals(SymbolAccessibility.PUBLIC)) {
 			return ValaPluginConstants.IMG_OBJECT_FIELD_PUBLIC;
-		case INTERNAL:
-			// Fall-through
-		default:
+		} else {
 			return ValaPluginConstants.IMG_OBJECT_FIELD_DEFAULT;
 		}
 	}
 
-	@Override
-	public String visitMethod(ValaMethod method) {
-		switch (method.getAccessibility()) {
-		case PRIVATE:
+	public String visitMethod(Method method) {
+		SymbolAccessibility accessibility = method.getAccessibility();
+		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
 			return ValaPluginConstants.IMG_OBJECT_METHOD_PRIVATE;
-		case PROTECTED:
+		} else if (accessibility.equals(SymbolAccessibility.PROTECTED)) {
 			return ValaPluginConstants.IMG_OBJECT_METHOD_PROTECTED;
-		case PUBLIC:
+		} else if (accessibility.equals(SymbolAccessibility.PUBLIC)) {
 			return ValaPluginConstants.IMG_OBJECT_METHOD_PUBLIC;
-		case INTERNAL:
-			// Fall-through
-		default:
+		} else {
 			return ValaPluginConstants.IMG_OBJECT_METHOD_DEFAULT;
 		}
 	}
 
-	@Override
-	public String visitType(ValaType type) {
+	public String visitClass(Class type) {
 		return ValaPluginConstants.IMG_OBJECT_CLASS;
-	}
-
-	@Override
-	public String visitLocalVariable(ValaLocalVariable localVariable) {
-		return ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE;
 	}
 
 	public static ValaSymbolImageProvider getInstance() {
 		return instance;
 	}
 
-	public static String getKey(ValaSymbol symbol) {
+	public static String getKey(Symbol symbol) {
 		if (symbol == null) {
-			throw new IllegalArgumentException("ValaSymbol must not be null");
+			throw new IllegalArgumentException("Symbol must not be null");
 		}
-		String key = symbol.accept(getInstance());
+		String key;
+		// TODO: Make it possible to implement the CodeVisitor interface.
+		// Thus, use the following work-around.
+		// String key = symbol.accept(getInstance());
+		if (symbol instanceof Method) {
+			key = getInstance().visitMethod((Method) symbol);
+		} else if (symbol instanceof Field) {
+			key = getInstance().visitField((Field) symbol);
+		} else if (symbol instanceof Class) {
+			key = getInstance().visitClass((Class) symbol);
+		} else {
+			key = getInstance().visitSymbol(symbol);
+		}
+
 		return key;
 	}
 
-	public static Image getImage(ValaPlugin valaPlugin, ValaSymbol symbol) {
+	public static Image getImage(ValaPlugin valaPlugin, Symbol symbol) {
 		if (valaPlugin == null) {
 			throw new IllegalArgumentException("ValaPlugin must not be null");
 		}

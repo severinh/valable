@@ -34,12 +34,6 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 
 	public static final String ID = "valable.builder.ValaProjectBuilder";
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.core.resources.IncrementalProjectBuilder#build(int,
-	 *      java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor)
 			throws CoreException {
@@ -108,8 +102,7 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 	private static void addValaCompilerCompliantFile(IFile file,
 			Collection<IFile> files, IResourceDelta delta) {
 		if (file.getName().endsWith(".vala")
-				|| file.getName().endsWith(".vapi")
-				|| file.getName().endsWith(".c")) {
+				|| file.getName().endsWith(".vapi")) {
 			if (delta == null || delta.findMember(file.getProjectRelativePath()) != null)
 				files.add(file);
 		}
@@ -143,11 +136,6 @@ public class ValaProjectBuilder extends IncrementalProjectBuilder {
 		return files;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.core.resources.IncrementalProjectBuilder#clean(org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	protected void clean(IProgressMonitor monitor) throws CoreException {
 		// Cleaning consists in deleting the content of the output folder

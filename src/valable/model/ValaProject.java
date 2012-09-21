@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.gnome.vala.Class;
 
 import valable.ValaPlugin;
 
@@ -36,7 +37,7 @@ public class ValaProject {
 
 	private final String name;
 	private final Set<ValaSource> sources = new HashSet<ValaSource>();
-	private final Map<String, ValaType> types = new HashMap<String, ValaType>();
+	private final Map<String, Class> classes = new HashMap<String, Class>();
 
 	private static Map<String, Set<ValaPackage>> knownPackages = null;
 	private static Map<String, ValaProject> projects = new HashMap<String, ValaProject>();
@@ -62,8 +63,9 @@ public class ValaProject {
 	 * @return An existing, or new project.
 	 */
 	public synchronized static ValaProject getProject(String name) {
-		if (projects.containsKey(name))
+		if (projects.containsKey(name)) {
 			return projects.get(name);
+		}
 
 		return new ValaProject(name);
 	}
@@ -136,29 +138,23 @@ public class ValaProject {
 	/**
 	 * Whether this project contains a class with the given name.
 	 * 
-	 * @return true if {@link #getType(String)} has been called for
+	 * @return true if {@link #getClass(String)} has been called for
 	 *         <var>name</var> previously.
 	 */
 	public synchronized boolean hasType(String name) {
-		return types.containsKey(name);
+		return classes.containsKey(name);
 	}
 
 	/**
 	 * Returns the type definition for the given class name. This should be used
-	 * to ensure that all references to a given class use the same instance. If
-	 * the class is not known, an empty result is returned.
+	 * to ensure that all references to a given class use the same instance.
 	 * 
 	 * @param name
 	 *            the name of the class.
 	 * @return existing, or new, instance of the class.
 	 */
-	public synchronized ValaType getType(String name) {
-		ValaType result = types.get(name);
-		if (result == null) {
-			result = new ValaType(name);
-			types.put(name, result);
-		}
-
+	public synchronized Class getClass(String name) {
+		Class result = classes.get(name);
 		return result;
 	}
 
@@ -181,13 +177,13 @@ public class ValaProject {
 	/**
 	 * Get the {@link ValaSource} representation containing the given type.
 	 * 
-	 * @param type
+	 * @param cls
 	 *            Class to find.
 	 * @return Existing {@link ValaSource} or <var>null</var> if none.
 	 */
-	public ValaSource getSource(ValaType type) {
+	public ValaSource getSource(Class cls) {
 		for (ValaSource source : sources)
-			if (source.getTypes().containsValue(type))
+			if (source.getClasses().containsValue(cls))
 				return source;
 
 		return null;
@@ -201,8 +197,8 @@ public class ValaProject {
 		return sources;
 	}
 
-	public Collection<ValaType> getTypes() {
-		return types.values();
+	public Collection<Class> getClasses() {
+		return classes.values();
 	}
 
 	/**

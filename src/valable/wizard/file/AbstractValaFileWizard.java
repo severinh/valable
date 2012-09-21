@@ -29,9 +29,6 @@ public abstract class AbstractValaFileWizard extends Wizard implements INewWizar
 		this.description = description;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
-	 */
 	@Override
 	public boolean performFinish() {
 		IFile file = performCreation();
@@ -53,9 +50,6 @@ public abstract class AbstractValaFileWizard extends Wizard implements INewWizar
 	 */
 	protected abstract IFile performCreation();
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
-	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;

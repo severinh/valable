@@ -25,9 +25,6 @@ public class ValaImportWizard extends Wizard implements IImportWizard {
 		super();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
-	 */
 	@Override
 	public boolean performFinish() {
 		IFile file = mainPage.createNewFile();
@@ -35,10 +32,7 @@ public class ValaImportWizard extends Wizard implements IImportWizard {
             return false;
         return true;
 	}
-	 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
-	 */
+
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle("File Import Wizard"); //NON-NLS-1
@@ -46,9 +40,6 @@ public class ValaImportWizard extends Wizard implements IImportWizard {
 		mainPage = new ValaImportWizardPage("Import File",selection); //NON-NLS-1
 	}
 	
-	/* (non-Javadoc)
-     * @see org.eclipse.jface.wizard.IWizard#addPages()
-     */
     @Override
 	public void addPages() {
         super.addPages(); 

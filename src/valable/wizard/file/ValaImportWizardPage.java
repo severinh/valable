@@ -42,9 +42,6 @@ public class ValaImportWizardPage extends WizardNewFileCreationPage {
 		setDescription("Import a file from the local file system into the workspace"); //NON-NLS-1
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#createAdvancedControls(org.eclipse.swt.widgets.Composite)
-	 */	
 	@Override
 	protected void createAdvancedControls(Composite parent) {
 		Composite fileSelectionArea = new Composite(parent, SWT.NONE);
@@ -72,17 +69,11 @@ public class ValaImportWizardPage extends WizardNewFileCreationPage {
 		fileSelectionArea.moveAbove(null);
 
 	}
-	
-	 /* (non-Javadoc)
-	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#createLinkTarget()
-	 */
+
 	@Override
 	protected void createLinkTarget() {
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#getInitialContents()
-	 */
 	@Override
 	protected InputStream getInitialContents() {
 		try {
@@ -92,17 +83,11 @@ public class ValaImportWizardPage extends WizardNewFileCreationPage {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#getNewFileLabel()
-	 */
 	@Override
 	protected String getNewFileLabel() {
 		return "New File Name:"; //NON-NLS-1
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#validateLinkedResource()
-	 */
 	@Override
 	protected IStatus validateLinkedResource() {
 		return new Status(IStatus.OK, "valable", IStatus.OK, "", null); //NON-NLS-1 //NON-NLS-2

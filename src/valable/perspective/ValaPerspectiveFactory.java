@@ -18,9 +18,6 @@ import valable.wizard.project.ValaProjectWizard;
 
 public class ValaPerspectiveFactory implements IPerspectiveFactory {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.IPageLayout)
-	 */
 	@Override
 	public void createInitialLayout(IPageLayout layout) {
         String editor = layout.getEditorArea();

@@ -19,12 +19,19 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.gnome.vala.Class;
+import org.gnome.vala.CodeNode;
+import org.gnome.vala.Field;
+import org.gnome.vala.Method;
+import org.gnome.vala.SourceLocation;
 import org.junit.Test;
+
+import valable.AbstractTest;
 
 /**
  * Test that {@link ValaSource} works correctly.
  */
-public class ValaSourceTest {
+public class ValaSourceTest extends AbstractTest {
 
 	/**
 	 * Test that simple Vala files can be parsed correctly. This actually checks
@@ -56,61 +63,85 @@ public class ValaSourceTest {
 		assertEquals("'Gee' package use not detected", "Gee", usesIterator
 				.next().getName());
 
-		assertEquals("Incorrect number of types", 2, source.getTypes().size());
+		assertEquals("Incorrect number of types", 2, source.getClasses().size());
 
-		ValaType simple = source.getTypes().get("Simple");
-		ValaType foo = source.getTypes().get("Foo");
+		Class simple = source.getClasses().get("Simple");
+		Class foo = source.getClasses().get("Foo");
 		assertNotNull("'Simple' type not found", simple);
 		assertNotNull("'Foo' type not found", foo);
 
 		assertEquals("Incorrect number of ancestors of 'Simple'", 1, simple
-				.getInherits().size());
+				.getBaseTypes().size());
 		assertEquals("Ancestor of 'Simple' is not 'Object'", "Object", simple
-				.getInherits().iterator().next().getName());
+				.getBaseTypes().get(0).getDataType().getName());
 
 		assertEquals("Incorrect number of ancestors of 'Foo'", 1, foo
-				.getInherits().size());
+				.getBaseTypes().size());
 		assertSame("Ancestor of 'Foo' is not 'Simple'", simple, foo
-				.getInherits().iterator().next());
-
+				.getBaseTypes().get(0).getDataType());
 		assertEquals("Incorrect number of fields in 'Simple'", 3, simple
 				.getFields().size());
-		assertEquals("Incorrect field names of 'Simple'", "[age, name, count]",
-				simple.getFields().toString());
 
 		assertEquals("Incorrect number of fields in 'Foo'", 0, foo.getFields()
 				.size());
 
-		assertLine(6, simple);
-		assertField("int", 7, simple.getField("age"));
-		assertField("string", 8, simple.getField("name"));
-		assertField("int", 9, simple.getField("count"));
-		assertMethod("int", 11, simple.getMethod("main"));
-		assertMethod("void", 22, simple.getMethod("doThing"));
-		assertMethod("Simple", 27, simple.getMethod("getParent"));
-		assertLine(33, foo);
-		assertMethod("Simple", 34, foo.getMethod("getParent"));
-		assertMethod("void", 38, foo.getMethod("removeParent"));
+		assertSourceLocation(7, 1, simple);
+
+		Field ageField = simple.getField("age");
+		assertField("int", ageField);
+		assertSourceLocation(8, 3, ageField);
+
+		Field nameField = simple.getField("name");
+		assertField("string", nameField);
+		assertSourceLocation(9, 3, nameField);
+
+		Field countField = simple.getField("count");
+		assertField("int", countField);
+		assertSourceLocation(10, 3, countField);
+
+		Method mainMethod = simple.getMethod("main");
+		assertMethod("int", mainMethod);
+		assertSourceLocation(12, 3, mainMethod);
+
+		Method doThingMethod = simple.getMethod("doThing");
+		assertMethod("void", doThingMethod);
+		assertSourceLocation(23, 3, doThingMethod);
+
+		Method sampleGetParentMethod = simple.getMethod("getParent");
+		assertMethod("Simple", sampleGetParentMethod);
+		assertSourceLocation(28, 3, sampleGetParentMethod);
+
+		assertSourceLocation(34, 1, foo);
+
+		Method fooGetParentMethod = foo.getMethod("getParent");
+		assertMethod("Simple", fooGetParentMethod);
+		assertSourceLocation(35, 3, fooGetParentMethod);
+
+		Method removeParentMethod = foo.getMethod("removeParent");
+		assertMethod("void", removeParentMethod);
+		assertSourceLocation(39, 3, removeParentMethod);
 	}
 
-	public void assertField(String expectedType, int expectedLine,
-			ValaField field) {
-		assertEquals("Incorrect type of '" + field + "'", expectedType,
-				field.getType());
-		assertLine(expectedLine, field);
+	public void assertField(String expectedType, Field field) {
+		assertEquals("Incorrect type of '" + field + "'", expectedType, field
+				.getVariableType().toString());
 	}
 
-	public void assertMethod(String expectedReturnType, int expectedLine,
-			ValaMethod method) {
+	public void assertMethod(String expectedReturnType, Method method) {
 		assertEquals("Incorrect return type of '" + method + "'",
-				expectedReturnType, method.getType());
-		assertLine(expectedLine, method);
+				expectedReturnType, method.getReturnType().toString());
 	}
 
-	public void assertLine(int expectedLine, ValaSymbol symbol) {
-		int line = symbol.getSourceLocation().getLine();
-		assertEquals("Incorrect line number of '" + symbol + "'", expectedLine,
-				line);
+	public void assertSourceLocation(int expectedLine, int expectedColumn,
+			CodeNode codeNode) {
+		SourceLocation sourceLocation = codeNode.getSourceReference()
+				.getBegin();
+		int line = sourceLocation.getLine();
+		int column = sourceLocation.getColumn();
+		assertEquals("Incorrect line number of '" + codeNode + "'",
+				expectedLine, line);
+		assertEquals("Incorrect column number of '" + codeNode + "'",
+				expectedColumn, column);
 	}
 
 }

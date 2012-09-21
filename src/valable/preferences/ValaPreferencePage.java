@@ -40,9 +40,6 @@ public class ValaPreferencePage extends FieldEditorPreferencePage
 				_("preferences.general.output.directory"), getFieldEditorParent()));	
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
-	 */
 	@Override
 	public void init(IWorkbench workbench) {
 	}

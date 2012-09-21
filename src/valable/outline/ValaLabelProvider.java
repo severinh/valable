@@ -9,21 +9,27 @@
  */
 package valable.outline;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.swt.graphics.Image;
+import org.gnome.vala.DataType;
+import org.gnome.vala.Field;
+import org.gnome.vala.Method;
+import org.gnome.vala.Parameter;
+import org.gnome.vala.Symbol;
 
 import valable.ValaPlugin;
 import valable.ValaPluginConstants;
-import valable.model.ValaSymbol;
-import valable.model.ValaSymbolImageProvider;
-import valable.model.ValaField;
-import valable.model.ValaMethod;
 import valable.model.ValaPackage;
 import valable.model.ValaSource;
+import valable.model.ValaSymbolImageProvider;
 
 /**
  * Provides a label for a given element in the outline.
@@ -37,11 +43,6 @@ public class ValaLabelProvider extends LabelProvider implements
 	 */
 	private static final String TYPE_SEPARATOR = " : ";
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
-	 */
 	@Override
 	public Image getImage(Object element) {
 		ValaPlugin valaPlugin = ValaPlugin.getDefault();
@@ -56,8 +57,8 @@ public class ValaLabelProvider extends LabelProvider implements
 		element = maybeGetTreeNodeValue(element);
 
 		String key = null;
-		if (element instanceof ValaSymbol) {
-			ValaSymbol symbol = (ValaSymbol) element;
+		if (element instanceof Symbol) {
+			Symbol symbol = (Symbol) element;
 			key = ValaSymbolImageProvider.getKey(symbol);
 		} else if (element instanceof ValaSource) {
 			key = ValaPluginConstants.IMG_OBJECT_VALA;
@@ -69,35 +70,26 @@ public class ValaLabelProvider extends LabelProvider implements
 		return key;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
-	 */
 	@Override
 	public String getText(Object element) {
 		element = maybeGetTreeNodeValue(element);
 
-		String text = super.getText(element);
+		String name = getName(element);
 		String type = getType(element);
 		if (type != null) {
-			text += TYPE_SEPARATOR + type;
+			name += TYPE_SEPARATOR + type;
 		}
-		return text;
+		return name;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.
-	 * IStyledLabelProvider#getStyledText(java.lang.Object)
-	 */
 	@Override
 	public StyledString getStyledText(Object element) {
 		element = maybeGetTreeNodeValue(element);
 
-		StyledString styledText = new StyledString(super.getText(element));
+		String name = getName(element);
 		String type = getType(element);
+
+		StyledString styledText = new StyledString(name);
 		if (type != null) {
 			styledText.append(TYPE_SEPARATOR, StyledString.QUALIFIER_STYLER);
 			styledText.append(type, StyledString.QUALIFIER_STYLER);
@@ -106,19 +98,47 @@ public class ValaLabelProvider extends LabelProvider implements
 	}
 
 	/**
-	 * Returns the type of a {@link ValaField} or {@link ValaMethod}.
+	 * Returns the name of an element.
+	 */
+	private String getName(Object element) {
+		StringBuilder nameBuilder = new StringBuilder();
+
+		if (element instanceof Symbol) {
+			nameBuilder.append(((Symbol) element).getName());
+			if (element instanceof Method) {
+				Method method = (Method) element;
+				List<Parameter> parameters = method.getParameters();
+				List<String> parameterTypeNames = new ArrayList<String>(
+						parameters.size());
+				for (Parameter parameter : parameters) {
+					DataType parameterType = parameter.getVariableType();
+					parameterTypeNames.add(parameterType.toString());
+				}
+				nameBuilder.append('(');
+				nameBuilder.append(StringUtils.join(parameterTypeNames, ", "));
+				nameBuilder.append(')');
+			}
+		} else {
+			nameBuilder.append(element.toString());
+		}
+		String name = nameBuilder.toString();
+		return name;
+	}
+
+	/**
+	 * Returns the type of a {@link Field} or {@link Method}.
 	 * 
-	 * @return <code>null</code> if the given element is neither a
-	 *         {@link ValaField} or {@link ValaMethod}
+	 * @return <code>null</code> if the given element is neither a {@link Field}
+	 *         or {@link Method}
 	 */
 	private String getType(Object element) {
 		String type = null;
-		if (element instanceof ValaField) {
-			ValaField field = (ValaField) element;
-			type = field.getType();
-		} else if (element instanceof ValaMethod) {
-			ValaMethod method = (ValaMethod) element;
-			type = method.getType();
+		if (element instanceof Field) {
+			Field field = (Field) element;
+			type = field.getVariableType().toString();
+		} else if (element instanceof Method) {
+			Method method = (Method) element;
+			type = method.getReturnType().toString();
 		}
 		return type;
 	}

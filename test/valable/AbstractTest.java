@@ -6,18 +6,14 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package valable.model;
+package valable;
 
-public interface ValaSymbolVisitor<R> {
+import org.gnome.gtk.Gtk;
 
-	public R visitSymbol(ValaSymbol symbol);
+public abstract class AbstractTest {
 
-	public R visitField(ValaField field);
-
-	public R visitMethod(ValaMethod method);
-
-	public R visitType(ValaType type);
-
-	public R visitLocalVariable(ValaLocalVariable localVariable);
+	static {
+		Gtk.init(new String[] {});
+	}
 
 }

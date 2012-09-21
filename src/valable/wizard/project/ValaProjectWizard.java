@@ -43,22 +43,12 @@ public class ValaProjectWizard extends Wizard implements INewWizard {
 		setNeedsProgressMonitor(true);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.wizard.Wizard#addPages()
-	 */
 	@Override
 	public void addPages() {
 		projectPage = new ValaProjectWizardPage();
 		this.addPage(projectPage);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
-	 */
 	@Override
 	public boolean performFinish() {
 		IProject project = createProject();
@@ -160,12 +150,6 @@ public class ValaProjectWizard extends Wizard implements INewWizard {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
-	 *      org.eclipse.jface.viewers.IStructuredSelection)
-	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;

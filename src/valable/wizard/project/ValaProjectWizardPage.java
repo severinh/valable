@@ -67,9 +67,6 @@ public class ValaProjectWizardPage extends WizardPage {
 		return workspace.getRoot().getLocation().toString();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		Composite control = new Composite(parent, SWT.NULL);

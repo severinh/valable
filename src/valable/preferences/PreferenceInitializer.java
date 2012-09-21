@@ -17,12 +17,6 @@ import valable.model.ValaBuildContext;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
-	 * initializeDefaultPreferences()
-	 */
 	@Override
 	public void initializeDefaultPreferences() {
 		ValaBuildContext context = ValaBuildContext.getDefault();

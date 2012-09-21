@@ -42,13 +42,6 @@ public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants 
 	private static ResourceBundle resourceBundle = ResourceBundle
 			.getBundle("valable.data.ValaPluginMessages");
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -105,13 +98,6 @@ public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
-	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
@@ -149,13 +135,6 @@ public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants 
 		return (IFile) editor.getEditorInput().getAdapter(IFile.class);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#initializeImageRegistry(org.eclipse
-	 * .jface.resource.ImageRegistry)
-	 */
 	@Override
 	protected void initializeImageRegistry(ImageRegistry registry) {
 		for (String key : IMG_KEYS) {

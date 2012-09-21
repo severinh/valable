@@ -9,7 +9,6 @@
  */
 package valable.outline;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
@@ -23,37 +22,26 @@ import valable.model.ValaSource;
  * Provide an outline view for the current class.
  * 
  * @see ValaSource#parse()
- * @see http://wiki.eclipse.org/FAQ_How_do_I_create_an_Outline_view_for_my_own_language_editor%3F
+ * @see http://wiki.eclipse.org/
+ *      FAQ_How_do_I_create_an_Outline_view_for_my_own_language_editor%3F
  */
 public class ValaOutlinePage extends ContentOutlinePage {
-	
-	private final ValaEditor        editor;
-	
 
-	/**
-	 * @param editor
-	 */
+	private final ValaEditor editor;
+
 	public ValaOutlinePage(ValaEditor editor) {
 		super();
-		
-		//this.documentProvider = documentProvider;
+
 		this.editor = editor;
 	}
 
-	
-	/**
-	 * @see org.eclipse.ui.views.contentoutline.ContentOutlinePage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
-	    super.createControl(parent);
+		super.createControl(parent);
 
-		ValaSource currentSource = ValaProject.getProject(editor.getCurrentFile()).getSource(editor.getCurrentFile());
-		try {
-			currentSource.parse();
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+		ValaSource currentSource = ValaProject.getProject(
+				editor.getCurrentFile()).getSource(editor.getCurrentFile());
+		currentSource.parse();
 
 		TreeViewer viewer = getTreeViewer();
 		viewer.setContentProvider(new ValaContentProvider());

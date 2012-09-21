@@ -39,11 +39,6 @@ public class ValaPackage {
 		this.pkgConfigName = pkgConfigName;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return name + "->" + pkgConfigName;
@@ -57,11 +52,6 @@ public class ValaPackage {
 		this.vapiFile = vapiFile;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public final boolean equals(Object arg) {
 		if (arg == null || !(arg instanceof ValaPackage))
@@ -72,11 +62,6 @@ public class ValaPackage {
 				&& pkgConfigName.equals(other.pkgConfigName);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		return name.hashCode()
