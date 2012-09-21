@@ -10,9 +10,6 @@ package valable.outline;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
@@ -22,9 +19,7 @@ import org.junit.Test;
 
 import valable.AbstractTest;
 import valable.ValaPluginConstants;
-import valable.model.LocalFile;
 import valable.model.ValaPackage;
-import valable.model.ValaProject;
 import valable.model.ValaSource;
 
 /**
@@ -34,10 +29,9 @@ public class ValaLabelProviderTest extends AbstractTest {
 
 	@Test
 	public void testImageKey() {
+		ValaSource source = parseTestSource("simple.vala");
+
 		ValaLabelProvider labelProvider = new ValaLabelProvider();
-		IFile file = new LocalFile(new File("test/simple.vala"));
-		ValaProject project = new ValaProject("project");
-		ValaSource source = new ValaSource(project, file);
 		ValaPackage valaPackage = new ValaPackage("package");
 		Field field = new Field("field", new VoidType());
 		field.setAccessibility(SymbolAccessibility.INTERNAL);

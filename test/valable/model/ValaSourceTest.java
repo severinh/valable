@@ -13,11 +13,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.gnome.vala.Class;
 import org.gnome.vala.CodeNode;
@@ -54,9 +52,7 @@ public class ValaSourceTest extends AbstractTest {
 	 */
 	@Test
 	public void testParse() throws CoreException, IOException {
-		IFile file = new LocalFile(new File("test/simple.vala"));
-		ValaSource source = new ValaSource(new ValaProject("Test"), file);
-		source.parse();
+		ValaSource source = parseTestSource("simple.vala");
 
 		Iterator<ValaPackage> usesIterator = source.getUses().iterator();
 		assertEquals("Incorrect number of used packages", 1, source.getUses()

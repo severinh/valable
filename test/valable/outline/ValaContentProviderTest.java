@@ -8,10 +8,8 @@
  */
 package valable.outline;
 
-import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Class;
@@ -19,8 +17,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import valable.AbstractTest;
-import valable.model.LocalFile;
-import valable.model.ValaProject;
 import valable.model.ValaSource;
 
 /**
@@ -30,9 +26,7 @@ public class ValaContentProviderTest extends AbstractTest {
 
 	@Test
 	public void testParse() throws CoreException, IOException {
-		IFile file = new LocalFile(new File("test/simple.vala"));
-		ValaSource source = new ValaSource(new ValaProject("Test"), file);
-		source.parse();
+		ValaSource source = parseTestSource("simple.vala");
 
 		Class sampleClass = source.getClasses().get("Simple");
 		Class fooClass = source.getClasses().get("Foo");
