@@ -24,6 +24,7 @@ import org.gnome.vala.CodeNode;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
 import org.gnome.vala.SourceLocation;
+import org.gnome.vala.SourceReference;
 import org.junit.Test;
 
 import valable.AbstractTest;
@@ -134,8 +135,8 @@ public class ValaSourceTest extends AbstractTest {
 
 	public void assertSourceLocation(int expectedLine, int expectedColumn,
 			CodeNode codeNode) {
-		SourceLocation sourceLocation = codeNode.getSourceReference()
-				.getBegin();
+		SourceReference sourceReference = codeNode.getSourceReference();
+		SourceLocation sourceLocation = sourceReference.getBegin();
 		int line = sourceLocation.getLine();
 		int column = sourceLocation.getColumn();
 		assertEquals("Incorrect line number of '" + codeNode + "'",
