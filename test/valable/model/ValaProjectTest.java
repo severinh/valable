@@ -32,7 +32,6 @@ public class ValaProjectTest {
 		Map<String, Set<ValaPackage>> packages = ValaProject.getAvailablePackages();
 		
 		assertNotNull("Packages set", packages);
-		System.out.println(packages);
 		
 		assertNotNull("Found libgee", packages.get("Gee"));
 		assertNotNull("Found vala", packages.get("Vala"));
