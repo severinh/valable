@@ -34,10 +34,11 @@ import valable.editors.vala.ValaStringTemplateScanner;
 
 public class ValaConfiguration extends SourceViewerConfiguration {
 
+	private final ColorManager colorManager;
+
 	private ValaCodeScanner codeScanner;
 	private GTKDocScanner docScanner;
-	ValaStringTemplateScanner templateScanner;
-	private final ColorManager colorManager;
+	private ValaStringTemplateScanner templateScanner;
 	private ValaDoubleClickStrategy doubleClickStrategy;
 
 	public ValaConfiguration(ColorManager colorManager) {
