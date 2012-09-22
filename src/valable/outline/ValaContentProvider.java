@@ -21,6 +21,7 @@ import org.gnome.vala.Constant;
 import org.gnome.vala.Enum;
 import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
+import org.gnome.vala.Interface;
 import org.gnome.vala.Method;
 import org.gnome.vala.SourceFile;
 import org.gnome.vala.Symbol;
@@ -61,6 +62,9 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 			if (node instanceof Class) {
 				Class cls = (Class) node;
 				children = getElements(cls);
+			} else if (node instanceof Interface) {
+				Interface interfce = (Interface) node;
+				children = getElements(interfce);
 			} else if (node instanceof Enum) {
 				Enum enm = (Enum) node;
 				children = getElements(enm);
@@ -98,6 +102,19 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 				result.add(new TreeNode(symbol));
 			}
 		}
+		TreeNode[] resultArray = makeResultArray(result);
+		return resultArray;
+	}
+
+	/**
+	 * Returns the elements inside of an interface.
+	 * 
+	 * @param interfce
+	 *            the interface to create tree nodes for
+	 * @return the resulting tree nodes
+	 */
+	private TreeNode[] getElements(Interface interfce) {
+		List<TreeNode> result = new ArrayList<TreeNode>();
 		TreeNode[] resultArray = makeResultArray(result);
 		return resultArray;
 	}
