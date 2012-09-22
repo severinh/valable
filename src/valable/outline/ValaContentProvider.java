@@ -34,7 +34,9 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 
 		if (parent instanceof ValaSource) {
 			ValaSource source = (ValaSource) parent;
-			elements.addAll(source.getClasses());
+			List<Class> classes = new ArrayList<Class>(source.getClasses());
+			Collections.sort(classes, SymbolLocationComparator.getInstance());
+			elements.addAll(classes);
 		} else if (parent instanceof Class) {
 			Class cls = (Class) parent;
 			List<Field> fields = cls.getFields();
