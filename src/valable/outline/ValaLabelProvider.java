@@ -25,6 +25,7 @@ import org.gnome.vala.Field;
 import org.gnome.vala.Method;
 import org.gnome.vala.Parameter;
 import org.gnome.vala.Property;
+import org.gnome.vala.Signal;
 import org.gnome.vala.Symbol;
 
 import valable.ValaPlugin;
@@ -97,30 +98,38 @@ public class ValaLabelProvider extends LabelProvider implements
 	 * Returns the name of an element.
 	 */
 	private String getName(Object element) {
-		StringBuilder nameBuilder = new StringBuilder();
-
+		String name;
 		if (element instanceof Symbol) {
 			// Ensure that in the case of unnamed construction methods, the
 			// "ClassName(...)" is shown rather than ".new()".
-			nameBuilder.append(((Symbol) element).getNameInSourceFile());
+			name = ((Symbol) element).getNameInSourceFile();
 			if (element instanceof Method) {
 				Method method = (Method) element;
 				List<Parameter> parameters = method.getParameters();
-				List<String> parameterTypeNames = new ArrayList<String>(
-						parameters.size());
-				for (Parameter parameter : parameters) {
-					DataType parameterType = parameter.getVariableType();
-					parameterTypeNames.add(parameterType.toString());
-				}
-				nameBuilder.append('(');
-				nameBuilder.append(StringUtils.join(parameterTypeNames, ", "));
-				nameBuilder.append(')');
+				name += getParameterListTest(parameters);
+			} else if (element instanceof Signal) {
+				Signal signal = (Signal) element;
+				List<Parameter> parameters = signal.getParameters();
+				name += getParameterListTest(parameters);
 			}
 		} else {
-			nameBuilder.append(element.toString());
+			name = element.toString();
 		}
-		String name = nameBuilder.toString();
 		return name;
+	}
+
+	private String getParameterListTest(List<Parameter> parameters) {
+		StringBuilder builder = new StringBuilder();
+		List<String> parameterTypeNames = new ArrayList<String>(
+				parameters.size());
+		for (Parameter parameter : parameters) {
+			DataType parameterType = parameter.getVariableType();
+			parameterTypeNames.add(parameterType.toString());
+		}
+		builder.append('(');
+		builder.append(StringUtils.join(parameterTypeNames, ", "));
+		builder.append(')');
+		return builder.toString();
 	}
 
 	/**
@@ -143,6 +152,9 @@ public class ValaLabelProvider extends LabelProvider implements
 		} else if (element instanceof Property) {
 			Property property = (Property) element;
 			type = property.getPropertyType().toString();
+		} else if (element instanceof Signal) {
+			Signal signal = (Signal) element;
+			type = signal.getReturnType().toString();
 		}
 		return type;
 	}

@@ -70,6 +70,8 @@ public interface ValaPluginConstants {
 			+ "methpub_obj.gif";
 	public static final String IMG_OBJECT_METHOD_PROTECTED = IMG_PATH_PREFIX
 			+ "methpro_obj.gif";
+	public static final String IMG_OBJECT_SIGNAL_PUBLIC = IMG_PATH_PREFIX
+			+ "signal_obj.gif";
 
 	public static final String IMG_OVERLAY_ABSTRACT = IMG_PATH_PREFIX
 			+ "abstract_co.gif";
@@ -92,7 +94,7 @@ public interface ValaPluginConstants {
 					IMG_OBJECT_FIELD_PUBLIC, IMG_OBJECT_FIELD_PROTECTED,
 					IMG_OBJECT_METHOD_DEFAULT, IMG_OBJECT_METHOD_PRIVATE,
 					IMG_OBJECT_METHOD_PUBLIC, IMG_OBJECT_METHOD_PROTECTED,
-					IMG_OVERLAY_ABSTRACT, IMG_OVERLAY_CONSTRUCTOR,
-					IMG_OVERLAY_STATIC)));
+					IMG_OBJECT_SIGNAL_PUBLIC, IMG_OVERLAY_ABSTRACT,
+					IMG_OVERLAY_CONSTRUCTOR, IMG_OVERLAY_STATIC)));
 
 }

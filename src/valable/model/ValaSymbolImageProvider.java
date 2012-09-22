@@ -18,6 +18,7 @@ import org.gnome.vala.LocalVariable;
 import org.gnome.vala.Method;
 import org.gnome.vala.NopCodeVisitor;
 import org.gnome.vala.Property;
+import org.gnome.vala.Signal;
 import org.gnome.vala.Symbol;
 import org.gnome.vala.SymbolAccessibility;
 
@@ -120,6 +121,11 @@ public class ValaSymbolImageProvider extends NopCodeVisitor<String> {
 		} else {
 			return ValaPluginConstants.IMG_OBJECT_FIELD_DEFAULT;
 		}
+	}
+
+	@Override
+	public String visitSignal(Signal signal) {
+		return ValaPluginConstants.IMG_OBJECT_SIGNAL_PUBLIC;
 	}
 
 	@Override
