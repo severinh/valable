@@ -51,4 +51,25 @@ public class ValaContentProviderTest extends AbstractTest {
 		Assert.assertArrayEquals(expectedTreeNodes, treeNodes);
 	}
 
+	@Test
+	public void testProperties() {
+		ValaSource source = parseTestSource("properties.vala");
+
+		Class nonPrivAccessClass = source.getClass("NonPrivAccess");
+		Class sampleClass = source.getClass("Sample");
+		TreeNode nonPrivAccessClassNode = new TreeNode(nonPrivAccessClass);
+		nonPrivAccessClassNode.setChildren(new TreeNode[] { new TreeNode(
+				nonPrivAccessClass.getField("real_struct")) });
+		TreeNode sampleClassNode = new TreeNode(sampleClass);
+		sampleClassNode.setChildren(new TreeNode[] { new TreeNode(sampleClass
+				.getField("_automatic")) });
+
+		TreeNode[] expectedTreeNodes = { nonPrivAccessClassNode,
+				sampleClassNode };
+		ValaContentProvider contentProvider = new ValaContentProvider();
+		TreeNode[] treeNodes = contentProvider.getElements(source);
+
+		Assert.assertArrayEquals(expectedTreeNodes, treeNodes);
+	}
+
 }
