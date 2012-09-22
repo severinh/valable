@@ -10,23 +10,21 @@
 package valable.outline;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.gnome.vala.Class;
 import org.gnome.vala.CodeNode;
-import org.gnome.vala.Constant;
 import org.gnome.vala.Enum;
 import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
 import org.gnome.vala.Interface;
 import org.gnome.vala.Method;
+import org.gnome.vala.NopCodeVisitor;
 import org.gnome.vala.SourceFile;
 import org.gnome.vala.Symbol;
 
-import valable.model.SymbolLocationComparator;
 import valable.model.ValaSource;
 
 /**
@@ -38,7 +36,9 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 	public TreeNode[] getElements(Object parent) {
 		if (parent instanceof SourceFile) {
 			SourceFile sourceFile = (SourceFile) parent;
-			return getElements(sourceFile);
+			TreeNode[] result = sourceFile.accept(ValaContentProviderImpl
+					.getInstance());
+			return result;
 		} else {
 			throw new IllegalStateException(
 					"expected parent of type SourceFile, got "
@@ -46,115 +46,87 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 		}
 	}
 
-	/**
-	 * Returns the elements inside of a source file, including classes,
-	 * functions, etc.
-	 * 
-	 * @param sourceFile
-	 *            the source file to create tree nodes for
-	 * @return the resulting tree nodes
-	 */
-	private TreeNode[] getElements(SourceFile sourceFile) {
-		List<TreeNode> result = new ArrayList<TreeNode>();
-		for (CodeNode node : sourceFile.getNodes()) {
-			TreeNode treeNode = new TreeNode(node);
-			TreeNode[] children = null;
-			if (node instanceof Class) {
-				Class cls = (Class) node;
-				children = getElements(cls);
-			} else if (node instanceof Interface) {
-				Interface interfce = (Interface) node;
-				children = getElements(interfce);
-			} else if (node instanceof Enum) {
-				Enum enm = (Enum) node;
-				children = getElements(enm);
-			} else if (node instanceof Method) {
-				children = new TreeNode[] {};
-			} else {
-				continue;
-			}
-			treeNode.setChildren(children);
-			result.add(treeNode);
+	private static class ValaContentProviderImpl extends
+			NopCodeVisitor<TreeNode[]> {
+
+		private static final ValaContentProviderImpl instance;
+		private static final TreeNode[] emptyTreeNodeArray;
+
+		static {
+			instance = new ValaContentProviderImpl();
+			emptyTreeNodeArray = new TreeNode[] {};
 		}
-		TreeNode[] resultArray = makeResultArray(result);
-		return resultArray;
-	}
 
-	/**
-	 * Returns the elements inside of a class, including fields and methods.
-	 * 
-	 * @param cls
-	 *            the class to create tree nodes for
-	 * @return the resulting tree nodes
-	 */
-	private TreeNode[] getElements(Class cls) {
-		List<TreeNode> result = new ArrayList<TreeNode>();
-		List<Field> fields = cls.getFields();
-		List<Method> methods = cls.getMethods();
-		int symbolCount = fields.size() + methods.size();
-		List<Symbol> symbols = new ArrayList<Symbol>(symbolCount);
-		symbols.addAll(fields);
-		symbols.addAll(methods);
-		Collections.sort(symbols, SymbolLocationComparator.getInstance());
+		public static ValaContentProviderImpl getInstance() {
+			return instance;
+		}
 
-		for (Symbol symbol : symbols) {
+		public static TreeNode[] getEmptyTreeNodeArray() {
+			return emptyTreeNodeArray;
+		}
+
+		@Override
+		public TreeNode[] visitSourceFile(SourceFile sourceFile) {
+			TreeNode[] result = visitNodes(sourceFile.getNodes());
+			return result;
+		}
+
+		@Override
+		public TreeNode[] visitClass(Class cls) {
+			TreeNode[] result = visitNodes(cls.getNodes());
+			return result;
+		}
+
+		@Override
+		public TreeNode[] visitInterface(Interface iface) {
+			TreeNode[] result = visitNodes(iface.getNodes());
+			return result;
+		}
+
+		@Override
+		public TreeNode[] visitEnum(Enum enm) {
+			TreeNode[] result = visitNodes(enm.getNodes());
+			return result;
+		}
+
+		@Override
+		public TreeNode[] visitEnumValue(EnumValue enumValue) {
+			return visitDisplayableSymbol(enumValue);
+		}
+
+		@Override
+		public TreeNode[] visitMethod(Method method) {
+			return visitDisplayableSymbol(method);
+		}
+
+		@Override
+		public TreeNode[] visitField(Field field) {
+			return visitDisplayableSymbol(field);
+		}
+
+		private TreeNode[] visitNodes(List<CodeNode> nodes) {
+			List<TreeNode> result = new ArrayList<TreeNode>();
+			for (CodeNode node : nodes) {
+				TreeNode[] children = node.accept(this);
+				if (children != null) {
+					TreeNode treeNode = new TreeNode(node);
+					treeNode.setChildren(children);
+					result.add(treeNode);
+				}
+			}
+			TreeNode[] resultArray = new TreeNode[result.size()];
+			result.toArray(resultArray);
+			return resultArray;
+		}
+
+		public TreeNode[] visitDisplayableSymbol(Symbol symbol) {
 			if (symbol.hasNameSourceReference()) {
-				result.add(new TreeNode(symbol));
+				return getEmptyTreeNodeArray();
+			} else {
+				return null;
 			}
 		}
-		TreeNode[] resultArray = makeResultArray(result);
-		return resultArray;
-	}
 
-	/**
-	 * Returns the elements inside of an interface.
-	 * 
-	 * @param interfce
-	 *            the interface to create tree nodes for
-	 * @return the resulting tree nodes
-	 */
-	private TreeNode[] getElements(Interface interfce) {
-		List<TreeNode> result = new ArrayList<TreeNode>();
-		List<Method> methods = interfce.getMethods();
-		int symbolCount = methods.size();
-		List<Symbol> symbols = new ArrayList<Symbol>(symbolCount);
-		symbols.addAll(methods);
-		Collections.sort(symbols, SymbolLocationComparator.getInstance());
-		for (Symbol symbol : symbols) {
-			result.add(new TreeNode(symbol));
-		}
-		TreeNode[] resultArray = makeResultArray(result);
-		return resultArray;
-	}
-
-	/**
-	 * Returns the elements inside of an enum, including its values.
-	 * 
-	 * @param enm
-	 *            the enum to create tree nodes for
-	 * @return the resulting tree nodes
-	 */
-	private TreeNode[] getElements(Enum enm) {
-		List<TreeNode> result = new ArrayList<TreeNode>();
-		List<EnumValue> values = enm.getValues();
-		List<Method> methods = enm.getMethods();
-		List<Constant> constants = enm.getConstants();
-		List<Symbol> symbols = new ArrayList<Symbol>();
-		symbols.addAll(values);
-		symbols.addAll(methods);
-		symbols.addAll(constants);
-		Collections.sort(symbols, SymbolLocationComparator.getInstance());
-		for (Symbol symbol : symbols) {
-			result.add(new TreeNode(symbol));
-		}
-		TreeNode[] resultArray = makeResultArray(result);
-		return resultArray;
-	}
-
-	private static TreeNode[] makeResultArray(List<TreeNode> result) {
-		TreeNode[] resultArray = new TreeNode[result.size()];
-		result.toArray(resultArray);
-		return resultArray;
 	}
 
 }
