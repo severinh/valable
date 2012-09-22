@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.gnome.vala.Class;
 import org.gnome.vala.CodeNode;
+import org.gnome.vala.Enum;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
 import org.gnome.vala.SourceFile;
@@ -53,12 +54,19 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 	private TreeNode[] getElements(SourceFile sourceFile) {
 		List<TreeNode> result = new ArrayList<TreeNode>();
 		for (CodeNode node : sourceFile.getNodes()) {
+			TreeNode treeNode = new TreeNode(node);
+			TreeNode[] children = null;
 			if (node instanceof Class) {
 				Class cls = (Class) node;
-				TreeNode treeNode = new TreeNode(cls);
-				treeNode.setChildren(getElements(cls));
-				result.add(treeNode);
+				children = getElements(cls);
+			} else if (node instanceof Enum) {
+				Enum enm = (Enum) node;
+				children = getElements(enm);
+			} else {
+				continue;
 			}
+			treeNode.setChildren(children);
+			result.add(treeNode);
 		}
 		TreeNode[] resultArray = makeResultArray(result);
 		return resultArray;
@@ -88,6 +96,17 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 		}
 		TreeNode[] resultArray = makeResultArray(result);
 		return resultArray;
+	}
+
+	/**
+	 * Returns the elements inside of an enum.
+	 * 
+	 * @param enm
+	 *            the enum to create tree nodes for
+	 * @return the resulting tree nodes
+	 */
+	private TreeNode[] getElements(Enum enm) {
+		return new TreeNode[] {};
 	}
 
 	private static TreeNode[] makeResultArray(List<TreeNode> result) {
