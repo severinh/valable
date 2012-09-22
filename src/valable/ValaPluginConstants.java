@@ -79,6 +79,10 @@ public interface ValaPluginConstants {
 			+ "constr_ovr.gif";
 	public static final String IMG_OVERLAY_STATIC = IMG_PATH_PREFIX
 			+ "static_co.gif";
+	public static final String IMG_OVERLAY_IMPLEMENTS = IMG_PATH_PREFIX
+			+ "implm_co.gif";
+	public static final String IMG_OVERLAY_OVERRIDES = IMG_PATH_PREFIX
+			+ "over_co.gif";
 
 	public static final Set<String> IMG_KEYS = Collections
 			.unmodifiableSet(new LinkedHashSet<String>(Arrays.asList(
@@ -95,6 +99,7 @@ public interface ValaPluginConstants {
 					IMG_OBJECT_METHOD_DEFAULT, IMG_OBJECT_METHOD_PRIVATE,
 					IMG_OBJECT_METHOD_PUBLIC, IMG_OBJECT_METHOD_PROTECTED,
 					IMG_OBJECT_SIGNAL_PUBLIC, IMG_OVERLAY_ABSTRACT,
-					IMG_OVERLAY_CONSTRUCTOR, IMG_OVERLAY_STATIC)));
+					IMG_OVERLAY_CONSTRUCTOR, IMG_OVERLAY_STATIC,
+					IMG_OVERLAY_IMPLEMENTS, IMG_OVERLAY_OVERRIDES)));
 
 }

@@ -112,6 +112,16 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 			if (method.isAbstract()) {
 				addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT);
 			}
+			Method baseMethod = method.getBaseMethod();
+			if (baseMethod != null && baseMethod != method) {
+				addOverlay(ValaPluginConstants.IMG_OVERLAY_OVERRIDES,
+						IDecoration.BOTTOM_RIGHT);
+			}
+			Method baseInterfaceMethod = method.getBaseInterfaceMethod();
+			if (baseInterfaceMethod != null && baseInterfaceMethod != method) {
+				addOverlay(ValaPluginConstants.IMG_OVERLAY_IMPLEMENTS,
+						IDecoration.BOTTOM_RIGHT);
+			}
 			visitMemberBinding(method.getBinding());
 			return null;
 		}
@@ -157,8 +167,12 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		}
 
 		private void addOverlay(String overlayKey) {
+			addOverlay(overlayKey, IDecoration.TOP_RIGHT);
+		}
+
+		private void addOverlay(String overlayKey, int quadrant) {
 			ImageDescriptor overlay = imageRegistry.getDescriptor(overlayKey);
-			getDecoration().addOverlay(overlay, IDecoration.TOP_RIGHT);
+			getDecoration().addOverlay(overlay, quadrant);
 		}
 
 	}
