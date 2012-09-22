@@ -62,8 +62,8 @@ public class ValaSourceTest extends AbstractTest {
 
 		assertEquals("Incorrect number of types", 2, source.getClasses().size());
 
-		Class simple = source.getClasses().get("Simple");
-		Class foo = source.getClasses().get("Foo");
+		Class simple = source.getClass("Simple");
+		Class foo = source.getClass("Foo");
 		assertNotNull("'Simple' type not found", simple);
 		assertNotNull("'Foo' type not found", foo);
 

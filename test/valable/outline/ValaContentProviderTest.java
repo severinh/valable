@@ -28,8 +28,8 @@ public class ValaContentProviderTest extends AbstractTest {
 	public void testParse() throws CoreException, IOException {
 		ValaSource source = parseTestSource("simple.vala");
 
-		Class sampleClass = source.getClasses().get("Simple");
-		Class fooClass = source.getClasses().get("Foo");
+		Class sampleClass = source.getClass("Simple");
+		Class fooClass = source.getClass("Foo");
 		TreeNode sampleTreeNode = new TreeNode(sampleClass);
 		sampleTreeNode.setChildren(new TreeNode[] {
 				new TreeNode(sampleClass.getField("age")),

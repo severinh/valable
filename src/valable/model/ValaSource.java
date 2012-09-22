@@ -10,6 +10,8 @@ package valable.model;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -58,8 +60,12 @@ public class ValaSource {
 		return source;
 	}
 
-	public Map<String, Class> getClasses() {
-		return classes;
+	public Collection<Class> getClasses() {
+		return Collections.unmodifiableCollection(classes.values());
+	}
+
+	public Class getClass(String name) {
+		return classes.get(name);
 	}
 
 	public Set<ValaPackage> getUses() {

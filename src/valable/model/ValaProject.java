@@ -183,7 +183,7 @@ public class ValaProject {
 	 */
 	public ValaSource getSource(Class cls) {
 		for (ValaSource source : sources)
-			if (source.getClasses().containsValue(cls))
+			if (source.getClasses().contains(cls))
 				return source;
 
 		return null;

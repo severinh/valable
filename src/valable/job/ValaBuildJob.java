@@ -123,7 +123,7 @@ public class ValaBuildJob extends Job {
 				packages.add(pkg.getPkgConfigName());
 			}
 
-			for (Class cls : source.getClasses().values()) {
+			for (Class cls : source.getClasses()) {
 				for (DataType baseType : cls.getBaseTypes()) {
 					TypeSymbol baseTypeSymbol = baseType.getDataType();
 					if (baseTypeSymbol instanceof Class) {
