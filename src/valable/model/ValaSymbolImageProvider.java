@@ -13,6 +13,7 @@ import org.gnome.vala.Class;
 import org.gnome.vala.Enum;
 import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
+import org.gnome.vala.Interface;
 import org.gnome.vala.LocalVariable;
 import org.gnome.vala.Method;
 import org.gnome.vala.Symbol;
@@ -73,6 +74,19 @@ public class ValaSymbolImageProvider {
 		}
 	}
 
+	public String visitInterface(Interface interfce) {
+		SymbolAccessibility accessibility = interfce.getAccessibility();
+		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
+			return ValaPluginConstants.IMG_OBJECT_INTERFACE_PRIVATE;
+		} else if (accessibility.equals(SymbolAccessibility.PROTECTED)) {
+			return ValaPluginConstants.IMG_OBJECT_INTERFACE_PROTECTED;
+		} else if (accessibility.equals(SymbolAccessibility.PUBLIC)) {
+			return ValaPluginConstants.IMG_OBJECT_INTERFACE_PUBLIC;
+		} else {
+			return ValaPluginConstants.IMG_OBJECT_INTERFACE_DEFAULT;
+		}
+	}
+
 	public String visitEnum(Enum enm) {
 		SymbolAccessibility accessibility = enm.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
@@ -114,6 +128,8 @@ public class ValaSymbolImageProvider {
 			key = getInstance().visitLocalVariable((LocalVariable) symbol);
 		} else if (symbol instanceof Class) {
 			key = getInstance().visitClass((Class) symbol);
+		} else if (symbol instanceof Interface) {
+			key = getInstance().visitInterface((Interface) symbol);
 		} else if (symbol instanceof Enum) {
 			key = getInstance().visitEnum((Enum) symbol);
 		} else if (symbol instanceof EnumValue) {

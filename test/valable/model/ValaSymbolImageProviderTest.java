@@ -13,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 import org.gnome.vala.Class;
 import org.gnome.vala.Enum;
 import org.gnome.vala.Field;
+import org.gnome.vala.Interface;
 import org.gnome.vala.LocalVariable;
 import org.gnome.vala.Method;
 import org.gnome.vala.SymbolAccessibility;
@@ -82,6 +83,20 @@ public class ValaSymbolImageProviderTest extends AbstractTest {
 		assertEquals(ValaPluginConstants.IMG_OBJECT_CLASS_PUBLIC,
 				ValaSymbolImageProvider.getKey(cls));
 
+		Interface interfce;
+		interfce = makeStubInterface(SymbolAccessibility.PRIVATE);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_INTERFACE_PRIVATE,
+				ValaSymbolImageProvider.getKey(interfce));
+		interfce = makeStubInterface(SymbolAccessibility.INTERNAL);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_INTERFACE_DEFAULT,
+				ValaSymbolImageProvider.getKey(interfce));
+		interfce = makeStubInterface(SymbolAccessibility.PROTECTED);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_INTERFACE_PROTECTED,
+				ValaSymbolImageProvider.getKey(interfce));
+		interfce = makeStubInterface(SymbolAccessibility.PUBLIC);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_INTERFACE_PUBLIC,
+				ValaSymbolImageProvider.getKey(interfce));
+
 		Enum enm;
 		enm = makeStubEnum(SymbolAccessibility.PRIVATE);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_ENUM_PRIVATE,
@@ -108,6 +123,19 @@ public class ValaSymbolImageProviderTest extends AbstractTest {
 		Class cls = new Class(NAME);
 		cls.setAccessibility(accessibility);
 		return cls;
+	}
+
+	/**
+	 * Creates a new stub interface with a given accessibility.
+	 * 
+	 * @param accessibility
+	 *            the accessibility of the stub interface
+	 * @return the newly created interface
+	 */
+	private Interface makeStubInterface(SymbolAccessibility accessibility) {
+		Interface interfce = new Interface(NAME);
+		interfce.setAccessibility(accessibility);
+		return interfce;
 	}
 
 	/**
