@@ -70,6 +70,9 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		if (method.getBinding().equals(MemberBinding.STATIC)) {
 			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC, decoration);
 		}
+		if (method.isAbstract()) {
+			addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT, decoration);
+		}
 	}
 
 	/**
