@@ -15,6 +15,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.gnome.vala.Class;
+import org.gnome.vala.Method;
+import org.gnome.vala.SourceReference;
 
 import valable.model.ValaSource;
 
@@ -32,8 +34,16 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 			elements.addAll(((ValaSource) parent).getClasses().values());
 
 		} else if (parent instanceof Class) {
-			elements.addAll(((Class) parent).getFields());
-			elements.addAll(((Class) parent).getMethods());
+			Class cls = (Class) parent;
+			elements.addAll(cls.getFields());
+			for (Method method : cls.getMethods()) {
+				// Only display a method if its SourceReference can be
+				// determined.
+				SourceReference reference = method.getNameSourceReference();
+				if (reference != null) {
+					elements.add(method);
+				}
+			}
 		}
 
 		TreeNode[] results = new TreeNode[elements.size()];
