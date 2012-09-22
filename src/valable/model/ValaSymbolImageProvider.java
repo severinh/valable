@@ -16,6 +16,7 @@ import org.gnome.vala.Field;
 import org.gnome.vala.Interface;
 import org.gnome.vala.LocalVariable;
 import org.gnome.vala.Method;
+import org.gnome.vala.NopCodeVisitor;
 import org.gnome.vala.Symbol;
 import org.gnome.vala.SymbolAccessibility;
 
@@ -27,7 +28,7 @@ import valable.ValaPluginConstants;
  * 
  * This class is a singleton.
  */
-public class ValaSymbolImageProvider {
+public class ValaSymbolImageProvider extends NopCodeVisitor<String> {
 
 	private static final ValaSymbolImageProvider instance = new ValaSymbolImageProvider();
 
@@ -35,6 +36,7 @@ public class ValaSymbolImageProvider {
 		return ValaPluginConstants.IMG_OBJECT_UNKNOWN;
 	}
 
+	@Override
 	public String visitField(Field field) {
 		SymbolAccessibility accessibility = field.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
@@ -48,6 +50,7 @@ public class ValaSymbolImageProvider {
 		}
 	}
 
+	@Override
 	public String visitMethod(Method method) {
 		SymbolAccessibility accessibility = method.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
@@ -61,6 +64,7 @@ public class ValaSymbolImageProvider {
 		}
 	}
 
+	@Override
 	public String visitClass(Class cls) {
 		SymbolAccessibility accessibility = cls.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
@@ -74,6 +78,7 @@ public class ValaSymbolImageProvider {
 		}
 	}
 
+	@Override
 	public String visitInterface(Interface interfce) {
 		SymbolAccessibility accessibility = interfce.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
@@ -87,6 +92,7 @@ public class ValaSymbolImageProvider {
 		}
 	}
 
+	@Override
 	public String visitEnum(Enum enm) {
 		SymbolAccessibility accessibility = enm.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
@@ -100,10 +106,12 @@ public class ValaSymbolImageProvider {
 		}
 	}
 
+	@Override
 	public String visitEnumValue(EnumValue enumValue) {
 		return ValaPluginConstants.IMG_OBJECT_FIELD_PUBLIC;
 	}
 
+	@Override
 	public String visitLocalVariable(LocalVariable localVariable) {
 		return ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE;
 	}
@@ -116,28 +124,10 @@ public class ValaSymbolImageProvider {
 		if (symbol == null) {
 			throw new IllegalArgumentException("Symbol must not be null");
 		}
-		String key;
-		// TODO: Make it possible to implement the CodeVisitor interface.
-		// Thus, use the following work-around.
-		// String key = symbol.accept(getInstance());
-		if (symbol instanceof Method) {
-			key = getInstance().visitMethod((Method) symbol);
-		} else if (symbol instanceof Field) {
-			key = getInstance().visitField((Field) symbol);
-		} else if (symbol instanceof LocalVariable) {
-			key = getInstance().visitLocalVariable((LocalVariable) symbol);
-		} else if (symbol instanceof Class) {
-			key = getInstance().visitClass((Class) symbol);
-		} else if (symbol instanceof Interface) {
-			key = getInstance().visitInterface((Interface) symbol);
-		} else if (symbol instanceof Enum) {
-			key = getInstance().visitEnum((Enum) symbol);
-		} else if (symbol instanceof EnumValue) {
-			key = getInstance().visitEnumValue((EnumValue) symbol);
-		} else {
-			key = getInstance().visitSymbol(symbol);
+		String key = symbol.accept(getInstance());
+		if (key == null) {
+			key = ValaPluginConstants.IMG_OBJECT_UNKNOWN;
 		}
-
 		return key;
 	}
 
