@@ -23,6 +23,7 @@ import org.gnome.vala.CreationMethod;
 import org.gnome.vala.DataType;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
+import org.gnome.vala.NopCodeVisitor;
 import org.gnome.vala.Parameter;
 import org.gnome.vala.Property;
 import org.gnome.vala.Signal;
@@ -100,36 +101,12 @@ public class ValaLabelProvider extends LabelProvider implements
 	private String getName(Object element) {
 		String name;
 		if (element instanceof Symbol) {
-			// Ensure that in the case of unnamed construction methods, the
-			// "ClassName(...)" is shown rather than ".new()".
-			name = ((Symbol) element).getNameInSourceFile();
-			if (element instanceof Method) {
-				Method method = (Method) element;
-				List<Parameter> parameters = method.getParameters();
-				name += getParameterListTest(parameters);
-			} else if (element instanceof Signal) {
-				Signal signal = (Signal) element;
-				List<Parameter> parameters = signal.getParameters();
-				name += getParameterListTest(parameters);
-			}
+			Symbol symbol = (Symbol) element;
+			name = symbol.accept(PrimaryLabelTextProvider.getInstance());
 		} else {
 			name = element.toString();
 		}
 		return name;
-	}
-
-	private String getParameterListTest(List<Parameter> parameters) {
-		StringBuilder builder = new StringBuilder();
-		List<String> parameterTypeNames = new ArrayList<String>(
-				parameters.size());
-		for (Parameter parameter : parameters) {
-			DataType parameterType = parameter.getVariableType();
-			parameterTypeNames.add(parameterType.toString());
-		}
-		builder.append('(');
-		builder.append(StringUtils.join(parameterTypeNames, ", "));
-		builder.append(')');
-		return builder.toString();
 	}
 
 	/**
@@ -168,6 +145,58 @@ public class ValaLabelProvider extends LabelProvider implements
 			element = ((TreeNode) element).getValue();
 		}
 		return element;
+	}
+
+	private static class PrimaryLabelTextProvider extends
+			NopCodeVisitor<String> {
+
+		private static final PrimaryLabelTextProvider instance;
+
+		static {
+			instance = new PrimaryLabelTextProvider();
+		}
+
+		public static PrimaryLabelTextProvider getInstance() {
+			return instance;
+		}
+
+		public String visitSymbol(Symbol symbol) {
+			// Ensure that in the case of unnamed construction methods, the
+			// "ClassName(...)" is shown rather than ".new()".
+			String result = symbol.getNameInSourceFile();
+			return result;
+		}
+
+		@Override
+		public String visitMethod(Method method) {
+			List<Parameter> parameters = method.getParameters();
+			String result = visitSymbolWithParameterList(method, parameters);
+			return result;
+		}
+
+		@Override
+		public String visitSignal(Signal signal) {
+			List<Parameter> parameters = signal.getParameters();
+			String result = visitSymbolWithParameterList(signal, parameters);
+			return result;
+		}
+
+		private String visitSymbolWithParameterList(Symbol symbol,
+				List<Parameter> parameters) {
+			StringBuilder builder = new StringBuilder();
+			builder.append(visitSymbol(symbol));
+			List<String> parameterTypeNames = new ArrayList<String>(
+					parameters.size());
+			for (Parameter parameter : parameters) {
+				DataType parameterType = parameter.getVariableType();
+				parameterTypeNames.add(parameterType.toString());
+			}
+			builder.append('(');
+			builder.append(StringUtils.join(parameterTypeNames, ", "));
+			builder.append(')');
+			return builder.toString();
+		}
+
 	}
 
 }
