@@ -23,9 +23,6 @@ import valable.model.ValaSource;
  */
 public class ValaContentProvider extends TreeNodeContentProvider {
 
-	/**
-	 * @see org.eclipse.jface.viewers.TreeNodeContentProvider#getChildren(java.lang.Object)
-	 */
 	@Override
 	public TreeNode[] getElements(Object parent) {
 		List<Object> elements = new ArrayList<Object>();

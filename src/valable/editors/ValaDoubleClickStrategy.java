@@ -16,7 +16,8 @@ import org.eclipse.jface.text.ITextViewer;
 import valable.editors.vala.ValaWordDetector;
 
 public class ValaDoubleClickStrategy implements ITextDoubleClickStrategy {
-	protected ITextViewer fText;
+
+	protected ITextViewer textViewer;
 
 	@Override
 	public void doubleClicked(ITextViewer part) {
@@ -26,12 +27,12 @@ public class ValaDoubleClickStrategy implements ITextDoubleClickStrategy {
 			return;
 		}
 
-		fText = part;
+		textViewer = part;
 		selectWord(pos);
 	}
 
 	protected boolean selectWord(int caretPos) {
-		IDocument doc = fText.getDocument();
+		IDocument doc = textViewer.getDocument();
 		int startPos = 0;
 		int endPos = 0;
 		ValaWordDetector detector = new ValaWordDetector();
@@ -81,7 +82,7 @@ public class ValaDoubleClickStrategy implements ITextDoubleClickStrategy {
 	private void selectRange(int startPos, int stopPos) {
 		int offset = startPos + 1;
 		int length = stopPos - offset;
-		fText.setSelectedRange(offset, length);
+		textViewer.setSelectedRange(offset, length);
 	}
 
 }

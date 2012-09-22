@@ -100,5 +100,16 @@
          </description>
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="valable.outline.ValaLabelDecorator"
+            id="valable.outline.ValaLabelDecorator"
+            label="Vala Label Decorator"
+            lightweight="true"
+            location="TOP_RIGHT"
+            state="true">
+      </decorator>
+   </extension>
 
 </plugin>

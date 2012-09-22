@@ -12,13 +12,15 @@ package valable.outline;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.DecorationContext;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.gnome.vala.SourceLocation;
@@ -61,8 +63,10 @@ public class ValaOutlinePage extends ContentOutlinePage {
 
 		TreeViewer viewer = getTreeViewer();
 		viewer.setContentProvider(new ValaContentProvider());
-		viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(
-				new ValaLabelProvider()));
+		viewer.setLabelProvider(new DecoratingStyledCellLabelProvider(
+				new ValaLabelProvider(), PlatformUI.getWorkbench()
+						.getDecoratorManager().getLabelDecorator(),
+				DecorationContext.DEFAULT_CONTEXT));
 		viewer.setInput(currentSource);
 		viewer.addSelectionChangedListener(this);
 	}
