@@ -108,12 +108,10 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 			if (method instanceof CreationMethod) {
 				addOverlay(ValaPluginConstants.IMG_OVERLAY_CONSTRUCTOR);
 			}
-			if (method.getBinding().equals(MemberBinding.STATIC)) {
-				addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC);
-			}
 			if (method.isAbstract()) {
 				addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT);
 			}
+			visitMemberBinding(method.getBinding());
 			return null;
 		}
 
@@ -125,7 +123,18 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		 */
 		@Override
 		public Void visitField(Field field) {
-			if (field.getBinding().equals(MemberBinding.STATIC)) {
+			visitMemberBinding(field.getBinding());
+			return null;
+		}
+
+		/**
+		 * Adds decorations depending on the given member binding.
+		 * 
+		 * @param binding
+		 *            the member binding
+		 */
+		public Void visitMemberBinding(MemberBinding binding) {
+			if (binding.equals(MemberBinding.STATIC)) {
 				addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC);
 			}
 			return null;
