@@ -101,6 +101,33 @@ public class ValaContentProviderTest extends AbstractTest {
 		assertTreeNodes(expectedTreeNodes, treeNodes);
 	}
 
+	@Test
+	public void testEnums() {
+		ValaSource source = parseTestSource("enums.vala");
+		SourceFile sourceFile = source.getSourceFile();
+
+		TreeNode fooNode = new TreeNode(sourceFile.getEnum("Foo"));
+		TreeNode fooishNode = new TreeNode(sourceFile.getEnum("Fooish"));
+
+		Class barClass = source.getClass("Bar");
+		TreeNode barClassNode = new TreeNode(barClass);
+		barClassNode
+				.setChildren(new TreeNode[] {
+						new TreeNode(barClass.getMethod(".new")),
+						new TreeNode(barClass.getMethod("run")),
+						new TreeNode(barClass
+								.getMethod("test_enums_0_conversion")),
+						new TreeNode(barClass
+								.getMethod("test_enum_methods_constants")),
+						new TreeNode(barClass.getMethod("main")) });
+
+		TreeNode[] expectedTreeNodes = { fooNode, fooishNode, barClassNode };
+		ValaContentProvider contentProvider = new ValaContentProvider();
+		TreeNode[] treeNodes = contentProvider.getElements(sourceFile);
+
+		assertTreeNodes(expectedTreeNodes, treeNodes);
+	}
+
 	/**
 	 * Asserts that two tree node arrays are equal, including their children.
 	 * 
