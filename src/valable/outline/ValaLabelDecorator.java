@@ -8,6 +8,8 @@ import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Class;
 import org.gnome.vala.CreationMethod;
+import org.gnome.vala.Field;
+import org.gnome.vala.MemberBinding;
 import org.gnome.vala.Method;
 
 import valable.ValaPlugin;
@@ -32,6 +34,9 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		} else if (element instanceof Method) {
 			Method method = (Method) element;
 			decorateMethod(method, decoration);
+		} else if (element instanceof Field) {
+			Field field = (Field) element;
+			decorateField(field, decoration);
 		}
 	}
 
@@ -44,14 +49,12 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 	 */
 	public void decorateClass(Class cls, IDecoration decoration) {
 		if (cls.isAbstract()) {
-			String overlayKey = ValaPluginConstants.IMG_OVERLAY_ABSTRACT;
-			ImageDescriptor overlay = imageRegistry.getDescriptor(overlayKey);
-			decoration.addOverlay(overlay, IDecoration.TOP_RIGHT);
+			addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT, decoration);
 		}
 	}
 
 	/**
-	 * Adds decorations to Vala methods where appropriate.
+	 * Adds decorations to a given Vala method where appropriate.
 	 * 
 	 * @param method
 	 *            the method to be decorated
@@ -59,10 +62,29 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 	 */
 	public void decorateMethod(Method method, IDecoration decoration) {
 		if (method instanceof CreationMethod) {
-			String overlayKey = ValaPluginConstants.IMG_OVERLAY_CONSTRUCTOR;
-			ImageDescriptor overlay = imageRegistry.getDescriptor(overlayKey);
-			decoration.addOverlay(overlay, IDecoration.TOP_RIGHT);
+			addOverlay(ValaPluginConstants.IMG_OVERLAY_CONSTRUCTOR, decoration);
 		}
+		if (method.getBinding().equals(MemberBinding.STATIC)) {
+			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC, decoration);
+		}
+	}
+
+	/**
+	 * Adds decorations to a given Vala field where appropriate.
+	 * 
+	 * @param field
+	 *            the field to be decorated
+	 * @param decoration
+	 */
+	public void decorateField(Field field, IDecoration decoration) {
+		if (field.getBinding().equals(MemberBinding.STATIC)) {
+			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC, decoration);
+		}
+	}
+
+	public void addOverlay(String overlayKey, IDecoration decoration) {
+		ImageDescriptor overlay = imageRegistry.getDescriptor(overlayKey);
+		decoration.addOverlay(overlay, IDecoration.TOP_RIGHT);
 	}
 
 	/**
