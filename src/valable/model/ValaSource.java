@@ -1,5 +1,6 @@
 /**
  * Copyright (C) 2008  Andrew Flegg <andrew@bleb.org>
+ * Copyright (C) 2012  Severin Heiniger <severinheiniger@gmail.com>
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -129,14 +130,23 @@ public class ValaSource {
 		codeContext.check();
 
 		Namespace root = codeContext.getRoot();
-		for (Class cls : root.getClasses()) {
+		addClassesInNamespace(root);
+
+		return lines;
+	}
+
+	private void addClassesInNamespace(Namespace namespace) {
+		String sourceFilename = getSource().getRawLocation().toOSString();
+		for (Class cls : namespace.getClasses()) {
 			SourceFile sourceFile = cls.getSourceReference().getSourceFile();
 			String filename = sourceFile.getFilename();
 			if (filename.equals(sourceFilename)) {
 				classes.put(cls.getName(), cls);
 			}
 		}
-		return lines;
+		for (Namespace nestedNamespace : namespace.getNamespaces()) {
+			addClassesInNamespace(nestedNamespace);
+		}
 	}
 
 }
