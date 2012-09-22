@@ -24,6 +24,7 @@ import org.gnome.vala.DataType;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
 import org.gnome.vala.Parameter;
+import org.gnome.vala.Property;
 import org.gnome.vala.Symbol;
 
 import valable.ValaPlugin;
@@ -139,6 +140,9 @@ public class ValaLabelProvider extends LabelProvider implements
 			if (!(method instanceof CreationMethod)) {
 				type = method.getReturnType().toString();
 			}
+		} else if (element instanceof Property) {
+			Property property = (Property) element;
+			type = property.getPropertyType().toString();
 		}
 		return type;
 	}

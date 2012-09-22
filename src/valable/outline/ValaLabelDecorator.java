@@ -13,6 +13,7 @@ import org.gnome.vala.Field;
 import org.gnome.vala.MemberBinding;
 import org.gnome.vala.Method;
 import org.gnome.vala.NopCodeVisitor;
+import org.gnome.vala.Property;
 import org.gnome.vala.Symbol;
 
 import valable.ValaPlugin;
@@ -124,6 +125,21 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		@Override
 		public Void visitField(Field field) {
 			visitMemberBinding(field.getBinding());
+			return null;
+		}
+
+		/**
+		 * Adds decorations to the given property where appropriate.
+		 * 
+		 * @param property
+		 *            the property to be decorated
+		 */
+		@Override
+		public Void visitProperty(Property property) {
+			if (property.isAbstract()) {
+				addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT);
+			}
+			visitMemberBinding(property.getBinding());
 			return null;
 		}
 

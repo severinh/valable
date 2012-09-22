@@ -22,6 +22,7 @@ import org.gnome.vala.Field;
 import org.gnome.vala.Interface;
 import org.gnome.vala.Method;
 import org.gnome.vala.NopCodeVisitor;
+import org.gnome.vala.Property;
 import org.gnome.vala.SourceFile;
 import org.gnome.vala.Symbol;
 
@@ -102,6 +103,11 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 		@Override
 		public TreeNode[] visitField(Field field) {
 			return visitDisplayableSymbol(field);
+		}
+
+		@Override
+		public TreeNode[] visitProperty(Property property) {
+			return visitDisplayableSymbol(property);
 		}
 
 		private TreeNode[] visitNodes(List<CodeNode> nodes) {
