@@ -72,68 +72,55 @@ public class ValaLabelProvider extends LabelProvider implements
 	public String getText(Object element) {
 		element = maybeGetTreeNodeValue(element);
 
-		String name = getName(element);
-		String type = getType(element);
-		if (type != null) {
-			name += TYPE_SEPARATOR + type;
+		String primaryText = getPrimaryText(element);
+		String typeText = getTypeText(element);
+		if (typeText != null) {
+			primaryText += TYPE_SEPARATOR + typeText;
 		}
-		return name;
+		return primaryText;
 	}
 
 	@Override
 	public StyledString getStyledText(Object element) {
 		element = maybeGetTreeNodeValue(element);
 
-		String name = getName(element);
-		String type = getType(element);
+		String primaryText = getPrimaryText(element);
+		String typeText = getTypeText(element);
 
-		StyledString styledText = new StyledString(name);
-		if (type != null) {
+		StyledString styledText = new StyledString(primaryText);
+		if (typeText != null) {
 			styledText.append(TYPE_SEPARATOR, StyledString.QUALIFIER_STYLER);
-			styledText.append(type, StyledString.QUALIFIER_STYLER);
+			styledText.append(typeText, StyledString.QUALIFIER_STYLER);
 		}
 		return styledText;
 	}
 
 	/**
-	 * Returns the name of an element.
+	 * Returns the primary text for an element.
 	 */
-	private String getName(Object element) {
-		String name;
+	private String getPrimaryText(Object element) {
+		String result;
 		if (element instanceof Symbol) {
 			Symbol symbol = (Symbol) element;
-			name = symbol.accept(PrimaryLabelTextProvider.getInstance());
+			result = symbol.accept(PrimaryLabelTextProvider.getInstance());
 		} else {
-			name = element.toString();
+			result = element.toString();
 		}
-		return name;
+		return result;
 	}
 
 	/**
-	 * Returns the type of a {@link Field} or {@link Method}.
+	 * Returns the type text for an element.
 	 * 
-	 * @return <code>null</code> if the given element is neither a {@link Field}
-	 *         or {@link Method}
+	 * @return the type text of <code>null</code> if no type should be displayed
 	 */
-	private String getType(Object element) {
-		String type = null;
-		if (element instanceof Field) {
-			Field field = (Field) element;
-			type = field.getVariableType().toString();
-		} else if (element instanceof Method) {
-			Method method = (Method) element;
-			// Do not display the return type in the case of a creation method
-			if (!(method instanceof CreationMethod)) {
-				type = method.getReturnType().toString();
-			}
-		} else if (element instanceof Property) {
-			Property property = (Property) element;
-			type = property.getPropertyType().toString();
-		} else if (element instanceof Signal) {
-			Signal signal = (Signal) element;
-			type = signal.getReturnType().toString();
+	private String getTypeText(Object element) {
+		String result = null;
+		if (element instanceof Symbol) {
+			Symbol symbol = (Symbol) element;
+			result = symbol.accept(TypeLabelTextProvider.getInstance());
 		}
-		return type;
+		return result;
 	}
 
 	/**
@@ -160,6 +147,7 @@ public class ValaLabelProvider extends LabelProvider implements
 			return instance;
 		}
 
+		@Override
 		public String visitSymbol(Symbol symbol) {
 			// Ensure that in the case of unnamed construction methods, the
 			// "ClassName(...)" is shown rather than ".new()".
@@ -195,6 +183,48 @@ public class ValaLabelProvider extends LabelProvider implements
 			builder.append(StringUtils.join(parameterTypeNames, ", "));
 			builder.append(')');
 			return builder.toString();
+		}
+
+	}
+
+	private static class TypeLabelTextProvider extends NopCodeVisitor<String> {
+
+		private static final TypeLabelTextProvider instance;
+
+		static {
+			instance = new TypeLabelTextProvider();
+		}
+
+		public static TypeLabelTextProvider getInstance() {
+			return instance;
+		}
+
+		@Override
+		public String visitMethod(Method method) {
+			String result = super.visitMethod(method);
+			// Do not display the return type in the case of a creation method
+			if (!(method instanceof CreationMethod)) {
+				result = method.getReturnType().toString();
+			}
+			return result;
+		}
+
+		@Override
+		public String visitField(Field field) {
+			String result = field.getVariableType().toString();
+			return result;
+		}
+
+		@Override
+		public String visitProperty(Property property) {
+			String result = property.getPropertyType().toString();
+			return result;
+		}
+
+		@Override
+		public String visitSignal(Signal signal) {
+			String result = signal.getReturnType().toString();
+			return result;
 		}
 
 	}
