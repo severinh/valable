@@ -12,6 +12,8 @@ import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
 import org.gnome.vala.MemberBinding;
 import org.gnome.vala.Method;
+import org.gnome.vala.NopCodeVisitor;
+import org.gnome.vala.Symbol;
 
 import valable.ValaPlugin;
 import valable.ValaPluginConstants;
@@ -28,80 +30,15 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 
 	@Override
 	public void decorate(Object element, IDecoration decoration) {
-		element = maybeGetTreeNodeValue(element);
-		if (element instanceof Class) {
-			Class cls = (Class) element;
-			decorateClass(cls, decoration);
-		} else if (element instanceof Method) {
-			Method method = (Method) element;
-			decorateMethod(method, decoration);
-		} else if (element instanceof Field) {
-			Field field = (Field) element;
-			decorateField(field, decoration);
-		} else if (element instanceof EnumValue) {
-			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC, decoration);
-		}
-	}
-
-	/**
-	 * Adds decorations to Vala classes where appropriate.
-	 * 
-	 * @param cls
-	 *            the class to be decorated
-	 * @param decoration
-	 */
-	public void decorateClass(Class cls, IDecoration decoration) {
-		if (cls.isAbstract()) {
-			addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT, decoration);
-		}
-	}
-
-	/**
-	 * Adds decorations to a given Vala method where appropriate.
-	 * 
-	 * @param method
-	 *            the method to be decorated
-	 * @param decoration
-	 */
-	public void decorateMethod(Method method, IDecoration decoration) {
-		if (method instanceof CreationMethod) {
-			addOverlay(ValaPluginConstants.IMG_OVERLAY_CONSTRUCTOR, decoration);
-		}
-		if (method.getBinding().equals(MemberBinding.STATIC)) {
-			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC, decoration);
-		}
-		if (method.isAbstract()) {
-			addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT, decoration);
-		}
-	}
-
-	/**
-	 * Adds decorations to a given Vala field where appropriate.
-	 * 
-	 * @param field
-	 *            the field to be decorated
-	 * @param decoration
-	 */
-	public void decorateField(Field field, IDecoration decoration) {
-		if (field.getBinding().equals(MemberBinding.STATIC)) {
-			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC, decoration);
-		}
-	}
-
-	public void addOverlay(String overlayKey, IDecoration decoration) {
-		ImageDescriptor overlay = imageRegistry.getDescriptor(overlayKey);
-		decoration.addOverlay(overlay, IDecoration.TOP_RIGHT);
-	}
-
-	/**
-	 * Returns its value if the given element is a {@link TreeNode} and the
-	 * element itself otherwise.
-	 */
-	private Object maybeGetTreeNodeValue(Object element) {
 		if (element instanceof TreeNode) {
 			element = ((TreeNode) element).getValue();
 		}
-		return element;
+		if (element instanceof Symbol) {
+			Symbol symbol = (Symbol) element;
+			ValaLabelDecoratorImpl labelDecorator = new ValaLabelDecoratorImpl(
+					decoration);
+			symbol.accept(labelDecorator);
+		}
 	}
 
 	@Override
@@ -119,6 +56,86 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 
 	@Override
 	public void removeListener(ILabelProviderListener listener) {
+	}
+
+	private class ValaLabelDecoratorImpl extends NopCodeVisitor<Void> {
+
+		private final IDecoration decoration;
+
+		public ValaLabelDecoratorImpl(IDecoration decoration) {
+			super();
+			this.decoration = decoration;
+		}
+
+		public IDecoration getDecoration() {
+			return decoration;
+		}
+
+		/**
+		 * Adds decorations to the given class where appropriate.
+		 * 
+		 * @param cls
+		 *            the class to be decorated
+		 */
+		@Override
+		public Void visitClass(Class cls) {
+			if (cls.isAbstract()) {
+				addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT);
+			}
+			return null;
+		}
+
+		/**
+		 * Adds decorations to the given enum value where appropriate.
+		 * 
+		 * @param enumValue
+		 *            the enum value to be decorated
+		 */
+		@Override
+		public Void visitEnumValue(EnumValue enumValue) {
+			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC);
+			return null;
+		}
+
+		/**
+		 * Adds decorations to the given method where appropriate.
+		 * 
+		 * @param method
+		 *            the method to be decorated
+		 */
+		@Override
+		public Void visitMethod(Method method) {
+			if (method instanceof CreationMethod) {
+				addOverlay(ValaPluginConstants.IMG_OVERLAY_CONSTRUCTOR);
+			}
+			if (method.getBinding().equals(MemberBinding.STATIC)) {
+				addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC);
+			}
+			if (method.isAbstract()) {
+				addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT);
+			}
+			return null;
+		}
+
+		/**
+		 * Adds decorations to the given field where appropriate.
+		 * 
+		 * @param field
+		 *            the field to be decorated
+		 */
+		@Override
+		public Void visitField(Field field) {
+			if (field.getBinding().equals(MemberBinding.STATIC)) {
+				addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC);
+			}
+			return null;
+		}
+
+		private void addOverlay(String overlayKey) {
+			ImageDescriptor overlay = imageRegistry.getDescriptor(overlayKey);
+			getDecoration().addOverlay(overlay, IDecoration.TOP_RIGHT);
+		}
+
 	}
 
 }
