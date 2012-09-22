@@ -28,8 +28,6 @@ import org.gnome.vala.Symbol;
 
 import valable.ValaPlugin;
 import valable.ValaPluginConstants;
-import valable.model.ValaPackage;
-import valable.model.ValaSource;
 import valable.model.ValaSymbolImageProvider;
 
 /**
@@ -61,10 +59,6 @@ public class ValaLabelProvider extends LabelProvider implements
 		if (element instanceof Symbol) {
 			Symbol symbol = (Symbol) element;
 			key = ValaSymbolImageProvider.getKey(symbol);
-		} else if (element instanceof ValaSource) {
-			key = ValaPluginConstants.IMG_OBJECT_VALA;
-		} else if (element instanceof ValaPackage) {
-			key = ValaPluginConstants.IMG_OBJECT_PACKAGE;
 		} else {
 			key = ValaPluginConstants.IMG_OBJECT_UNKNOWN;
 		}

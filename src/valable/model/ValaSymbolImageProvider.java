@@ -11,6 +11,7 @@ package valable.model;
 import org.eclipse.swt.graphics.Image;
 import org.gnome.vala.Class;
 import org.gnome.vala.Enum;
+import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
 import org.gnome.vala.LocalVariable;
 import org.gnome.vala.Method;
@@ -85,6 +86,10 @@ public class ValaSymbolImageProvider {
 		}
 	}
 
+	public String visitEnumValue(EnumValue enumValue) {
+		return ValaPluginConstants.IMG_OBJECT_FIELD_PUBLIC;
+	}
+
 	public String visitLocalVariable(LocalVariable localVariable) {
 		return ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE;
 	}
@@ -111,6 +116,8 @@ public class ValaSymbolImageProvider {
 			key = getInstance().visitClass((Class) symbol);
 		} else if (symbol instanceof Enum) {
 			key = getInstance().visitEnum((Enum) symbol);
+		} else if (symbol instanceof EnumValue) {
+			key = getInstance().visitEnumValue((EnumValue) symbol);
 		} else {
 			key = getInstance().visitSymbol(symbol);
 		}

@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Class;
 import org.gnome.vala.CreationMethod;
+import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
 import org.gnome.vala.MemberBinding;
 import org.gnome.vala.Method;
@@ -37,6 +38,8 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		} else if (element instanceof Field) {
 			Field field = (Field) element;
 			decorateField(field, decoration);
+		} else if (element instanceof EnumValue) {
+			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC, decoration);
 		}
 	}
 
