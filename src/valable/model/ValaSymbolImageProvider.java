@@ -10,6 +10,7 @@ package valable.model;
 
 import org.eclipse.swt.graphics.Image;
 import org.gnome.vala.Class;
+import org.gnome.vala.Constant;
 import org.gnome.vala.Enum;
 import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
@@ -34,6 +35,7 @@ public class ValaSymbolImageProvider extends NopCodeVisitor<String> {
 
 	private static final ValaSymbolImageProvider instance = new ValaSymbolImageProvider();
 
+	@Override
 	public String visitSymbol(Symbol symbol) {
 		return ValaPluginConstants.IMG_OBJECT_UNKNOWN;
 	}
@@ -86,6 +88,17 @@ public class ValaSymbolImageProvider extends NopCodeVisitor<String> {
 	}
 
 	@Override
+	public String visitConstant(Constant constant) {
+		return ValaPluginConstants.IMG_OBJECT_FIELD_PUBLIC;
+	}
+
+	@Override
+	public String visitField(Field field) {
+		SymbolAccessibility accessibility = field.getAccessibility();
+		return visitFieldOrProperty(accessibility);
+	}
+
+	@Override
 	public String visitMethod(Method method) {
 		SymbolAccessibility accessibility = method.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
@@ -100,15 +113,19 @@ public class ValaSymbolImageProvider extends NopCodeVisitor<String> {
 	}
 
 	@Override
-	public String visitField(Field field) {
-		SymbolAccessibility accessibility = field.getAccessibility();
+	public String visitProperty(Property property) {
+		SymbolAccessibility accessibility = property.getAccessibility();
 		return visitFieldOrProperty(accessibility);
 	}
 
 	@Override
-	public String visitProperty(Property property) {
-		SymbolAccessibility accessibility = property.getAccessibility();
-		return visitFieldOrProperty(accessibility);
+	public String visitSignal(Signal signal) {
+		return ValaPluginConstants.IMG_OBJECT_SIGNAL_PUBLIC;
+	}
+
+	@Override
+	public String visitLocalVariable(LocalVariable localVariable) {
+		return ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE;
 	}
 
 	public String visitFieldOrProperty(SymbolAccessibility accessibility) {
@@ -121,16 +138,6 @@ public class ValaSymbolImageProvider extends NopCodeVisitor<String> {
 		} else {
 			return ValaPluginConstants.IMG_OBJECT_FIELD_DEFAULT;
 		}
-	}
-
-	@Override
-	public String visitSignal(Signal signal) {
-		return ValaPluginConstants.IMG_OBJECT_SIGNAL_PUBLIC;
-	}
-
-	@Override
-	public String visitLocalVariable(LocalVariable localVariable) {
-		return ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE;
 	}
 
 	public static ValaSymbolImageProvider getInstance() {

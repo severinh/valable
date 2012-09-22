@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.swt.graphics.Image;
+import org.gnome.vala.Constant;
 import org.gnome.vala.CreationMethod;
 import org.gnome.vala.DataType;
 import org.gnome.vala.Field;
@@ -200,18 +201,24 @@ public class ValaLabelProvider extends LabelProvider implements
 		}
 
 		@Override
-		public String visitMethod(Method method) {
-			String result = super.visitMethod(method);
-			// Do not display the return type in the case of a creation method
-			if (!(method instanceof CreationMethod)) {
-				result = method.getReturnType().toString();
-			}
+		public String visitConstant(Constant constant) {
+			String result = constant.getConstantType().toString();
 			return result;
 		}
 
 		@Override
 		public String visitField(Field field) {
 			String result = field.getVariableType().toString();
+			return result;
+		}
+
+		@Override
+		public String visitMethod(Method method) {
+			String result = super.visitMethod(method);
+			// Do not display the return type in the case of a creation method
+			if (!(method instanceof CreationMethod)) {
+				result = method.getReturnType().toString();
+			}
 			return result;
 		}
 

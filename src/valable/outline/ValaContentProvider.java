@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.gnome.vala.Class;
 import org.gnome.vala.CodeNode;
+import org.gnome.vala.Constant;
 import org.gnome.vala.Enum;
 import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
@@ -114,6 +115,11 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 		@Override
 		public TreeNode[] visitSignal(Signal signal) {
 			return visitDisplayableSymbol(signal);
+		}
+
+		@Override
+		public TreeNode[] visitConstant(Constant constant) {
+			return visitDisplayableSymbol(constant);
 		}
 
 		private TreeNode[] visitNodes(List<CodeNode> nodes) {

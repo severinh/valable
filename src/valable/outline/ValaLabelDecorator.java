@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Class;
+import org.gnome.vala.Constant;
 import org.gnome.vala.CreationMethod;
 import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
@@ -98,6 +99,24 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 			return null;
 		}
 
+		@Override
+		public Void visitConstant(Constant constant) {
+			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC);
+			return null;
+		}
+
+		/**
+		 * Adds decorations to the given field where appropriate.
+		 * 
+		 * @param field
+		 *            the field to be decorated
+		 */
+		@Override
+		public Void visitField(Field field) {
+			visitMemberBinding(field.getBinding());
+			return null;
+		}
+
 		/**
 		 * Adds decorations to the given method where appropriate.
 		 * 
@@ -123,18 +142,6 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 						IDecoration.BOTTOM_RIGHT);
 			}
 			visitMemberBinding(method.getBinding());
-			return null;
-		}
-
-		/**
-		 * Adds decorations to the given field where appropriate.
-		 * 
-		 * @param field
-		 *            the field to be decorated
-		 */
-		@Override
-		public Void visitField(Field field) {
-			visitMemberBinding(field.getBinding());
 			return null;
 		}
 
