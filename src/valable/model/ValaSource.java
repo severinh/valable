@@ -43,6 +43,8 @@ public class ValaSource {
 	private final Set<ValaPackage> uses = new LinkedHashSet<ValaPackage>();
 	private final Map<String, Class> classes = new HashMap<String, Class>();
 
+	private SourceFile sourceFile;
+
 	/**
 	 * Creates a new instance for the given source file within a project.
 	 */
@@ -59,6 +61,10 @@ public class ValaSource {
 
 	public IFile getSource() {
 		return source;
+	}
+
+	public SourceFile getSourceFile() {
+		return sourceFile;
 	}
 
 	public Collection<Class> getClasses() {
@@ -129,6 +135,13 @@ public class ValaSource {
 		parser.parse(codeContext);
 		codeContext.check();
 
+		for (SourceFile someSourceFile : codeContext.getSourceFiles()) {
+			if (someSourceFile.getFilename().equals(sourceFilename)) {
+				sourceFile = someSourceFile;
+				break;
+			}
+		}
+
 		Namespace root = codeContext.getRoot();
 		addClassesInNamespace(root);
 
@@ -136,11 +149,9 @@ public class ValaSource {
 	}
 
 	private void addClassesInNamespace(Namespace namespace) {
-		String sourceFilename = getSource().getRawLocation().toOSString();
 		for (Class cls : namespace.getClasses()) {
 			SourceFile sourceFile = cls.getSourceReference().getSourceFile();
-			String filename = sourceFile.getFilename();
-			if (filename.equals(sourceFilename)) {
+			if (sourceFile.equals(getSourceFile())) {
 				classes.put(cls.getName(), cls);
 			}
 		}
