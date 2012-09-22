@@ -10,8 +10,6 @@ package valable.outline;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Class;
 import org.gnome.vala.Field;
@@ -72,7 +70,6 @@ public class ValaLabelProviderTest extends AbstractTest {
 		ValaSource source = parseTestSource("properties.vala");
 		Class nonPrivAccessClass = source.getClass("NonPrivAccess");
 		Class sampleClass = source.getClass("Sample");
-		List<Field> sampleFields = sampleClass.getFields();
 		Field realStructField = nonPrivAccessClass.getField("_real_struct");
 		Field automaticField = sampleClass.getField("_automatic");
 		Field delegField = sampleClass.getField("_deleg");
