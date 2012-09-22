@@ -105,6 +105,8 @@ public class ValaLabelProvider extends LabelProvider implements
 		StringBuilder nameBuilder = new StringBuilder();
 
 		if (element instanceof Symbol) {
+			// Ensure that in the case of unnamed construction methods, the
+			// "ClassName(...)" is shown rather than ".new()".
 			nameBuilder.append(((Symbol) element).getNameInSourceFile());
 			if (element instanceof Method) {
 				Method method = (Method) element;
