@@ -33,18 +33,18 @@ public class ValaContentProviderTest extends AbstractTest {
 		Class fooClass = source.getClass("Foo");
 		TreeNode sampleTreeNode = new TreeNode(sampleClass);
 		sampleTreeNode.setChildren(new TreeNode[] {
+				new TreeNode(sampleClass.getMethod(".new")),
 				new TreeNode(sampleClass.getField("age")),
 				new TreeNode(sampleClass.getField("name")),
 				new TreeNode(sampleClass.getField("count")),
 				new TreeNode(sampleClass.getMethod("main")),
 				new TreeNode(sampleClass.getMethod("doThing")),
-				new TreeNode(sampleClass.getMethod("getParent")),
-				new TreeNode(sampleClass.getMethod(".new")) });
+				new TreeNode(sampleClass.getMethod("getParent")) });
 		TreeNode fooTreeNode = new TreeNode(fooClass);
 		fooTreeNode.setChildren(new TreeNode[] {
+				new TreeNode(fooClass.getMethod(".new")),
 				new TreeNode(fooClass.getMethod("getParent")),
-				new TreeNode(fooClass.getMethod("removeParent")),
-				new TreeNode(fooClass.getMethod(".new")) });
+				new TreeNode(fooClass.getMethod("removeParent")) });
 
 		TreeNode[] expectedTreeNodes = { sampleTreeNode, fooTreeNode };
 
@@ -59,10 +59,11 @@ public class ValaContentProviderTest extends AbstractTest {
 		ValaSource source = parseTestSource("properties.vala");
 
 		Class nonPrivAccessClass = source.getClass("NonPrivAccess");
-		Class sampleClass = source.getClass("Sample");
 		TreeNode nonPrivAccessClassNode = new TreeNode(nonPrivAccessClass);
 		nonPrivAccessClassNode.setChildren(new TreeNode[] { new TreeNode(
 				nonPrivAccessClass.getMethod(".new")) });
+
+		Class sampleClass = source.getClass("Sample");
 		TreeNode sampleClassNode = new TreeNode(sampleClass);
 		sampleClassNode.setChildren(new TreeNode[] {
 				new TreeNode(sampleClass.getField("_name")),
@@ -71,8 +72,26 @@ public class ValaContentProviderTest extends AbstractTest {
 				new TreeNode(sampleClass.getMethod("run")),
 				new TreeNode(sampleClass.getMethod("main")) });
 
+		Class fooClass = source.getClass("Foo");
+		TreeNode fooClassNode = new TreeNode(fooClass);
+		fooClassNode.setChildren(new TreeNode[] {
+				new TreeNode(fooClass.getMethod(".new")),
+				new TreeNode(fooClass.getField("_public_base_property")) });
+
+		Class barClass = source.getClass("Bar");
+		TreeNode barClassNode = new TreeNode(barClass);
+		barClassNode.setChildren(new TreeNode[] {
+				new TreeNode(barClass.getMethod(".new")),
+				new TreeNode(barClass.getMethod("do_action")),
+				new TreeNode(barClass.getMethod("run")) });
+
+		Class bazClass = source.getClass("Baz");
+		TreeNode bazClassNode = new TreeNode(bazClass);
+		bazClassNode.setChildren(new TreeNode[] { new TreeNode(bazClass
+				.getMethod(".new")) });
+
 		TreeNode[] expectedTreeNodes = { nonPrivAccessClassNode,
-				sampleClassNode };
+				sampleClassNode, fooClassNode, barClassNode, bazClassNode };
 		ValaContentProvider contentProvider = new ValaContentProvider();
 		TreeNode[] treeNodes = contentProvider.getElements(source);
 
