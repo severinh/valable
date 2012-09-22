@@ -15,6 +15,7 @@ import java.io.IOException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Class;
+import org.gnome.vala.SourceFile;
 import org.junit.Test;
 
 import valable.AbstractTest;
@@ -28,6 +29,7 @@ public class ValaContentProviderTest extends AbstractTest {
 	@Test
 	public void testParse() throws CoreException, IOException {
 		ValaSource source = parseTestSource("simple.vala");
+		SourceFile sourceFile = source.getSourceFile();
 
 		Class sampleClass = source.getClass("Simple");
 		Class fooClass = source.getClass("Foo");
@@ -49,7 +51,7 @@ public class ValaContentProviderTest extends AbstractTest {
 		TreeNode[] expectedTreeNodes = { sampleTreeNode, fooTreeNode };
 
 		ValaContentProvider contentProvider = new ValaContentProvider();
-		TreeNode[] treeNodes = contentProvider.getElements(source);
+		TreeNode[] treeNodes = contentProvider.getElements(sourceFile);
 
 		assertTreeNodes(expectedTreeNodes, treeNodes);
 	}
@@ -57,6 +59,7 @@ public class ValaContentProviderTest extends AbstractTest {
 	@Test
 	public void testProperties() {
 		ValaSource source = parseTestSource("properties.vala");
+		SourceFile sourceFile = source.getSourceFile();
 
 		Class nonPrivAccessClass = source.getClass("NonPrivAccess");
 		TreeNode nonPrivAccessClassNode = new TreeNode(nonPrivAccessClass);
@@ -93,7 +96,7 @@ public class ValaContentProviderTest extends AbstractTest {
 		TreeNode[] expectedTreeNodes = { nonPrivAccessClassNode,
 				sampleClassNode, fooClassNode, barClassNode, bazClassNode };
 		ValaContentProvider contentProvider = new ValaContentProvider();
-		TreeNode[] treeNodes = contentProvider.getElements(source);
+		TreeNode[] treeNodes = contentProvider.getElements(sourceFile);
 
 		assertTreeNodes(expectedTreeNodes, treeNodes);
 	}

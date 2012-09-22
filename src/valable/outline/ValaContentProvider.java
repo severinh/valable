@@ -16,8 +16,10 @@ import java.util.List;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.gnome.vala.Class;
+import org.gnome.vala.CodeNode;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
+import org.gnome.vala.SourceFile;
 import org.gnome.vala.Symbol;
 
 import valable.model.SymbolLocationComparator;
@@ -30,40 +32,68 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 
 	@Override
 	public TreeNode[] getElements(Object parent) {
-		List<Object> elements = new ArrayList<Object>();
-
-		if (parent instanceof ValaSource) {
-			ValaSource source = (ValaSource) parent;
-			List<Class> classes = new ArrayList<Class>(source.getClasses());
-			Collections.sort(classes, SymbolLocationComparator.getInstance());
-			elements.addAll(classes);
+		if (parent instanceof SourceFile) {
+			SourceFile sourceFile = (SourceFile) parent;
+			return getElements(sourceFile);
 		} else if (parent instanceof Class) {
 			Class cls = (Class) parent;
-			List<Field> fields = cls.getFields();
-			List<Method> methods = cls.getMethods();
-			int symbolCount = fields.size() + methods.size();
-			List<Symbol> symbols = new ArrayList<Symbol>(symbolCount);
-			symbols.addAll(fields);
-			symbols.addAll(methods);
-			Collections.sort(symbols, SymbolLocationComparator.getInstance());
+			return getElements(cls);
+		}
+		return new TreeNode[] {};
+	}
 
-			for (Symbol symbol : symbols) {
-				if (symbol.hasNameSourceReference()) {
-					elements.add(symbol);
-				}
+	/**
+	 * Returns the elements inside of a source file, including classes,
+	 * functions, etc.
+	 * 
+	 * @param sourceFile
+	 *            the source file to create tree nodes for
+	 * @return the resulting tree nodes
+	 */
+	private TreeNode[] getElements(SourceFile sourceFile) {
+		List<TreeNode> result = new ArrayList<TreeNode>();
+		for (CodeNode node : sourceFile.getNodes()) {
+			if (node instanceof Class) {
+				Class cls = (Class) node;
+				TreeNode treeNode = new TreeNode(cls);
+				treeNode.setChildren(getElements(cls));
+				result.add(treeNode);
 			}
 		}
+		TreeNode[] resultArray = makeResultArray(result);
+		return resultArray;
+	}
 
-		TreeNode[] results = new TreeNode[elements.size()];
-		for (int i = 0; i < elements.size(); i++) {
-			results[i] = new TreeNode(elements.get(i));
+	/**
+	 * Returns the elements inside of a class, including fields and methods.
+	 * 
+	 * @param cls
+	 *            the class to create tree nodes for
+	 * @return the resulting tree nodes
+	 */
+	private TreeNode[] getElements(Class cls) {
+		List<TreeNode> result = new ArrayList<TreeNode>();
+		List<Field> fields = cls.getFields();
+		List<Method> methods = cls.getMethods();
+		int symbolCount = fields.size() + methods.size();
+		List<Symbol> symbols = new ArrayList<Symbol>(symbolCount);
+		symbols.addAll(fields);
+		symbols.addAll(methods);
+		Collections.sort(symbols, SymbolLocationComparator.getInstance());
 
-			if (results[i].getValue() instanceof Class) {
-				results[i].setChildren(getElements(results[i].getValue()));
+		for (Symbol symbol : symbols) {
+			if (symbol.hasNameSourceReference()) {
+				result.add(new TreeNode(symbol));
 			}
 		}
+		TreeNode[] resultArray = makeResultArray(result);
+		return resultArray;
+	}
 
-		return results;
+	private static TreeNode[] makeResultArray(List<TreeNode> result) {
+		TreeNode[] resultArray = new TreeNode[result.size()];
+		result.toArray(resultArray);
+		return resultArray;
 	}
 
 }

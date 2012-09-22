@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
+import org.gnome.vala.SourceFile;
 import org.gnome.vala.SourceLocation;
 import org.gnome.vala.SourceReference;
 import org.gnome.vala.Symbol;
@@ -60,6 +61,7 @@ public class ValaOutlinePage extends ContentOutlinePage {
 		ValaSource currentSource = ValaProject.getProject(currentFile)
 				.getSource(currentFile);
 		currentSource.parse();
+		SourceFile currentSourceFile = currentSource.getSourceFile();
 
 		TreeViewer viewer = getTreeViewer();
 		viewer.setContentProvider(new ValaContentProvider());
@@ -67,7 +69,7 @@ public class ValaOutlinePage extends ContentOutlinePage {
 				new ValaLabelProvider(), PlatformUI.getWorkbench()
 						.getDecoratorManager().getLabelDecorator(),
 				DecorationContext.DEFAULT_CONTEXT));
-		viewer.setInput(currentSource);
+		viewer.setInput(currentSourceFile);
 		viewer.addSelectionChangedListener(this);
 	}
 
