@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.swt.graphics.Image;
+import org.gnome.vala.CreationMethod;
 import org.gnome.vala.DataType;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
@@ -104,7 +105,7 @@ public class ValaLabelProvider extends LabelProvider implements
 		StringBuilder nameBuilder = new StringBuilder();
 
 		if (element instanceof Symbol) {
-			nameBuilder.append(((Symbol) element).getName());
+			nameBuilder.append(((Symbol) element).getNameInSourceFile());
 			if (element instanceof Method) {
 				Method method = (Method) element;
 				List<Parameter> parameters = method.getParameters();
@@ -138,7 +139,10 @@ public class ValaLabelProvider extends LabelProvider implements
 			type = field.getVariableType().toString();
 		} else if (element instanceof Method) {
 			Method method = (Method) element;
-			type = method.getReturnType().toString();
+			// Do not display the return type in the case of a creation method
+			if (!(method instanceof CreationMethod)) {
+				type = method.getReturnType().toString();
+			}
 		}
 		return type;
 	}
