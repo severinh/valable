@@ -30,7 +30,6 @@ public class ValaContentProviderTest extends AbstractTest {
 
 		Class sampleClass = source.getClasses().get("Simple");
 		Class fooClass = source.getClasses().get("Foo");
-		TreeNode geeUseTreeNode = new TreeNode(source.getUse("Gee"));
 		TreeNode sampleTreeNode = new TreeNode(sampleClass);
 		sampleTreeNode.setChildren(new TreeNode[] {
 				new TreeNode(sampleClass.getField("age")),
@@ -44,8 +43,7 @@ public class ValaContentProviderTest extends AbstractTest {
 				new TreeNode(fooClass.getMethod("getParent")),
 				new TreeNode(fooClass.getMethod("removeParent")) });
 
-		TreeNode[] expectedTreeNodes = { geeUseTreeNode, sampleTreeNode,
-				fooTreeNode };
+		TreeNode[] expectedTreeNodes = { sampleTreeNode, fooTreeNode };
 
 		ValaContentProvider contentProvider = new ValaContentProvider();
 		TreeNode[] treeNodes = contentProvider.getElements(source);
