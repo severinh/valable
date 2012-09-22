@@ -118,7 +118,9 @@ public class ValaContentProviderTest extends AbstractTest {
 		TreeNode fooishEnumNode = new TreeNode(fooishEnum);
 		fooishEnumNode.setChildren(new TreeNode[] {
 				new TreeNode(fooishEnum.getValues().get(0)),
-				new TreeNode(fooishEnum.getValues().get(1)) });
+				new TreeNode(fooishEnum.getValues().get(1)),
+				new TreeNode(fooishEnum.getMethods().get(0)),
+				new TreeNode(fooishEnum.getConstants().get(0)) });
 
 		Class barClass = source.getClass("Bar");
 		TreeNode barClassNode = new TreeNode(barClass);

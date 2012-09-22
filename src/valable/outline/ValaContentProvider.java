@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.gnome.vala.Class;
 import org.gnome.vala.CodeNode;
+import org.gnome.vala.Constant;
 import org.gnome.vala.Enum;
 import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
@@ -108,8 +109,16 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 	 */
 	private TreeNode[] getElements(Enum enm) {
 		List<TreeNode> result = new ArrayList<TreeNode>();
-		for (EnumValue enumValue : enm.getValues()) {
-			result.add(new TreeNode(enumValue));
+		List<EnumValue> values = enm.getValues();
+		List<Method> methods = enm.getMethods();
+		List<Constant> constants = enm.getConstants();
+		List<Symbol> symbols = new ArrayList<Symbol>();
+		symbols.addAll(values);
+		symbols.addAll(methods);
+		symbols.addAll(constants);
+		Collections.sort(symbols, SymbolLocationComparator.getInstance());
+		for (Symbol symbol : symbols) {
+			result.add(new TreeNode(symbol));
 		}
 		TreeNode[] resultArray = makeResultArray(result);
 		return resultArray;
