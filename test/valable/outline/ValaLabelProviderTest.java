@@ -11,6 +11,7 @@ package valable.outline;
 import static org.junit.Assert.assertEquals;
 
 import org.eclipse.jface.viewers.TreeNode;
+import org.gnome.vala.Class;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
 import org.gnome.vala.SymbolAccessibility;
@@ -62,6 +63,22 @@ public class ValaLabelProviderTest extends AbstractTest {
 
 		Method method = new Method("method", new VoidType());
 		assertEquals("method() : void", labelProvider.getText(method));
+	}
+
+	@Test
+	public void testProperties() {
+		ValaSource source = parseTestSource("properties.vala");
+		Class nonPrivAccessClass = source.getClass("NonPrivAccess");
+		Class sampleClass = source.getClass("Sample");
+		Field realStructField = nonPrivAccessClass.getField("_real_struct");
+		Field automaticField = sampleClass.getField("_automatic");
+
+		ValaLabelProvider labelProvider = new ValaLabelProvider();
+
+		assertEquals("_real_struct : RealStruct",
+				labelProvider.getText(realStructField));
+		assertEquals("_automatic : string",
+				labelProvider.getText(automaticField));
 	}
 
 }
