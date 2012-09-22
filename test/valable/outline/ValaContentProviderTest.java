@@ -8,12 +8,13 @@
  */
 package valable.outline;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Class;
-import org.junit.Assert;
 import org.junit.Test;
 
 import valable.AbstractTest;
@@ -48,7 +49,7 @@ public class ValaContentProviderTest extends AbstractTest {
 		ValaContentProvider contentProvider = new ValaContentProvider();
 		TreeNode[] treeNodes = contentProvider.getElements(source);
 
-		Assert.assertArrayEquals(expectedTreeNodes, treeNodes);
+		assertTreeNodes(expectedTreeNodes, treeNodes);
 	}
 
 	@Test
@@ -59,17 +60,45 @@ public class ValaContentProviderTest extends AbstractTest {
 		Class sampleClass = source.getClass("Sample");
 		TreeNode nonPrivAccessClassNode = new TreeNode(nonPrivAccessClass);
 		nonPrivAccessClassNode.setChildren(new TreeNode[] { new TreeNode(
-				nonPrivAccessClass.getField("real_struct")) });
+				nonPrivAccessClass.getMethod(".new")) });
 		TreeNode sampleClassNode = new TreeNode(sampleClass);
-		sampleClassNode.setChildren(new TreeNode[] { new TreeNode(sampleClass
-				.getField("_automatic")) });
+		sampleClassNode.setChildren(new TreeNode[] {
+				new TreeNode(sampleClass.getField("_name")),
+				new TreeNode(sampleClass.getField("_read_only")),
+				new TreeNode(sampleClass.getMethod(".new")),
+				new TreeNode(sampleClass.getMethod("run")),
+				new TreeNode(sampleClass.getMethod("main")) });
 
 		TreeNode[] expectedTreeNodes = { nonPrivAccessClassNode,
 				sampleClassNode };
 		ValaContentProvider contentProvider = new ValaContentProvider();
 		TreeNode[] treeNodes = contentProvider.getElements(source);
 
-		Assert.assertArrayEquals(expectedTreeNodes, treeNodes);
+		assertTreeNodes(expectedTreeNodes, treeNodes);
+	}
+
+	/**
+	 * Asserts that two tree node arrays are equal, including their children.
+	 * 
+	 * @param expectedTreeNodes
+	 *            the expected array of tree nodes
+	 * @param treeNodes
+	 *            the actual array of tree nodes
+	 */
+	public void assertTreeNodes(TreeNode[] expectedTreeNodes,
+			TreeNode[] treeNodes) {
+		if (expectedTreeNodes == null && treeNodes == null) {
+			return;
+		}
+		assertEquals(expectedTreeNodes.length, treeNodes.length);
+
+		for (int index = 0; index < treeNodes.length; index++) {
+			TreeNode expectedTreeNode = expectedTreeNodes[index];
+			TreeNode treeNode = treeNodes[index];
+			assertEquals(expectedTreeNode.getValue(), treeNode.getValue());
+			assertTreeNodes(expectedTreeNode.getChildren(),
+					treeNode.getChildren());
+		}
 	}
 
 }
