@@ -11,6 +11,7 @@ package valable.model;
 import static org.junit.Assert.assertEquals;
 
 import org.gnome.vala.Class;
+import org.gnome.vala.Enum;
 import org.gnome.vala.Field;
 import org.gnome.vala.LocalVariable;
 import org.gnome.vala.Method;
@@ -80,6 +81,20 @@ public class ValaSymbolImageProviderTest extends AbstractTest {
 		cls = makeStubClass(SymbolAccessibility.PUBLIC);
 		assertEquals(ValaPluginConstants.IMG_OBJECT_CLASS_PUBLIC,
 				ValaSymbolImageProvider.getKey(cls));
+
+		Enum enm;
+		enm = makeStubEnum(SymbolAccessibility.PRIVATE);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_ENUM_PRIVATE,
+				ValaSymbolImageProvider.getKey(enm));
+		enm = makeStubEnum(SymbolAccessibility.INTERNAL);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_ENUM_DEFAULT,
+				ValaSymbolImageProvider.getKey(enm));
+		enm = makeStubEnum(SymbolAccessibility.PROTECTED);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_ENUM_PROTECTED,
+				ValaSymbolImageProvider.getKey(enm));
+		enm = makeStubEnum(SymbolAccessibility.PUBLIC);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_ENUM_PUBLIC,
+				ValaSymbolImageProvider.getKey(enm));
 	}
 
 	/**
@@ -93,6 +108,19 @@ public class ValaSymbolImageProviderTest extends AbstractTest {
 		Class cls = new Class(NAME);
 		cls.setAccessibility(accessibility);
 		return cls;
+	}
+
+	/**
+	 * Creates a new stub enum with a given accessibility.
+	 * 
+	 * @param accessibility
+	 *            the accessibility of the stub enum
+	 * @return the newly created enum
+	 */
+	private Enum makeStubEnum(SymbolAccessibility accessibility) {
+		Enum enm = new Enum(NAME);
+		enm.setAccessibility(accessibility);
+		return enm;
 	}
 
 	/**

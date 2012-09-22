@@ -10,6 +10,7 @@ package valable.model;
 
 import org.eclipse.swt.graphics.Image;
 import org.gnome.vala.Class;
+import org.gnome.vala.Enum;
 import org.gnome.vala.Field;
 import org.gnome.vala.LocalVariable;
 import org.gnome.vala.Method;
@@ -71,6 +72,19 @@ public class ValaSymbolImageProvider {
 		}
 	}
 
+	public String visitEnum(Enum enm) {
+		SymbolAccessibility accessibility = enm.getAccessibility();
+		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
+			return ValaPluginConstants.IMG_OBJECT_ENUM_PRIVATE;
+		} else if (accessibility.equals(SymbolAccessibility.PROTECTED)) {
+			return ValaPluginConstants.IMG_OBJECT_ENUM_PROTECTED;
+		} else if (accessibility.equals(SymbolAccessibility.PUBLIC)) {
+			return ValaPluginConstants.IMG_OBJECT_ENUM_PUBLIC;
+		} else {
+			return ValaPluginConstants.IMG_OBJECT_ENUM_DEFAULT;
+		}
+	}
+
 	public String visitLocalVariable(LocalVariable localVariable) {
 		return ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE;
 	}
@@ -95,6 +109,8 @@ public class ValaSymbolImageProvider {
 			key = getInstance().visitLocalVariable((LocalVariable) symbol);
 		} else if (symbol instanceof Class) {
 			key = getInstance().visitClass((Class) symbol);
+		} else if (symbol instanceof Enum) {
+			key = getInstance().visitEnum((Enum) symbol);
 		} else {
 			key = getInstance().visitSymbol(symbol);
 		}
