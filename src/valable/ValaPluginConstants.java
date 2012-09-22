@@ -28,8 +28,14 @@ public interface ValaPluginConstants {
 			+ "unknown_obj.gif";
 	public static final String IMG_OBJECT_PACKAGE = IMG_PATH_PREFIX
 			+ "package_obj.gif";
-	public static final String IMG_OBJECT_CLASS = IMG_PATH_PREFIX
+	public static final String IMG_OBJECT_CLASS_DEFAULT = IMG_PATH_PREFIX
+			+ "class_default_obj.gif";
+	public static final String IMG_OBJECT_CLASS_PRIVATE = IMG_PATH_PREFIX
+			+ "innerclass_private_obj.gif";
+	public static final String IMG_OBJECT_CLASS_PUBLIC = IMG_PATH_PREFIX
 			+ "class_obj.gif";
+	public static final String IMG_OBJECT_CLASS_PROTECTED = IMG_PATH_PREFIX
+			+ "innerclass_protected_obj.gif";
 	public static final String IMG_OBJECT_INTERFACE = IMG_PATH_PREFIX
 			+ "int_obj.gif";
 	public static final String IMG_OBJECT_ENUM = IMG_PATH_PREFIX
@@ -63,7 +69,9 @@ public interface ValaPluginConstants {
 	public static final Set<String> IMG_KEYS = Collections
 			.unmodifiableSet(new LinkedHashSet<String>(Arrays.asList(
 					IMG_OBJECT_VALA, IMG_OBJECT_VALA, IMG_OBJECT_UNKNOWN,
-					IMG_OBJECT_PACKAGE, IMG_OBJECT_CLASS, IMG_OBJECT_INTERFACE,
+					IMG_OBJECT_PACKAGE, IMG_OBJECT_CLASS_DEFAULT,
+					IMG_OBJECT_CLASS_PRIVATE, IMG_OBJECT_CLASS_PUBLIC,
+					IMG_OBJECT_CLASS_PROTECTED, IMG_OBJECT_INTERFACE,
 					IMG_OBJECT_ENUM, IMG_OBJECT_LOCAL_VARIABLE,
 					IMG_OBJECT_FIELD_DEFAULT, IMG_OBJECT_FIELD_PRIVATE,
 					IMG_OBJECT_FIELD_PUBLIC, IMG_OBJECT_FIELD_PROTECTED,

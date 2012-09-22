@@ -67,14 +67,40 @@ public class ValaSymbolImageProviderTest extends AbstractTest {
 		assertEquals(ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE,
 				ValaSymbolImageProvider.getKey(localVariable));
 
-		Class cls = new Class(NAME);
-		assertEquals(ValaPluginConstants.IMG_OBJECT_CLASS,
+		Class cls;
+		cls = makeStubClass(SymbolAccessibility.PRIVATE);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_CLASS_PRIVATE,
+				ValaSymbolImageProvider.getKey(cls));
+		cls = makeStubClass(SymbolAccessibility.INTERNAL);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_CLASS_DEFAULT,
+				ValaSymbolImageProvider.getKey(cls));
+		cls = makeStubClass(SymbolAccessibility.PROTECTED);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_CLASS_PROTECTED,
+				ValaSymbolImageProvider.getKey(cls));
+		cls = makeStubClass(SymbolAccessibility.PUBLIC);
+		assertEquals(ValaPluginConstants.IMG_OBJECT_CLASS_PUBLIC,
 				ValaSymbolImageProvider.getKey(cls));
 	}
 
 	/**
-	 * Creates a new stub {@link Field} with a given {@link SymbolAccessibility}
-	 * .
+	 * Creates a new stub class with a given accessibility.
+	 * 
+	 * @param accessibility
+	 *            the accessibility of the stub class
+	 * @return the newly created class
+	 */
+	private Class makeStubClass(SymbolAccessibility accessibility) {
+		Class cls = new Class(NAME);
+		cls.setAccessibility(accessibility);
+		return cls;
+	}
+
+	/**
+	 * Creates a new stub field with a given accessibility.
+	 * 
+	 * @param accessibility
+	 *            the accessibility of the stub field
+	 * @return the newly created field
 	 */
 	private Field makeStubField(SymbolAccessibility accessibility) {
 		Field field = new Field(NAME, new VoidType());
@@ -83,8 +109,11 @@ public class ValaSymbolImageProviderTest extends AbstractTest {
 	}
 
 	/**
-	 * Creates a new stub {@link Method} with a given
-	 * {@link SymbolAccessibility}.
+	 * Creates a new stub method with a given accessibility.
+	 * 
+	 * @param accessibility
+	 *            the accessibility of the stub method
+	 * @return the newly created method
 	 */
 	private Method makeStubMethod(SymbolAccessibility accessibility) {
 		Method method = new Method(NAME, new VoidType());

@@ -58,8 +58,17 @@ public class ValaSymbolImageProvider {
 		}
 	}
 
-	public String visitClass(Class type) {
-		return ValaPluginConstants.IMG_OBJECT_CLASS;
+	public String visitClass(Class cls) {
+		SymbolAccessibility accessibility = cls.getAccessibility();
+		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
+			return ValaPluginConstants.IMG_OBJECT_CLASS_PRIVATE;
+		} else if (accessibility.equals(SymbolAccessibility.PROTECTED)) {
+			return ValaPluginConstants.IMG_OBJECT_CLASS_PROTECTED;
+		} else if (accessibility.equals(SymbolAccessibility.PUBLIC)) {
+			return ValaPluginConstants.IMG_OBJECT_CLASS_PUBLIC;
+		} else {
+			return ValaPluginConstants.IMG_OBJECT_CLASS_DEFAULT;
+		}
 	}
 
 	public String visitLocalVariable(LocalVariable localVariable) {
