@@ -115,6 +115,14 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 	 */
 	private TreeNode[] getElements(Interface interfce) {
 		List<TreeNode> result = new ArrayList<TreeNode>();
+		List<Method> methods = interfce.getMethods();
+		int symbolCount = methods.size();
+		List<Symbol> symbols = new ArrayList<Symbol>(symbolCount);
+		symbols.addAll(methods);
+		Collections.sort(symbols, SymbolLocationComparator.getInstance());
+		for (Symbol symbol : symbols) {
+			result.add(new TreeNode(symbol));
+		}
 		TreeNode[] resultArray = makeResultArray(result);
 		return resultArray;
 	}
