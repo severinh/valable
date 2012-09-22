@@ -10,6 +10,7 @@
 package valable.outline;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.viewers.TreeNode;
@@ -17,7 +18,9 @@ import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.gnome.vala.Class;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
+import org.gnome.vala.Symbol;
 
+import valable.model.SymbolLocationComparator;
 import valable.model.ValaSource;
 
 /**
@@ -34,14 +37,17 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 			elements.addAll(source.getClasses());
 		} else if (parent instanceof Class) {
 			Class cls = (Class) parent;
-			for (Field field : cls.getFields()) {
-				if (field.hasNameSourceReference()) {
-					elements.add(field);
-				}
-			}
-			for (Method method : cls.getMethods()) {
-				if (method.hasNameSourceReference()) {
-					elements.add(method);
+			List<Field> fields = cls.getFields();
+			List<Method> methods = cls.getMethods();
+			int symbolCount = fields.size() + methods.size();
+			List<Symbol> symbols = new ArrayList<Symbol>(symbolCount);
+			symbols.addAll(fields);
+			symbols.addAll(methods);
+			Collections.sort(symbols, SymbolLocationComparator.getInstance());
+
+			for (Symbol symbol : symbols) {
+				if (symbol.hasNameSourceReference()) {
+					elements.add(symbol);
 				}
 			}
 		}
