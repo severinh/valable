@@ -38,11 +38,11 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 		if (parent instanceof SourceFile) {
 			SourceFile sourceFile = (SourceFile) parent;
 			return getElements(sourceFile);
-		} else if (parent instanceof Class) {
-			Class cls = (Class) parent;
-			return getElements(cls);
+		} else {
+			throw new IllegalStateException(
+					"expected parent of type SourceFile, got "
+							+ parent.getClass().getSimpleName());
 		}
-		return new TreeNode[] {};
 	}
 
 	/**
@@ -64,6 +64,8 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 			} else if (node instanceof Enum) {
 				Enum enm = (Enum) node;
 				children = getElements(enm);
+			} else if (node instanceof Method) {
+				children = new TreeNode[] {};
 			} else {
 				continue;
 			}
