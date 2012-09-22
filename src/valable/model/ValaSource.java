@@ -26,7 +26,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.gnome.vala.Class;
 import org.gnome.vala.CodeContext;
-import org.gnome.vala.Namespace;
+import org.gnome.vala.CodeNode;
 import org.gnome.vala.Parser;
 import org.gnome.vala.SourceFile;
 
@@ -142,22 +142,14 @@ public class ValaSource {
 			}
 		}
 
-		Namespace root = codeContext.getRoot();
-		addClassesInNamespace(root);
-
-		return lines;
-	}
-
-	private void addClassesInNamespace(Namespace namespace) {
-		for (Class cls : namespace.getClasses()) {
-			SourceFile sourceFile = cls.getSourceReference().getSourceFile();
-			if (sourceFile.equals(getSourceFile())) {
+		for (CodeNode codeNode : sourceFile.getNodes()) {
+			if (codeNode instanceof Class) {
+				Class cls = (Class) codeNode;
 				classes.put(cls.getName(), cls);
 			}
 		}
-		for (Namespace nestedNamespace : namespace.getNamespaces()) {
-			addClassesInNamespace(nestedNamespace);
-		}
+
+		return lines;
 	}
 
 }
