@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.gnome.vala.Class;
 import org.gnome.vala.CodeNode;
 import org.gnome.vala.Enum;
+import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
 import org.gnome.vala.SourceFile;
@@ -99,14 +100,19 @@ public class ValaContentProvider extends TreeNodeContentProvider {
 	}
 
 	/**
-	 * Returns the elements inside of an enum.
+	 * Returns the elements inside of an enum, including its values.
 	 * 
 	 * @param enm
 	 *            the enum to create tree nodes for
 	 * @return the resulting tree nodes
 	 */
 	private TreeNode[] getElements(Enum enm) {
-		return new TreeNode[] {};
+		List<TreeNode> result = new ArrayList<TreeNode>();
+		for (EnumValue enumValue : enm.getValues()) {
+			result.add(new TreeNode(enumValue));
+		}
+		TreeNode[] resultArray = makeResultArray(result);
+		return resultArray;
 	}
 
 	private static TreeNode[] makeResultArray(List<TreeNode> result) {

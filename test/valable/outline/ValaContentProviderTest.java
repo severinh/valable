@@ -15,6 +15,7 @@ import java.io.IOException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Class;
+import org.gnome.vala.Enum;
 import org.gnome.vala.SourceFile;
 import org.junit.Test;
 
@@ -106,8 +107,18 @@ public class ValaContentProviderTest extends AbstractTest {
 		ValaSource source = parseTestSource("enums.vala");
 		SourceFile sourceFile = source.getSourceFile();
 
-		TreeNode fooNode = new TreeNode(sourceFile.getEnum("Foo"));
-		TreeNode fooishNode = new TreeNode(sourceFile.getEnum("Fooish"));
+		Enum fooEnum = sourceFile.getEnum("Foo");
+		TreeNode fooEnumNode = new TreeNode(fooEnum);
+		fooEnumNode.setChildren(new TreeNode[] {
+				new TreeNode(fooEnum.getValues().get(0)),
+				new TreeNode(fooEnum.getValues().get(1)),
+				new TreeNode(fooEnum.getValues().get(2)) });
+
+		Enum fooishEnum = sourceFile.getEnum("Fooish");
+		TreeNode fooishEnumNode = new TreeNode(fooishEnum);
+		fooishEnumNode.setChildren(new TreeNode[] {
+				new TreeNode(fooishEnum.getValues().get(0)),
+				new TreeNode(fooishEnum.getValues().get(1)) });
 
 		Class barClass = source.getClass("Bar");
 		TreeNode barClassNode = new TreeNode(barClass);
@@ -121,7 +132,8 @@ public class ValaContentProviderTest extends AbstractTest {
 								.getMethod("test_enum_methods_constants")),
 						new TreeNode(barClass.getMethod("main")) });
 
-		TreeNode[] expectedTreeNodes = { fooNode, fooishNode, barClassNode };
+		TreeNode[] expectedTreeNodes = { fooEnumNode, fooishEnumNode,
+				barClassNode };
 		ValaContentProvider contentProvider = new ValaContentProvider();
 		TreeNode[] treeNodes = contentProvider.getElements(sourceFile);
 
