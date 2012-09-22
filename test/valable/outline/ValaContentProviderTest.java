@@ -38,11 +38,13 @@ public class ValaContentProviderTest extends AbstractTest {
 				new TreeNode(sampleClass.getField("count")),
 				new TreeNode(sampleClass.getMethod("main")),
 				new TreeNode(sampleClass.getMethod("doThing")),
-				new TreeNode(sampleClass.getMethod("getParent")) });
+				new TreeNode(sampleClass.getMethod("getParent")),
+				new TreeNode(sampleClass.getMethod(".new")) });
 		TreeNode fooTreeNode = new TreeNode(fooClass);
 		fooTreeNode.setChildren(new TreeNode[] {
 				new TreeNode(fooClass.getMethod("getParent")),
-				new TreeNode(fooClass.getMethod("removeParent")) });
+				new TreeNode(fooClass.getMethod("removeParent")),
+				new TreeNode(fooClass.getMethod(".new")) });
 
 		TreeNode[] expectedTreeNodes = { sampleTreeNode, fooTreeNode };
 
