@@ -16,6 +16,7 @@ import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
 import org.gnome.vala.Property;
+import org.gnome.vala.Signal;
 import org.gnome.vala.SourceFile;
 import org.gnome.vala.SymbolAccessibility;
 import org.gnome.vala.VoidType;
@@ -81,6 +82,24 @@ public class ValaLabelProviderTest extends AbstractTest {
 		assertEquals("automatic : string",
 				labelProvider.getText(automaticProperty));
 		assertEquals("deleg : Delegate", labelProvider.getText(delegProperty));
+	}
+
+	@Test
+	public void testSignals() {
+		ValaSource source = parseTestSource("signals.vala");
+		SourceFile sourceFile = source.getSourceFile();
+
+		Class fooClass = sourceFile.getClass("Foo");
+		Signal activatedSignal = fooClass.getSignal("activated");
+		Class returnFooClass = sourceFile.getClass("ReturnFoo");
+		Signal intActivatedSignal = returnFooClass.getSignal("int_activated");
+
+		ValaLabelProvider labelProvider = new ValaLabelProvider();
+
+		assertEquals("activated(bool) : void",
+				labelProvider.getText(activatedSignal));
+		assertEquals("int_activated(int) : int",
+				labelProvider.getText(intActivatedSignal));
 	}
 
 }
