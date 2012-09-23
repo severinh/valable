@@ -16,6 +16,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Class;
 import org.gnome.vala.Enum;
+import org.gnome.vala.Interface;
+import org.gnome.vala.Method;
 import org.gnome.vala.SourceFile;
 import org.junit.Test;
 
@@ -32,8 +34,8 @@ public class ValaContentProviderTest extends AbstractTest {
 		ValaSource source = parseTestSource("simple.vala");
 		SourceFile sourceFile = source.getSourceFile();
 
-		Class sampleClass = source.getClass("Simple");
-		Class fooClass = source.getClass("Foo");
+		Class sampleClass = sourceFile.getClass("Simple");
+		Class fooClass = sourceFile.getClass("Foo");
 		TreeNode sampleTreeNode = new TreeNode(sampleClass);
 		sampleTreeNode.setChildren(new TreeNode[] {
 				new TreeNode(sampleClass.getMethod(".new")),
@@ -62,40 +64,61 @@ public class ValaContentProviderTest extends AbstractTest {
 		ValaSource source = parseTestSource("properties.vala");
 		SourceFile sourceFile = source.getSourceFile();
 
-		Class nonPrivAccessClass = source.getClass("NonPrivAccess");
+		Class nonPrivAccessClass = sourceFile.getClass("NonPrivAccess");
 		TreeNode nonPrivAccessClassNode = new TreeNode(nonPrivAccessClass);
-		nonPrivAccessClassNode.setChildren(new TreeNode[] { new TreeNode(
-				nonPrivAccessClass.getMethod(".new")) });
+		nonPrivAccessClassNode.setChildren(new TreeNode[] {
+				new TreeNode(nonPrivAccessClass.getMethod(".new")),
+				new TreeNode(nonPrivAccessClass.getProperty("real_struct")) });
 
-		Class sampleClass = source.getClass("Sample");
+		Class sampleClass = sourceFile.getClass("Sample");
 		TreeNode sampleClassNode = new TreeNode(sampleClass);
 		sampleClassNode.setChildren(new TreeNode[] {
+				new TreeNode(sampleClass.getProperty("automatic")),
+				new TreeNode(sampleClass.getProperty("deleg")),
 				new TreeNode(sampleClass.getField("_name")),
+				new TreeNode(sampleClass.getProperty("name")),
 				new TreeNode(sampleClass.getField("_read_only")),
+				new TreeNode(sampleClass.getProperty("read_only")),
 				new TreeNode(sampleClass.getMethod(".new")),
 				new TreeNode(sampleClass.getMethod("run")),
 				new TreeNode(sampleClass.getMethod("main")) });
 
-		Class fooClass = source.getClass("Foo");
+		Class fooClass = sourceFile.getClass("Foo");
 		TreeNode fooClassNode = new TreeNode(fooClass);
 		fooClassNode.setChildren(new TreeNode[] {
 				new TreeNode(fooClass.getMethod(".new")),
-				new TreeNode(fooClass.getField("_public_base_property")) });
+				new TreeNode(fooClass.getField("_public_base_property")),
+				new TreeNode(fooClass.getProperty("public_base_property")),
+				new TreeNode(fooClass.getProperty("abstract_base_property")) });
 
-		Class barClass = source.getClass("Bar");
+		Class barClass = sourceFile.getClass("Bar");
 		TreeNode barClassNode = new TreeNode(barClass);
 		barClassNode.setChildren(new TreeNode[] {
 				new TreeNode(barClass.getMethod(".new")),
+				new TreeNode(barClass.getProperty("public_property")),
+				new TreeNode(barClass.getProperty("abstract_base_property")),
 				new TreeNode(barClass.getMethod("do_action")),
 				new TreeNode(barClass.getMethod("run")) });
 
-		Class bazClass = source.getClass("Baz");
+		Interface ibazInterface = sourceFile.getInterface("Ibaz");
+		TreeNode ibazInterfaceNode = new TreeNode(ibazInterface);
+		ibazInterfaceNode.setChildren(new TreeNode[] {
+				new TreeNode(ibazInterface.getProperty("number")),
+				new TreeNode(ibazInterface.getMethod("simple_method")) });
+
+		Class bazClass = sourceFile.getClass("Baz");
 		TreeNode bazClassNode = new TreeNode(bazClass);
-		bazClassNode.setChildren(new TreeNode[] { new TreeNode(bazClass
-				.getMethod(".new")) });
+		bazClassNode.setChildren(new TreeNode[] {
+				new TreeNode(bazClass.getMethod(".new")),
+				new TreeNode(bazClass.getProperty("number")) });
+
+		Method mainMethod = sourceFile.getMethod("main");
+		TreeNode mainMethodNode = new TreeNode(mainMethod);
 
 		TreeNode[] expectedTreeNodes = { nonPrivAccessClassNode,
-				sampleClassNode, fooClassNode, barClassNode, bazClassNode };
+				sampleClassNode, fooClassNode, barClassNode, ibazInterfaceNode,
+				bazClassNode, mainMethodNode };
+
 		ValaContentProvider contentProvider = new ValaContentProvider();
 		TreeNode[] treeNodes = contentProvider.getElements(sourceFile);
 
@@ -122,7 +145,7 @@ public class ValaContentProviderTest extends AbstractTest {
 				new TreeNode(fooishEnum.getMethods().get(0)),
 				new TreeNode(fooishEnum.getConstants().get(0)) });
 
-		Class barClass = source.getClass("Bar");
+		Class barClass = sourceFile.getClass("Bar");
 		TreeNode barClassNode = new TreeNode(barClass);
 		barClassNode
 				.setChildren(new TreeNode[] {

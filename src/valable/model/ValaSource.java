@@ -11,12 +11,8 @@ package valable.model;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -24,9 +20,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.gnome.vala.Class;
 import org.gnome.vala.CodeContext;
-import org.gnome.vala.CodeNode;
 import org.gnome.vala.Parser;
 import org.gnome.vala.SourceFile;
 
@@ -41,7 +35,6 @@ public class ValaSource {
 
 	private final IFile source;
 	private final Set<ValaPackage> uses = new LinkedHashSet<ValaPackage>();
-	private final Map<String, Class> classes = new HashMap<String, Class>();
 
 	private SourceFile sourceFile;
 
@@ -65,14 +58,6 @@ public class ValaSource {
 
 	public SourceFile getSourceFile() {
 		return sourceFile;
-	}
-
-	public Collection<Class> getClasses() {
-		return Collections.unmodifiableCollection(classes.values());
-	}
-
-	public Class getClass(String name) {
-		return classes.get(name);
 	}
 
 	public Set<ValaPackage> getUses() {
@@ -139,13 +124,6 @@ public class ValaSource {
 			if (someSourceFile.getFilename().equals(sourceFilename)) {
 				sourceFile = someSourceFile;
 				break;
-			}
-		}
-
-		for (CodeNode codeNode : sourceFile.getNodes()) {
-			if (codeNode instanceof Class) {
-				Class cls = (Class) codeNode;
-				classes.put(cls.getName(), cls);
 			}
 		}
 

@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.gnome.vala.Class;
 import org.gnome.vala.DataType;
+import org.gnome.vala.SourceFile;
 import org.gnome.vala.TypeSymbol;
 
 import valable.model.ValaPackage;
@@ -123,7 +124,8 @@ public class ValaBuildJob extends Job {
 				packages.add(pkg.getPkgConfigName());
 			}
 
-			for (Class cls : source.getClasses()) {
+			SourceFile sourceFile = source.getSourceFile();
+			for (Class cls : sourceFile.getClasses()) {
 				for (DataType baseType : cls.getBaseTypes()) {
 					TypeSymbol baseTypeSymbol = baseType.getDataType();
 					if (baseTypeSymbol instanceof Class) {

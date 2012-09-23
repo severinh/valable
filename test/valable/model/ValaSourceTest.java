@@ -21,6 +21,7 @@ import org.gnome.vala.Class;
 import org.gnome.vala.CodeNode;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
+import org.gnome.vala.SourceFile;
 import org.gnome.vala.SourceLocation;
 import org.gnome.vala.SourceReference;
 import org.junit.Test;
@@ -53,6 +54,7 @@ public class ValaSourceTest extends AbstractTest {
 	@Test
 	public void testParse() throws CoreException, IOException {
 		ValaSource source = parseTestSource("simple.vala");
+		SourceFile sourceFile = source.getSourceFile();
 
 		Iterator<ValaPackage> usesIterator = source.getUses().iterator();
 		assertEquals("Incorrect number of used packages", 1, source.getUses()
@@ -60,10 +62,11 @@ public class ValaSourceTest extends AbstractTest {
 		assertEquals("'Gee' package use not detected", "Gee", usesIterator
 				.next().getName());
 
-		assertEquals("Incorrect number of types", 2, source.getClasses().size());
+		assertEquals("Incorrect number of types", 2, sourceFile.getClasses()
+				.size());
 
-		Class simple = source.getClass("Simple");
-		Class foo = source.getClass("Foo");
+		Class simple = sourceFile.getClass("Simple");
+		Class foo = sourceFile.getClass("Foo");
 		assertNotNull("'Simple' type not found", simple);
 		assertNotNull("'Foo' type not found", foo);
 

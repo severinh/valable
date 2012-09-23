@@ -182,9 +182,11 @@ public class ValaProject {
 	 * @return Existing {@link ValaSource} or <var>null</var> if none.
 	 */
 	public ValaSource getSource(Class cls) {
-		for (ValaSource source : sources)
-			if (source.getClasses().contains(cls))
+		for (ValaSource source : sources) {
+			if (source.getSourceFile().getClasses().contains(cls)) {
 				return source;
+			}
+		}
 
 		return null;
 	}

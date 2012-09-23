@@ -15,6 +15,7 @@ import org.gnome.vala.Class;
 import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
+import org.gnome.vala.SourceFile;
 import org.gnome.vala.SymbolAccessibility;
 import org.gnome.vala.VoidType;
 import org.junit.Test;
@@ -63,8 +64,10 @@ public class ValaLabelProviderTest extends AbstractTest {
 	@Test
 	public void testProperties() {
 		ValaSource source = parseTestSource("properties.vala");
-		Class nonPrivAccessClass = source.getClass("NonPrivAccess");
-		Class sampleClass = source.getClass("Sample");
+		SourceFile sourceFile = source.getSourceFile();
+
+		Class nonPrivAccessClass = sourceFile.getClass("NonPrivAccess");
+		Class sampleClass = sourceFile.getClass("Sample");
 		Field realStructField = nonPrivAccessClass.getField("_real_struct");
 		Field automaticField = sampleClass.getField("_automatic");
 		Field delegField = sampleClass.getField("_deleg");

@@ -65,7 +65,7 @@ public class ValaCompletionProcessor implements IContentAssistProcessor {
 
 		// Add fields and methods in the current source file
 		List<ICompletionProposal> localVars = new ArrayList<ICompletionProposal>();
-		for (Class type : source.getClasses()) {
+		for (Class type : source.getSourceFile().getClasses()) {
 			for (Field field : type.getFields()) {
 				addProposal(proposals, field.getVariableType().getDataType(),
 						field.getVariableType() + " - " + type.getName(),
