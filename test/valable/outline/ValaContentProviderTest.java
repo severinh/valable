@@ -157,8 +157,11 @@ public class ValaContentProviderTest extends AbstractTest {
 								.getMethod("test_enum_methods_constants")),
 						new TreeNode(barClass.getMethod("main")) });
 
+		Method mainMethod = sourceFile.getMethod("main");
+		TreeNode mainMethodNode = new TreeNode(mainMethod);
+
 		TreeNode[] expectedTreeNodes = { fooEnumNode, fooishEnumNode,
-				barClassNode };
+				barClassNode, mainMethodNode };
 		ValaContentProvider contentProvider = new ValaContentProvider();
 		TreeNode[] treeNodes = contentProvider.getElements(sourceFile);
 
