@@ -15,6 +15,7 @@ import org.gnome.vala.Class;
 import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
+import org.gnome.vala.Property;
 import org.gnome.vala.SourceFile;
 import org.gnome.vala.SymbolAccessibility;
 import org.gnome.vala.VoidType;
@@ -68,17 +69,18 @@ public class ValaLabelProviderTest extends AbstractTest {
 
 		Class nonPrivAccessClass = sourceFile.getClass("NonPrivAccess");
 		Class sampleClass = sourceFile.getClass("Sample");
-		Field realStructField = nonPrivAccessClass.getField("_real_struct");
-		Field automaticField = sampleClass.getField("_automatic");
-		Field delegField = sampleClass.getField("_deleg");
+		Property realStructProperty = nonPrivAccessClass
+				.getProperty("real_struct");
+		Property automaticProperty = sampleClass.getProperty("automatic");
+		Property delegProperty = sampleClass.getProperty("deleg");
 
 		ValaLabelProvider labelProvider = new ValaLabelProvider();
 
-		assertEquals("_real_struct : RealStruct",
-				labelProvider.getText(realStructField));
-		assertEquals("_automatic : string",
-				labelProvider.getText(automaticField));
-		assertEquals("_deleg : Delegate", labelProvider.getText(delegField));
+		assertEquals("real_struct : RealStruct",
+				labelProvider.getText(realStructProperty));
+		assertEquals("automatic : string",
+				labelProvider.getText(automaticProperty));
+		assertEquals("deleg : Delegate", labelProvider.getText(delegProperty));
 	}
 
 }
