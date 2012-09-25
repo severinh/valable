@@ -1,0 +1,100 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.valable</groupId>
+    <artifactId>org.valable</artifactId>
+    <packaging>eclipse-plugin</packaging>
+    <version>0.1.0</version>
+    <name>Valable - Vala plug-in for Eclipse</name>
+    <url>https://github.com/severinh/valable</url>
+    
+    <licenses>
+        <license>
+            <name>Eclipse Public License v1.0</name>
+            <url>http://www.eclipse.org/legal/epl-v10.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <developers>
+        <developer>
+            <id>jprieur</id>
+            <name>Johann Prieur</name>
+            <email>johann.prieur@gmail.com</email>
+            <url>https://launchpad.net/~jprieur</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>severinh</id>
+            <name>Severin Heiniger</name>
+            <email>severinheiniger@gmail.com</email>
+            <url>https://github.com/severinh</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+    
+    <properties>
+    	<tycho-version>0.15.0</tycho-version>
+    	<platform-version-name>juno</platform-version-name>
+    	<eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
+  	</properties>
+
+	<build>
+	    <plugins>
+	    	<plugin>
+	        	<artifactId>maven-compiler-plugin</artifactId>
+	        	<version>2.5.1</version>
+	        	<configuration>
+	          		<source>1.6</source>
+	          		<target>1.6</target>
+	        	</configuration>
+	      	</plugin>
+         	<plugin>
+            	<groupId>org.eclipse.tycho</groupId>
+            	<artifactId>tycho-maven-plugin</artifactId>
+            	<version>${tycho-version}</version>
+            	<extensions>true</extensions>
+         	</plugin>
+          	<plugin>
+            	<groupId>org.eclipse.tycho</groupId>
+     	       	<artifactId>target-platform-configuration</artifactId>
+        	    <version>${tycho-version}</version>
+            	<configuration>
+            		<resolver>p2</resolver>
+              		<target>
+                		<artifact>
+                  			<groupId>${project.groupId}</groupId>
+                  			<artifactId>${project.artifactId}</artifactId>
+                  			<version>${project.version}</version>
+                  			<classifier>juno</classifier>
+                		</artifact>
+              		</target>
+              		<environments>
+			            <environment>
+				            <os>linux</os>
+				            <ws>gtk</ws>
+				            <arch>x86_64</arch>
+			            </environment>
+		          	</environments>
+		          	<ignoreTychoRepositories>false</ignoreTychoRepositories>
+            	</configuration>
+          	</plugin>
+     	</plugins>
+	</build>
+
+	<repositories>
+     	<repository>
+	      	<id>juno</id>
+	      	<layout>p2</layout>
+	      	<url>${eclipse-site}</url>
+	   	</repository>
+	</repositories>
+</project>
