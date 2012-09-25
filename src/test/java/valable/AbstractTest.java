@@ -34,7 +34,7 @@ import valable.model.ValaSource;
 public abstract class AbstractTest {
 
 	public static final String TEST_DIRECTORY_NAME = "test";
-	public static final String TEST_SOURCES_DIRECTORY_NAME = "sources";
+	public static final String TEST_SOURCES_DIRECTORY_NAME = "resources";
 	public static final File TEST_SOURCES_DIRECTORY = new File(
 			TEST_DIRECTORY_NAME, TEST_SOURCES_DIRECTORY_NAME);
 	public static final String TEST_PROJECT_NAME = "Test";

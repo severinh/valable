@@ -20,7 +20,7 @@ public interface ValaPluginConstants {
 
 	public static final String PLUGIN_ID = "valable";
 
-	public static final String IMG_PATH_PREFIX = "icons/";
+	public static final String IMG_PATH_PREFIX = "src/main/resources/icons/";
 
 	public static final String IMG_OBJECT_VALA = IMG_PATH_PREFIX
 			+ "vala_obj.gif";
