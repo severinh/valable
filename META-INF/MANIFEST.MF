@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Vala Plug-in
-Bundle-SymbolicName: valable;singleton:=true
+Bundle-SymbolicName: org.valable;singleton:=true
 Bundle-Version: 0.1
-Bundle-Activator: valable.ValaPlugin
+Bundle-Activator: org.valable.ValaPlugin
 Require-Bundle: org.eclipse.ui.editors,
  org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -13,19 +13,19 @@ Require-Bundle: org.eclipse.ui.editors,
  org.eclipse.ui.console,
  org.eclipse.ui.views
 Bundle-ActivationPolicy: lazy
-Export-Package: valable,
- valable.builder,
- valable.data,
- valable.editors,
- valable.editors.gtkdoc,
- valable.editors.util,
- valable.editors.vala,
- valable.job,
- valable.perspective,
- valable.preferences,
- valable.view,
- valable.wizard.file,
- valable.wizard.project
+Export-Package: org.valable,
+ org.valable.builder,
+ org.valable.data,
+ org.valable.editors,
+ org.valable.editors.gtkdoc,
+ org.valable.editors.util,
+ org.valable.editors.vala,
+ org.valable.job,
+ org.valable.perspective,
+ org.valable.preferences,
+ org.valable.view,
+ org.valable.wizard.file,
+ org.valable.wizard.project
 Import-Package: org.eclipse.ui.texteditor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .,

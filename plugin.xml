@@ -2,31 +2,31 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         id="valable.editors"
+         id="org.valable.editors"
          name="Vala Editor"
          point="org.eclipse.ui.editors">
       <editor
-            class="valable.editors.ValaEditor"
+            class="org.valable.editors.ValaEditor"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="true"
             extensions="vala"
             icon="src/main/resources/icons/vala_obj.gif"
-            id="valable.editors.ValaEditor"
+            id="org.valable.editors.ValaEditor"
             name="Vala Editor">
       </editor>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="valable.preferences.ValaPreferencePage"
-            id="valable.preferences.ValaPreferencePage"
+            class="org.valable.preferences.ValaPreferencePage"
+            id="org.valable.preferences.ValaPreferencePage"
             name="Vala">
       </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="valable.preferences.PreferenceInitializer">
+            class="org.valable.preferences.PreferenceInitializer">
       </initializer>
    </extension>
    <extension
@@ -34,7 +34,7 @@
       <content-type
             base-type="org.eclipse.core.runtime.text"
             file-extensions="vala"
-            id="valable.valafile"
+            id="org.valable.valafile"
             name="Vala File"
             priority="high">
       </content-type>
@@ -42,58 +42,58 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            id="valable.wizard.ValaCategory"
+            id="org.valable.wizard.ValaCategory"
             name="Vala">
       </category>
       <wizard
             canFinishEarly="false"
-            category="valable.wizard.ValaCategory"
-            class="valable.wizard.project.ValaProjectWizard"
-            finalPerspective="valable.perspective.ValaPerspective"
+            category="org.valable.wizard.ValaCategory"
+            class="org.valable.wizard.project.ValaProjectWizard"
+            finalPerspective="org.valable.perspective.ValaPerspective"
             hasPages="true"
             icon="src/main/resources/icons/sample.gif"
-            id="valable.wizard.project.ValaProject"
+            id="org.valable.wizard.project.ValaProject"
             name="Vala Project"
-            preferredPerspectives="valable.perspective.ValaPerspective"
+            preferredPerspectives="org.valable.perspective.ValaPerspective"
             project="true">
       </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="valable.perspective.ValaPerspectiveFactory"
+            class="org.valable.perspective.ValaPerspectiveFactory"
             fixed="false"
-            id="valable.perspective.ValaPerspective"
+            id="org.valable.perspective.ValaPerspective"
             name="Vala">
       </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <view
-            class="valable.view.ValaResourceNavigator"
-            id="valable.view.ValaResourceView"
+            class="org.valable.view.ValaResourceNavigator"
+            id="org.valable.view.ValaResourceView"
             name="Vala Resource Navigator">
       </view>
    </extension>
    <extension
-         id="valable.builder.ValaProjectBuilder"
+         id="org.valable.builder.ValaProjectBuilder"
          name="Vala project builder"
          point="org.eclipse.core.resources.builders">
       <builder>
-         <run class="valable.builder.ValaProjectBuilder"/>
+         <run class="org.valable.builder.ValaProjectBuilder"/>
       </builder>
    </extension>
    <extension
          point="org.eclipse.ui.importWizards">
       <category
-            id="valable.wizard.file.importCategory"
+            id="org.valable.wizard.file.importCategory"
             name="Vala">
       </category>
       <wizard
-            category="valable.wizard.file.importCategory"
-            class="valable.wizard.file.ValaImportWizard"
+            category="org.valable.wizard.file.importCategory"
+            class="org.valable.wizard.file.ValaImportWizard"
             icon="src/main/resources/icons/vala_obj.gif"
-            id="valable.wizard.file.ValaImportWizard"
+            id="org.valable.wizard.file.ValaImportWizard"
             name="Import Vala File">
          <description>
             Import a file from the local file system into the workspace.
@@ -103,8 +103,8 @@
    <extension
          point="org.eclipse.ui.decorators">
       <decorator
-            class="valable.outline.ValaLabelDecorator"
-            id="valable.outline.ValaLabelDecorator"
+            class="org.valable.outline.ValaLabelDecorator"
+            id="org.valable.outline.ValaLabelDecorator"
             label="Vala Label Decorator"
             lightweight="true"
             location="TOP_RIGHT"
