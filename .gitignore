@@ -1,4 +1,4 @@
-bin/
+target/
 .settings
 lib/gtk-4.1.jar
 lib/libgtkjni-4.1.3-dev.so
