@@ -19,11 +19,28 @@ import java.util.regex.Pattern;
 import org.gnome.vala.SourceLocation;
 import org.valable.job.ValaReportElement.Severity;
 
+/**
+ * Extracts {@link ValaReportElement}s from the Vala compiler error output in
+ * the form of an {@link InputStream} or {@link String}. A line may look as
+ * follows:
+ * 
+ * <pre>
+ * /home/me/Test.vala:7.2-7.19: warning: method `Test.test' never used
+ * </pre>
+ */
 public class ValaReportParser {
 
 	private static final Pattern REPORT_LINE_PATTERN = Pattern
 			.compile("(.*?):(\\d+).(\\d+)-(\\d+).(\\d+): (error|warning): (.*)");
 
+	/**
+	 * Extracts all {@link ValaReportElement}s from an {@link InputStream},
+	 * which is usually contains the Vala compiler error output.
+	 * 
+	 * @param errorStream
+	 *            the stream of warning and error messages
+	 * @return the list of report elements
+	 */
 	public List<ValaReportElement> parse(InputStream errorStream) {
 		List<ValaReportElement> result = new ArrayList<ValaReportElement>();
 		Scanner scanner = new Scanner(errorStream);
@@ -37,6 +54,14 @@ public class ValaReportParser {
 		return result;
 	}
 
+	/**
+	 * Extracts a single {@link ValaReportElement} from a line in the error
+	 * output.
+	 * 
+	 * @param line
+	 *            the line from the Vala compiler error output.
+	 * @return <code>null</code> if it is not a valid error or warning message
+	 */
 	public ValaReportElement parseLine(String line) {
 		Matcher lineMatcher = REPORT_LINE_PATTERN.matcher(line);
 		if (!lineMatcher.matches()) {

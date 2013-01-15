@@ -3,10 +3,13 @@ package org.valable.job;
 import org.eclipse.core.resources.IMarker;
 import org.gnome.vala.SourceLocation;
 
+/**
+ * Represents a compilation warning or error from the Vala compiler.
+ */
 public class ValaReportElement {
 
 	/**
-	 * Model representing compilation failures & warnings.
+	 * Model representing compilation failures and warnings.
 	 */
 	public enum Severity {
 		ERROR(IMarker.SEVERITY_ERROR), WARNING(IMarker.SEVERITY_WARNING);
