@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,6 +45,9 @@ import org.valable.model.ValaProject;
 import org.valable.model.ValaSource;
 
 public class ValaBuildJob extends Job {
+
+	private static final Logger LOG = Logger.getLogger(ValaBuildJob.class
+			.getName());
 
 	private static final Pattern UNKNOWN_NAME_MESSAGE_PATTERN = Pattern
 			.compile("The name `(\\S+?)' does not exist in the context of `([^\\.']+?)(\\..+?)?'");
@@ -72,8 +76,13 @@ public class ValaBuildJob extends Job {
 		this.vapi = vapi;
 		this.output = output;
 
-		if (!filesToCompile.isEmpty())
+		if (!filesToCompile.isEmpty()) {
+			long startTime = System.currentTimeMillis();
 			initialise();
+			long endTime = System.currentTimeMillis();
+			LOG.info("ValaBuildJob initialized in " + (endTime - startTime)
+					+ "ms");
+		}
 	}
 
 	/**
@@ -263,14 +272,12 @@ public class ValaBuildJob extends Job {
 	 */
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
+		long startTime = System.currentTimeMillis();
 		if (filesToCompile.isEmpty()) {
 			return Status.OK_STATUS;
 		}
 
-		// TODO Early abort if last mods show no reason to
-
 		Runtime runtime = Runtime.getRuntime();
-
 		PrintStream out = System.out;
 
 		// -- Incrementally build the files, pulling in any dependencies
@@ -378,7 +385,9 @@ public class ValaBuildJob extends Job {
 			e.printStackTrace();
 			return Status.CANCEL_STATUS;
 		}
-
+		long endTime = System.currentTimeMillis();
+		LOG.info("ValaBuildJob run successfully in " + (endTime - startTime)
+				+ "ms");
 		return Status.OK_STATUS;
 	}
 
