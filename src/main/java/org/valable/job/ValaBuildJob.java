@@ -38,34 +38,15 @@ import org.gnome.vala.DataType;
 import org.gnome.vala.SourceFile;
 import org.gnome.vala.TypeSymbol;
 
+import org.valable.job.ValaReportElement.Severity;
 import org.valable.model.ValaPackage;
 import org.valable.model.ValaProject;
 import org.valable.model.ValaSource;
 
 public class ValaBuildJob extends Job {
-	private static final Pattern COMPILE_MSG = Pattern
-			.compile("(.*?):(\\d+).(\\d+)-(\\d+).(\\d+): (error|warning): (.*)");
-	private static final Pattern UNKNOWN_NAME = Pattern
+
+	private static final Pattern UNKNOWN_NAME_MESSAGE_PATTERN = Pattern
 			.compile("The name `(\\S+?)' does not exist in the context of `([^\\.']+?)(\\..+?)?'");
-
-	/**
-	 * Model representing compilation failures & warnings.
-	 */
-	public enum MessageType {
-		ERROR(IMarker.SEVERITY_ERROR), WARNING(IMarker.SEVERITY_WARNING);
-
-		public final int severity;
-
-		/**
-		 * Construct a new message type.
-		 * 
-		 * @param severity
-		 *            Severity of the problem for the {@link IMarker}.
-		 */
-		private MessageType(int severity) {
-			this.severity = severity;
-		}
-	}
 
 	private ValaProject project;
 	private String baseDir;
@@ -282,8 +263,9 @@ public class ValaBuildJob extends Job {
 	 */
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		if (filesToCompile.isEmpty() || true)
+		if (filesToCompile.isEmpty()) {
 			return Status.OK_STATUS;
+		}
 
 		// TODO Early abort if last mods show no reason to
 
@@ -300,27 +282,17 @@ public class ValaBuildJob extends Job {
 			out.println(Arrays.asList(command) + "\n");
 
 			Process process = runtime.exec(command);
-			Scanner scanner = new Scanner(process.getErrorStream());
-			while (scanner.hasNext()) {
-				String line = scanner.nextLine();
-				out.println(line);
+			InputStream errorStream = process.getErrorStream();
+			ValaReportParser reportParser = new ValaReportParser();
+			List<ValaReportElement> reportElements = reportParser
+					.parse(errorStream);
 
-				Matcher msg = COMPILE_MSG.matcher(line);
-				if (!msg.matches())
-					continue;
-
-				String file = msg.group(1);
-				int startLine = Integer.parseInt(msg.group(2));
-				int startCol = Integer.parseInt(msg.group(3));
-				int endLine = Integer.parseInt(msg.group(4));
-				int endCol = Integer.parseInt(msg.group(5));
-				MessageType type = MessageType.valueOf(msg.group(6)
-						.toUpperCase());
-				String message = msg.group(7);
-
-				Matcher matcher = UNKNOWN_NAME.matcher(message);
+			for (ValaReportElement element : reportElements) {
+				Matcher matcher = UNKNOWN_NAME_MESSAGE_PATTERN.matcher(element
+						.getMessage());
 				boolean processed = false;
-				if (type == MessageType.ERROR && matcher.matches()) {
+				if (element.getSeverity() == Severity.ERROR
+						&& matcher.matches()) {
 					String missingName = matcher.group(1);
 					String containingType = matcher.group(2);
 
@@ -338,17 +310,24 @@ public class ValaBuildJob extends Job {
 				// determined: show the user...
 				//
 				if (!processed) {
-					IMarker marker = reverseFiles.get(file).createMarker(
-							IMarker.PROBLEM);
-					marker.setAttribute(IMarker.MESSAGE, message);
-					marker.setAttribute(IMarker.SEVERITY, type.severity);
+					int startLine = element.getStartLocation().getLine();
+					int endLine = element.getEndLocation().getLine();
+					int startColumn = element.getStartLocation().getColumn();
+					int endColumn = element.getEndLocation().getColumn();
+
+					IMarker marker = reverseFiles.get(element.getFilePath())
+							.createMarker(IMarker.PROBLEM);
+					marker.setAttribute(IMarker.MESSAGE, element.getMessage());
+					marker.setAttribute(IMarker.SEVERITY, element.getSeverity()
+							.getiMarkerSeverity());
 					marker.setAttribute(IMarker.LOCATION, "Line " + startLine);
 					if (startLine == endLine) {
-						int offset = offsetOfLine(
-								lines.get(reverseFiles.get(file)), startLine);
+						int offset = offsetOfLine(lines.get(reverseFiles
+								.get(element.getFilePath())), startLine);
 						marker.setAttribute(IMarker.CHAR_START, offset
-								+ startCol - 1);
-						marker.setAttribute(IMarker.CHAR_END, offset + endCol);
+								+ startColumn - 1);
+						marker.setAttribute(IMarker.CHAR_END, offset
+								+ endColumn);
 					} else {
 						marker.setAttribute(IMarker.LINE_NUMBER, startLine);
 					}
