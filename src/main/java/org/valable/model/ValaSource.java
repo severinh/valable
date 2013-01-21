@@ -22,6 +22,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.gnome.vala.CodeContext;
 import org.gnome.vala.Parser;
+import org.gnome.vala.Report;
+import org.gnome.vala.ReportItem;
 import org.gnome.vala.SourceFile;
 
 /**
@@ -37,6 +39,7 @@ public class ValaSource {
 	private final Set<ValaPackage> uses = new LinkedHashSet<ValaPackage>();
 
 	private SourceFile sourceFile;
+	private List<ReportItem> reportItems;
 
 	/**
 	 * Creates a new instance for the given source file within a project.
@@ -58,6 +61,10 @@ public class ValaSource {
 
 	public SourceFile getSourceFile() {
 		return sourceFile;
+	}
+
+	public List<ReportItem> getReportItems() {
+		return reportItems;
 	}
 
 	public Set<ValaPackage> getUses() {
@@ -119,6 +126,9 @@ public class ValaSource {
 		Parser parser = new Parser();
 		parser.parse(codeContext);
 		codeContext.check();
+
+		Report report = codeContext.getReport();
+		reportItems = new ArrayList<ReportItem>(report.getItems());
 
 		for (SourceFile someSourceFile : codeContext.getSourceFiles()) {
 			if (someSourceFile.getFilename().equals(sourceFilename)) {

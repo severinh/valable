@@ -36,10 +36,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.gnome.vala.Class;
 import org.gnome.vala.DataType;
+import org.gnome.vala.ReportItem;
 import org.gnome.vala.SourceFile;
+import org.gnome.vala.SourceReference;
 import org.gnome.vala.TypeSymbol;
 
-import org.valable.job.ValaReportElement.Severity;
 import org.valable.model.ValaPackage;
 import org.valable.model.ValaProject;
 import org.valable.model.ValaSource;
@@ -61,11 +62,6 @@ public class ValaBuildJob extends Job {
 	private final Set<String> packages = new HashSet<String>();
 
 	private final Map<IFile, List<String>> lines = new HashMap<IFile, List<String>>();
-
-	/**
-	 * Used to retrieve {@link IFile}s from leaf filenames.
-	 */
-	private final Map<String, IFile> reverseFiles = new HashMap<String, IFile>();
 
 	public ValaBuildJob(Set<IFile> filesToCompile, String valac, String vapi,
 			String output) throws CoreException {
@@ -98,18 +94,37 @@ public class ValaBuildJob extends Job {
 				baseDir = file.getProject().getLocation().toOSString();
 			}
 
-			// -- Remove any existing markers...
-			//
-			reverseFiles.put(file.getRawLocation().makeAbsolute().toOSString(),
-					file);
-			for (IMarker marker : file.findMarkers(IMarker.PROBLEM, false, 0))
-				marker.delete();
-
-			// -- Parse the file...
+			// Parse the file
 			ValaSource source = project.getSource(file);
 			lines.put(file, source.parse());
 
-			// -- Add dependencies...
+			// Remove any existing markers
+			for (IMarker marker : file.findMarkers(IMarker.PROBLEM, false, 0)) {
+				marker.delete();
+			}
+
+			for (ReportItem reportItem : source.getReportItems()) {
+				SourceReference sourceReference = reportItem.getSource();
+				int startLine = sourceReference.getBegin().getLine();
+				int endLine = sourceReference.getEnd().getLine();
+				int startColumn = sourceReference.getBegin().getColumn();
+				int endColumn = sourceReference.getEnd().getColumn();
+
+				IMarker marker = file.createMarker(IMarker.PROBLEM);
+				marker.setAttribute(IMarker.MESSAGE, reportItem.getMessage());
+				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+				marker.setAttribute(IMarker.LOCATION, "Line " + startLine);
+				if (startLine == endLine) {
+					int offset = offsetOfLine(lines.get(file), startLine);
+					marker.setAttribute(IMarker.CHAR_START, offset
+							+ startColumn - 1);
+					marker.setAttribute(IMarker.CHAR_END, offset + endColumn);
+				} else {
+					marker.setAttribute(IMarker.LINE_NUMBER, startLine);
+				}
+			}
+
+			// Add dependencies
 			for (ValaPackage pkg : source.getUses()) {
 				packages.add(pkg.getPkgConfigName());
 			}
@@ -290,57 +305,26 @@ public class ValaBuildJob extends Job {
 
 			Process process = runtime.exec(command);
 			InputStream errorStream = process.getErrorStream();
-			ValaReportParser reportParser = new ValaReportParser();
-			List<ValaReportElement> reportElements = reportParser
-					.parse(errorStream);
 
-			for (ValaReportElement element : reportElements) {
-				Matcher matcher = UNKNOWN_NAME_MESSAGE_PATTERN.matcher(element
-						.getMessage());
-				boolean processed = false;
-				if (element.getSeverity() == Severity.ERROR
-						&& matcher.matches()) {
-					String missingName = matcher.group(1);
-					String containingType = matcher.group(2);
-
-					if (project.hasType(missingName)
-							&& project.hasType(containingType)) {
-						// doAgain |= project.getClass(containingType).
-						// getDependencies().
-						// add(project.getClass(missingName));
-						processed = true;
-					}
-
-				}
-
-				// -- Any other errors, or where the type couldn't be
-				// determined: show the user...
-				//
-				if (!processed) {
-					int startLine = element.getStartLocation().getLine();
-					int endLine = element.getEndLocation().getLine();
-					int startColumn = element.getStartLocation().getColumn();
-					int endColumn = element.getEndLocation().getColumn();
-
-					IMarker marker = reverseFiles.get(element.getFilePath())
-							.createMarker(IMarker.PROBLEM);
-					marker.setAttribute(IMarker.MESSAGE, element.getMessage());
-					marker.setAttribute(IMarker.SEVERITY, element.getSeverity()
-							.getiMarkerSeverity());
-					marker.setAttribute(IMarker.LOCATION, "Line " + startLine);
-					if (startLine == endLine) {
-						int offset = offsetOfLine(lines.get(reverseFiles
-								.get(element.getFilePath())), startLine);
-						marker.setAttribute(IMarker.CHAR_START, offset
-								+ startColumn - 1);
-						marker.setAttribute(IMarker.CHAR_END, offset
-								+ endColumn);
-					} else {
-						marker.setAttribute(IMarker.LINE_NUMBER, startLine);
-					}
-					processed = true;
-				}
-			}
+			// for (ValaReportElement element : reportElements) {
+			// Matcher matcher = UNKNOWN_NAME_MESSAGE_PATTERN.matcher(element
+			// .getMessage());
+			// boolean processed = false;
+			// if (element.getSeverity() == Severity.ERROR
+			// && matcher.matches()) {
+			// String missingName = matcher.group(1);
+			// String containingType = matcher.group(2);
+			//
+			// if (project.hasType(missingName)
+			// && project.hasType(containingType)) {
+			// // doAgain |= project.getClass(containingType).
+			// // getDependencies().
+			// // add(project.getClass(missingName));
+			// processed = true;
+			// }
+			//
+			// }
+			// }
 
 			// -- Wait for process to finish...
 			//
