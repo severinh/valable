@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.gnome.vala.Class;
 import org.gnome.vala.DataType;
 import org.gnome.vala.ReportItem;
+import org.gnome.vala.ReportItemSeverity;
 import org.gnome.vala.SourceFile;
 import org.gnome.vala.SourceReference;
 import org.gnome.vala.TypeSymbol;
@@ -112,7 +113,16 @@ public class ValaBuildJob extends Job {
 
 				IMarker marker = file.createMarker(IMarker.PROBLEM);
 				marker.setAttribute(IMarker.MESSAGE, reportItem.getMessage());
-				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+				ReportItemSeverity severity = reportItem.getSeverity();
+				if (severity.equals(ReportItemSeverity.ERROR)) {
+					marker.setAttribute(IMarker.SEVERITY,
+							IMarker.SEVERITY_ERROR);
+				} else if (severity.equals(ReportItemSeverity.WARNING)) {
+					marker.setAttribute(IMarker.SEVERITY,
+							IMarker.SEVERITY_WARNING);
+				} else if (severity.equals(ReportItemSeverity.NOTE)) {
+					marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
+				}
 				marker.setAttribute(IMarker.LOCATION, "Line " + startLine);
 				if (startLine == endLine) {
 					int offset = offsetOfLine(lines.get(file), startLine);
