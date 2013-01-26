@@ -13,7 +13,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ContentAssistAction;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
-import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import org.valable.ValaPlugin;
@@ -22,8 +21,8 @@ import org.valable.outline.ValaOutlinePage;
 
 public class ValaEditor extends TextEditor {
 
-	private final ContentOutlinePage outlinePage;
 	private final ColorManager colorManager;
+	private ValaOutlinePage outlinePage;
 
 	/**
 	 * Create a new ValaEditor.
@@ -34,8 +33,6 @@ public class ValaEditor extends TextEditor {
 		colorManager = new ColorManager();
 		setSourceViewerConfiguration(new ValaConfiguration(colorManager));
 		setDocumentProvider(new ValaDocumentProvider());
-
-		outlinePage = new ValaOutlinePage(this);
 	}
 
 	@Override
@@ -54,6 +51,9 @@ public class ValaEditor extends TextEditor {
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
 		if (IContentOutlinePage.class.equals(required)) {
+			if (outlinePage == null) {
+				outlinePage = createOutlinePage();
+			}
 			return outlinePage;
 		}
 
@@ -82,6 +82,26 @@ public class ValaEditor extends TextEditor {
 	 */
 	public IFile getCurrentFile() {
 		return (IFile) this.getEditorInput().getAdapter(IFile.class);
+	}
+
+	/**
+	 * Creates the outline page used with this editor.
+	 * 
+	 * @return the created Vala outline page
+	 */
+	protected ValaOutlinePage createOutlinePage() {
+		ValaOutlinePage page = new ValaOutlinePage(this);
+		return page;
+	}
+
+	/**
+	 * Informs the editor that its outline has been closed.
+	 */
+	public void outlinePageClosed() {
+		if (outlinePage != null) {
+			outlinePage = null;
+			resetHighlightRange();
+		}
 	}
 
 }

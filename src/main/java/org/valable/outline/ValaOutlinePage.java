@@ -10,6 +10,7 @@
 package org.valable.outline;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
@@ -41,10 +42,12 @@ import org.valable.model.ValaSource;
  */
 public class ValaOutlinePage extends ContentOutlinePage {
 
-	private final ValaEditor editor;
+	private ValaEditor editor;
 
 	public ValaOutlinePage(ValaEditor editor) {
 		super();
+
+		Assert.isNotNull(editor);
 
 		this.editor = editor;
 	}
@@ -121,6 +124,18 @@ public class ValaOutlinePage extends ContentOutlinePage {
 		}
 		offset += column;
 		return offset;
+	}
+
+	@Override
+	public void dispose() {
+		if (editor == null) {
+			return;
+		}
+
+		editor.outlinePageClosed();
+		editor = null;
+
+		super.dispose();
 	}
 
 }
