@@ -16,7 +16,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-public class ColorManager implements IColorConstants {
+public class ColorManager implements IValaColorConstants {
 
 	protected Map<RGB, Color> colorTable = new HashMap<RGB, Color>(10);
 

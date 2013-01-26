@@ -14,6 +14,7 @@ import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
+import org.valable.editors.vala.IValaPartitions;
 import org.valable.editors.vala.ValaPartitionScanner;
 
 public class ValaDocumentProvider extends FileDocumentProvider {
@@ -24,11 +25,12 @@ public class ValaDocumentProvider extends FileDocumentProvider {
 		if (document != null) {
 			IDocumentPartitioner partitioner = new FastPartitioner(
 					new ValaPartitionScanner(), new String[] {
-							ValaPartitionScanner.GTKDOC_COMMENT,
-							ValaPartitionScanner.VALA_MULTILINE_COMMENT,
-							ValaPartitionScanner.VALA_MULTILINE_STRING,
-							ValaPartitionScanner.VALA_VERBATIM_STRING,
-							ValaPartitionScanner.VALA_STRING_TEMPLATES });
+							IValaPartitions.GTKDOC_COMMENT,
+							IValaPartitions.VALA_MULTILINE_COMMENT,
+							IValaPartitions.VALA_MULTILINE_STRING,
+							IValaPartitions.VALA_VERBATIM_STRING,
+							IValaPartitions.VALA_STRING_TEMPLATES,
+							IValaPartitions.VALA_CHARACTER });
 			partitioner.connect(document);
 			document.setDocumentPartitioner(partitioner);
 		}

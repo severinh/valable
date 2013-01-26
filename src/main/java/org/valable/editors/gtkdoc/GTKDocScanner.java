@@ -22,7 +22,7 @@ import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
 
 import org.valable.editors.util.ColorManager;
-import org.valable.editors.util.IColorConstants;
+import org.valable.editors.util.IValaColorConstants;
 import org.valable.editors.util.WhitespaceDetector;
 
 public class GTKDocScanner extends RuleBasedScanner 
@@ -30,15 +30,15 @@ public class GTKDocScanner extends RuleBasedScanner
 
 	public GTKDocScanner(ColorManager manager) {
 		IToken def = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.GTKDOC_DEFAULT_COLOR)));
+				manager.getColor(IValaColorConstants.GTKDOC_DEFAULT_COLOR)));
 		IToken tag = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.GTKDOC_TAG_COLOR), null,
+				manager.getColor(IValaColorConstants.GTKDOC_TAG_COLOR), null,
 				SWT.BOLD));
 		IToken xml = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.GTKDOC_DOCBOOK_COLOR), null,
+				manager.getColor(IValaColorConstants.GTKDOC_DOCBOOK_COLOR), null,
 				SWT.BOLD));
 		IToken other = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.GTKDOC_OTHER_COLOR), null,
+				manager.getColor(IValaColorConstants.GTKDOC_OTHER_COLOR), null,
 				SWT.BOLD));
 
 		setDefaultReturnToken(def);

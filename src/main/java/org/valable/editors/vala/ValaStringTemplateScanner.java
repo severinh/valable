@@ -20,7 +20,7 @@ import org.eclipse.jface.text.rules.WordPatternRule;
 import org.eclipse.swt.SWT;
 
 import org.valable.editors.util.ColorManager;
-import org.valable.editors.util.IColorConstants;
+import org.valable.editors.util.IValaColorConstants;
 import org.valable.editors.util.ParentesizedRule;
 import org.valable.editors.util.WhitespaceDetector;
 
@@ -28,9 +28,9 @@ public class ValaStringTemplateScanner extends RuleBasedScanner {
 
 	public ValaStringTemplateScanner(ColorManager manager) {
 		IToken defaultToken = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.STRING_COLOR)));
+				manager.getColor(IValaColorConstants.VALA_STRING_COLOR)));
 		IToken templateToken = new Token(new TextAttribute(
-				manager.getColor(IColorConstants.STRING_TEMPLATE), null,
+				manager.getColor(IValaColorConstants.VALA_STRING_TEMPLATE), null,
 				SWT.BOLD));
 
 		setDefaultReturnToken(defaultToken);

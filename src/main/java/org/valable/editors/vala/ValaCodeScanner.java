@@ -26,19 +26,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
 import org.valable.editors.util.ColorManager;
-import org.valable.editors.util.IColorConstants;
+import org.valable.editors.util.IValaColorConstants;
 import org.valable.editors.util.WhitespaceDetector;
 
 public class ValaCodeScanner extends RuleBasedScanner implements
 		IValaLanguageWords {
 
 	public ValaCodeScanner(ColorManager manager) {
-		Color keywordColor = manager.getColor(IColorConstants.KEYWORD_COLOR);
-		Color typeColor = manager.getColor(IColorConstants.TYPE_COLOR);
-		Color numberColor = manager.getColor(IColorConstants.NUMBER_COLOR);
-		Color commentColor = manager.getColor(IColorConstants.COMMENT_COLOR);
-		Color defaultColor = manager.getColor(IColorConstants.DEFAULT_COLOR);
-		Color ccodeColor = manager.getColor(IColorConstants.CCODE_COLOR);
+		Color keywordColor = manager.getColor(IValaColorConstants.VALA_KEYWORD_COLOR);
+		Color typeColor = manager.getColor(IValaColorConstants.VALA_TYPE_COLOR);
+		Color numberColor = manager.getColor(IValaColorConstants.VALA_NUMBER_COLOR);
+		Color commentColor = manager.getColor(IValaColorConstants.VALA_COMMENT_COLOR);
+		Color defaultColor = manager.getColor(IValaColorConstants.VALA_DEFAULT_COLOR);
+		Color ccodeColor = manager.getColor(IValaColorConstants.VALA_CCODE_COLOR);
 
 		IToken keywordToken = new Token(new TextAttribute(keywordColor, null,
 				SWT.BOLD));

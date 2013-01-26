@@ -25,11 +25,11 @@ import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
 import org.valable.editors.gtkdoc.GTKDocScanner;
 import org.valable.editors.util.ColorManager;
-import org.valable.editors.util.IColorConstants;
+import org.valable.editors.util.IValaColorConstants;
+import org.valable.editors.vala.IValaPartitions;
 import org.valable.editors.vala.ValaAutoIndentStrategy;
 import org.valable.editors.vala.ValaCodeScanner;
 import org.valable.editors.vala.ValaCompletionProcessor;
-import org.valable.editors.vala.ValaPartitionScanner;
 import org.valable.editors.vala.ValaStringTemplateScanner;
 
 public class ValaConfiguration extends SourceViewerConfiguration {
@@ -48,10 +48,11 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 	@Override
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
 		return new String[] { IDocument.DEFAULT_CONTENT_TYPE,
-				ValaPartitionScanner.VALA_MULTILINE_COMMENT,
-				ValaPartitionScanner.VALA_MULTILINE_STRING,
-				ValaPartitionScanner.VALA_VERBATIM_STRING,
-				ValaPartitionScanner.VALA_STRING_TEMPLATES };
+				IValaPartitions.VALA_MULTILINE_COMMENT,
+				IValaPartitions.VALA_MULTILINE_STRING,
+				IValaPartitions.VALA_VERBATIM_STRING,
+				IValaPartitions.VALA_STRING_TEMPLATES,
+				IValaPartitions.VALA_CHARACTER};
 	}
 
 	protected ValaCodeScanner getValaScanner() {
@@ -75,7 +76,6 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 		return templateScanner;
 	}
 
-	// TODO: @"string" scanner
 	@Override
 	public IPresentationReconciler getPresentationReconciler(
 			ISourceViewer sourceViewer) {
@@ -88,38 +88,40 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 
 		// Rule for gtk-doc
 		dr = new DefaultDamagerRepairer(getGTKDocScanner());
-		reconciler.setDamager(dr, ValaPartitionScanner.GTKDOC_COMMENT);
-		reconciler.setRepairer(dr, ValaPartitionScanner.GTKDOC_COMMENT);
+		reconciler.setDamager(dr, IValaPartitions.GTKDOC_COMMENT);
+		reconciler.setRepairer(dr, IValaPartitions.GTKDOC_COMMENT);
 
 		// Rule for multi line comments
 		RuleBasedScanner multilineScanner = new RuleBasedScanner();
 		multilineScanner.setDefaultReturnToken(new Token(new TextAttribute(
-				colorManager.getColor(IColorConstants.COMMENT_COLOR))));
+				colorManager.getColor(IValaColorConstants.VALA_COMMENT_COLOR))));
 		dr = new DefaultDamagerRepairer(multilineScanner);
-		reconciler.setDamager(dr, ValaPartitionScanner.VALA_MULTILINE_COMMENT);
-		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_MULTILINE_COMMENT);
+		reconciler.setDamager(dr, IValaPartitions.VALA_MULTILINE_COMMENT);
+		reconciler.setRepairer(dr, IValaPartitions.VALA_MULTILINE_COMMENT);
 
 		// Rule for multiline strings
 		RuleBasedScanner stringScanner = new RuleBasedScanner();
 		stringScanner.setDefaultReturnToken(new Token(new TextAttribute(
-				colorManager.getColor(IColorConstants.STRING_COLOR))));
+				colorManager.getColor(IValaColorConstants.VALA_STRING_COLOR))));
 		dr = new DefaultDamagerRepairer(stringScanner);
-		reconciler.setDamager(dr, ValaPartitionScanner.VALA_MULTILINE_STRING);
-		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_MULTILINE_STRING);
+		reconciler.setDamager(dr, IValaPartitions.VALA_MULTILINE_STRING);
+		reconciler.setRepairer(dr, IValaPartitions.VALA_MULTILINE_STRING);
 
 		// Rule for verbatim strings
-		RuleBasedScanner verbatimScanner = new RuleBasedScanner();
-		verbatimScanner.setDefaultReturnToken(new Token(new TextAttribute(
-				colorManager.getColor(IColorConstants.STRING_COLOR))));
-		dr = new DefaultDamagerRepairer(verbatimScanner);
-		reconciler.setDamager(dr, ValaPartitionScanner.VALA_VERBATIM_STRING);
-		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_VERBATIM_STRING);
+		dr = new DefaultDamagerRepairer(stringScanner);
+		reconciler.setDamager(dr, IValaPartitions.VALA_VERBATIM_STRING);
+		reconciler.setRepairer(dr, IValaPartitions.VALA_VERBATIM_STRING);
 
 		// Rule for string templates
 		dr = new DefaultDamagerRepairer(getStringTemplateScanner());
-		reconciler.setDamager(dr, ValaPartitionScanner.VALA_STRING_TEMPLATES);
-		reconciler.setRepairer(dr, ValaPartitionScanner.VALA_STRING_TEMPLATES);
+		reconciler.setDamager(dr, IValaPartitions.VALA_STRING_TEMPLATES);
+		reconciler.setRepairer(dr, IValaPartitions.VALA_STRING_TEMPLATES);
 
+		// Rule for character constants
+		dr = new DefaultDamagerRepairer(stringScanner);
+		reconciler.setDamager(dr, IValaPartitions.VALA_CHARACTER);
+		reconciler.setRepairer(dr, IValaPartitions.VALA_CHARACTER);
+		
 		return reconciler;
 	}
 
