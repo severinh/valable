@@ -1,7 +1,6 @@
 package org.valable.outline;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -17,8 +16,7 @@ import org.gnome.vala.NopCodeVisitor;
 import org.gnome.vala.Property;
 import org.gnome.vala.Symbol;
 
-import org.valable.ValaPlugin;
-import org.valable.ValaPluginConstants;
+import org.valable.ValaPluginImages;
 
 /**
  * Decorates Vala symbols with overlay images.
@@ -26,9 +24,6 @@ import org.valable.ValaPluginConstants;
  * For instance, it adds an 'A' overlay image to abstract Vala classes.
  */
 public class ValaLabelDecorator implements ILightweightLabelDecorator {
-
-	private final ImageRegistry imageRegistry = ValaPlugin.getDefault()
-			.getImageRegistry();
 
 	@Override
 	public void decorate(Object element, IDecoration decoration) {
@@ -82,7 +77,7 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		@Override
 		public Void visitClass(Class cls) {
 			if (cls.isAbstract()) {
-				addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT);
+				addOverlay(ValaPluginImages.DESC_OVR_ABSTRACT);
 			}
 			return null;
 		}
@@ -95,13 +90,13 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		 */
 		@Override
 		public Void visitEnumValue(EnumValue enumValue) {
-			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC);
+			addOverlay(ValaPluginImages.DESC_OVR_STATIC);
 			return null;
 		}
 
 		@Override
 		public Void visitConstant(Constant constant) {
-			addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC);
+			addOverlay(ValaPluginImages.DESC_OVR_STATIC);
 			return null;
 		}
 
@@ -126,19 +121,19 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		@Override
 		public Void visitMethod(Method method) {
 			if (method instanceof CreationMethod) {
-				addOverlay(ValaPluginConstants.IMG_OVERLAY_CONSTRUCTOR);
+				addOverlay(ValaPluginImages.DESC_OVR_CONSTRUCTOR);
 			}
 			if (method.isAbstract()) {
-				addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT);
+				addOverlay(ValaPluginImages.DESC_OVR_ABSTRACT);
 			}
 			Method baseMethod = method.getBaseMethod();
 			if (baseMethod != null && baseMethod != method) {
-				addOverlay(ValaPluginConstants.IMG_OVERLAY_OVERRIDES,
+				addOverlay(ValaPluginImages.DESC_OVR_OVERRIDES,
 						IDecoration.BOTTOM_RIGHT);
 			}
 			Method baseInterfaceMethod = method.getBaseInterfaceMethod();
 			if (baseInterfaceMethod != null && baseInterfaceMethod != method) {
-				addOverlay(ValaPluginConstants.IMG_OVERLAY_IMPLEMENTS,
+				addOverlay(ValaPluginImages.DESC_OVR_IMPLEMENTS,
 						IDecoration.BOTTOM_RIGHT);
 			}
 			visitMemberBinding(method.getBinding());
@@ -154,7 +149,7 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		@Override
 		public Void visitProperty(Property property) {
 			if (property.isAbstract()) {
-				addOverlay(ValaPluginConstants.IMG_OVERLAY_ABSTRACT);
+				addOverlay(ValaPluginImages.DESC_OVR_ABSTRACT);
 			}
 			visitMemberBinding(property.getBinding());
 			return null;
@@ -168,18 +163,17 @@ public class ValaLabelDecorator implements ILightweightLabelDecorator {
 		 */
 		public Void visitMemberBinding(MemberBinding binding) {
 			if (binding.equals(MemberBinding.STATIC)) {
-				addOverlay(ValaPluginConstants.IMG_OVERLAY_STATIC);
+				addOverlay(ValaPluginImages.DESC_OVR_STATIC);
 			}
 			return null;
 		}
 
-		private void addOverlay(String overlayKey) {
-			addOverlay(overlayKey, IDecoration.TOP_RIGHT);
+		private void addOverlay(ImageDescriptor descriptor) {
+			addOverlay(descriptor, IDecoration.TOP_RIGHT);
 		}
 
-		private void addOverlay(String overlayKey, int quadrant) {
-			ImageDescriptor overlay = imageRegistry.getDescriptor(overlayKey);
-			getDecoration().addOverlay(overlay, quadrant);
+		private void addOverlay(ImageDescriptor descriptor, int quadrant) {
+			getDecoration().addOverlay(descriptor, quadrant);
 		}
 
 	}

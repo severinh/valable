@@ -30,7 +30,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
-import org.valable.ValaPluginConstants;
+import org.valable.ValaPlugin;
 
 
 public class ValaImportWizardPage extends WizardNewFileCreationPage {
@@ -91,7 +91,7 @@ public class ValaImportWizardPage extends WizardNewFileCreationPage {
 
 	@Override
 	protected IStatus validateLinkedResource() {
-		return new Status(IStatus.OK, ValaPluginConstants.PLUGIN_ID,
+		return new Status(IStatus.OK, ValaPlugin.PLUGIN_ID,
 				IStatus.OK, "", null); // NON-NLS-1
 	}
 }

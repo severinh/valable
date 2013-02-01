@@ -25,8 +25,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -35,15 +33,23 @@ import org.osgi.framework.BundleContext;
 import org.valable.builder.ValaProjectBuilder;
 import org.valable.editors.ValaEditor;
 import org.valable.editors.ValaTextTools;
+import org.valable.viewsupport.ImageDescriptorRegistry;
 
-public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants {
+public class ValaPlugin extends AbstractUIPlugin {
 
+	public static final String PLUGIN_ID = "org.valable";
+	
 	private static ValaPlugin plugin;
 	private static ResourceBundle resourceBundle = ResourceBundle
 			.getBundle("org.valable.data.ValaPluginMessages");
 
 	private ValaTextTools valaTextTools;
+	private ImageDescriptorRegistry imageDescriptorRegistry;
 
+	public static ImageDescriptorRegistry getImageDescriptorRegistry() {
+		return getDefault().internalGetImageDescriptorRegistry();
+	}
+	
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -103,7 +109,14 @@ public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		super.stop(context);
+
+		try {
+			if (imageDescriptorRegistry != null) {
+				imageDescriptorRegistry.dispose();
+			}
+		} finally {
+			super.stop(context);
+		}
 	}
 
 	/**
@@ -137,17 +150,13 @@ public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants 
 		return (IFile) editor.getEditorInput().getAdapter(IFile.class);
 	}
 
-	@Override
-	protected void initializeImageRegistry(ImageRegistry registry) {
-		for (String key : IMG_KEYS) {
-			ImageDescriptor desc = imageDescriptorFromPlugin(PLUGIN_ID, key);
-			if (desc == null) {
-				desc = ImageDescriptor.getMissingImageDescriptor();
-			}
-			getImageRegistry().put(key, desc);
+	private synchronized ImageDescriptorRegistry internalGetImageDescriptorRegistry() {
+		if (imageDescriptorRegistry == null) {
+			imageDescriptorRegistry = new ImageDescriptorRegistry();
 		}
+		return imageDescriptorRegistry;
 	}
-
+	
 	public synchronized ValaTextTools getValaTextTools() {
 		if (valaTextTools == null) {
 			valaTextTools = new ValaTextTools(getPreferenceStore());

@@ -12,42 +12,21 @@ import static org.junit.Assert.assertEquals;
 
 import org.eclipse.jface.viewers.TreeNode;
 import org.gnome.vala.Class;
-import org.gnome.vala.EnumValue;
 import org.gnome.vala.Field;
 import org.gnome.vala.Method;
 import org.gnome.vala.Property;
 import org.gnome.vala.Signal;
 import org.gnome.vala.SourceFile;
-import org.gnome.vala.SymbolAccessibility;
 import org.gnome.vala.VoidType;
 import org.junit.Test;
 
 import org.valable.AbstractTest;
-import org.valable.ValaPluginConstants;
 import org.valable.model.ValaSource;
 
 /**
  * Tests {@link ValaLabelProvider}.
  */
 public class ValaLabelProviderTest extends AbstractTest {
-
-	@Test
-	public void testImageKey() {
-		ValaLabelProvider labelProvider = new ValaLabelProvider();
-		Field field = new Field("field", new VoidType());
-		field.setAccessibility(SymbolAccessibility.INTERNAL);
-
-		assertEquals(ValaPluginConstants.IMG_OBJECT_UNKNOWN,
-				labelProvider.getImageKey(new Object()));
-		assertEquals(ValaPluginConstants.IMG_OBJECT_FIELD_DEFAULT,
-				labelProvider.getImageKey(field));
-		TreeNode fieldTreeNode = new TreeNode(field);
-		assertEquals(ValaPluginConstants.IMG_OBJECT_FIELD_DEFAULT,
-				labelProvider.getImageKey(fieldTreeNode));
-		EnumValue enumValue = new EnumValue("VALUE");
-		assertEquals(ValaPluginConstants.IMG_OBJECT_FIELD_PUBLIC,
-				labelProvider.getImageKey(enumValue));
-	}
 
 	@Test
 	public void testText() {

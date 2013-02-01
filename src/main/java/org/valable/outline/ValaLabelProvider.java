@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
@@ -31,8 +31,9 @@ import org.gnome.vala.Signal;
 import org.gnome.vala.Symbol;
 
 import org.valable.ValaPlugin;
-import org.valable.ValaPluginConstants;
+import org.valable.ValaPluginImages;
 import org.valable.model.ValaSymbolImageProvider;
+import org.valable.viewsupport.ImageDescriptorRegistry;
 
 /**
  * Provides a label for a given element in the outline.
@@ -48,25 +49,23 @@ public class ValaLabelProvider extends LabelProvider implements
 
 	@Override
 	public Image getImage(Object element) {
-		ValaPlugin valaPlugin = ValaPlugin.getDefault();
-		String key = getImageKey(element);
-		ImageRegistry imageRegistry = valaPlugin.getImageRegistry();
-		Image image = imageRegistry.get(key);
-
+		ImageDescriptor descriptor = getImageDescriptor(element);
+		ImageDescriptorRegistry registry = ValaPlugin.getImageDescriptorRegistry();
+		Image image = registry.get(descriptor);
 		return image;
 	}
 
-	public String getImageKey(Object element) {
+	public ImageDescriptor getImageDescriptor(Object element) {
 		element = maybeGetTreeNodeValue(element);
 
-		String key = null;
+		ImageDescriptor result = null;
 		if (element instanceof Symbol) {
 			Symbol symbol = (Symbol) element;
-			key = ValaSymbolImageProvider.getKey(symbol);
+			result =  ValaSymbolImageProvider.getImageDescriptor(symbol);
 		} else {
-			key = ValaPluginConstants.IMG_OBJECT_UNKNOWN;
+			result = ValaPluginImages.DESC_OBJS_UNKNOWN;
 		}
-		return key;
+		return result;
 	}
 
 	@Override

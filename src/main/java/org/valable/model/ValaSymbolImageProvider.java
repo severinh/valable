@@ -8,6 +8,7 @@
  */
 package org.valable.model;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.gnome.vala.Class;
 import org.gnome.vala.Constant;
@@ -24,119 +25,120 @@ import org.gnome.vala.Symbol;
 import org.gnome.vala.SymbolAccessibility;
 
 import org.valable.ValaPlugin;
-import org.valable.ValaPluginConstants;
+import org.valable.ValaPluginImages;
+import org.valable.viewsupport.ImageDescriptorRegistry;
 
 /**
  * Provides the images used to visually represent symbols.
  * 
  * This class is a singleton.
  */
-public class ValaSymbolImageProvider extends NopCodeVisitor<String> {
+public class ValaSymbolImageProvider extends NopCodeVisitor<ImageDescriptor> {
 
 	private static final ValaSymbolImageProvider instance = new ValaSymbolImageProvider();
 
 	@Override
-	public String visitSymbol(Symbol symbol) {
-		return ValaPluginConstants.IMG_OBJECT_UNKNOWN;
+	public ImageDescriptor visitSymbol(Symbol symbol) {
+		return ValaPluginImages.DESC_OBJS_UNKNOWN;
 	}
 
 	@Override
-	public String visitClass(Class cls) {
+	public ImageDescriptor visitClass(Class cls) {
 		SymbolAccessibility accessibility = cls.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
-			return ValaPluginConstants.IMG_OBJECT_CLASS_PRIVATE;
+			return ValaPluginImages.DESC_OBJS_INNER_CLASS_PRIVATE;
 		} else if (accessibility.equals(SymbolAccessibility.PROTECTED)) {
-			return ValaPluginConstants.IMG_OBJECT_CLASS_PROTECTED;
+			return ValaPluginImages.DESC_OBJS_INNER_CLASS_PROTECTED;
 		} else if (accessibility.equals(SymbolAccessibility.PUBLIC)) {
-			return ValaPluginConstants.IMG_OBJECT_CLASS_PUBLIC;
+			return ValaPluginImages.DESC_OBJS_CLASS;
 		} else {
-			return ValaPluginConstants.IMG_OBJECT_CLASS_DEFAULT;
+			return ValaPluginImages.DESC_OBJS_CLASS_DEFAULT;
 		}
 	}
 
 	@Override
-	public String visitInterface(Interface interfce) {
+	public ImageDescriptor visitInterface(Interface interfce) {
 		SymbolAccessibility accessibility = interfce.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
-			return ValaPluginConstants.IMG_OBJECT_INTERFACE_PRIVATE;
+			return ValaPluginImages.DESC_OBJS_INNER_INTERFACE_PRIVATE;
 		} else if (accessibility.equals(SymbolAccessibility.PROTECTED)) {
-			return ValaPluginConstants.IMG_OBJECT_INTERFACE_PROTECTED;
+			return ValaPluginImages.DESC_OBJS_INNER_INTERFACE_PROTECTED;
 		} else if (accessibility.equals(SymbolAccessibility.PUBLIC)) {
-			return ValaPluginConstants.IMG_OBJECT_INTERFACE_PUBLIC;
+			return ValaPluginImages.DESC_OBJS_INTERFACE;
 		} else {
-			return ValaPluginConstants.IMG_OBJECT_INTERFACE_DEFAULT;
+			return ValaPluginImages.DESC_OBJS_INTERFACE_DEFAULT;
 		}
 	}
 
 	@Override
-	public String visitEnum(Enum enm) {
+	public ImageDescriptor visitEnum(Enum enm) {
 		SymbolAccessibility accessibility = enm.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
-			return ValaPluginConstants.IMG_OBJECT_ENUM_PRIVATE;
+			return ValaPluginImages.DESC_OBJS_ENUM_PRIVATE;
 		} else if (accessibility.equals(SymbolAccessibility.PROTECTED)) {
-			return ValaPluginConstants.IMG_OBJECT_ENUM_PROTECTED;
+			return ValaPluginImages.DESC_OBJS_ENUM_PROTECTED;
 		} else if (accessibility.equals(SymbolAccessibility.PUBLIC)) {
-			return ValaPluginConstants.IMG_OBJECT_ENUM_PUBLIC;
+			return ValaPluginImages.DESC_OBJS_ENUM;
 		} else {
-			return ValaPluginConstants.IMG_OBJECT_ENUM_DEFAULT;
+			return ValaPluginImages.DESC_OBJS_ENUM_DEFAULT;
 		}
 	}
 
 	@Override
-	public String visitEnumValue(EnumValue enumValue) {
-		return ValaPluginConstants.IMG_OBJECT_FIELD_PUBLIC;
+	public ImageDescriptor visitEnumValue(EnumValue enumValue) {
+		return ValaPluginImages.DESC_FIELD_PUBLIC;
 	}
 
 	@Override
-	public String visitConstant(Constant constant) {
-		return ValaPluginConstants.IMG_OBJECT_FIELD_PUBLIC;
+	public ImageDescriptor visitConstant(Constant constant) {
+		return ValaPluginImages.DESC_FIELD_PUBLIC;
 	}
 
 	@Override
-	public String visitField(Field field) {
+	public ImageDescriptor visitField(Field field) {
 		SymbolAccessibility accessibility = field.getAccessibility();
 		return visitFieldOrProperty(accessibility);
 	}
 
 	@Override
-	public String visitMethod(Method method) {
+	public ImageDescriptor visitMethod(Method method) {
 		SymbolAccessibility accessibility = method.getAccessibility();
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
-			return ValaPluginConstants.IMG_OBJECT_METHOD_PRIVATE;
+			return ValaPluginImages.DESC_MISC_PRIVATE;
 		} else if (accessibility.equals(SymbolAccessibility.PROTECTED)) {
-			return ValaPluginConstants.IMG_OBJECT_METHOD_PROTECTED;
+			return ValaPluginImages.DESC_MISC_PROTECTED;
 		} else if (accessibility.equals(SymbolAccessibility.PUBLIC)) {
-			return ValaPluginConstants.IMG_OBJECT_METHOD_PUBLIC;
+			return ValaPluginImages.DESC_MISC_PUBLIC;
 		} else {
-			return ValaPluginConstants.IMG_OBJECT_METHOD_DEFAULT;
+			return ValaPluginImages.DESC_MISC_DEFAULT;
 		}
 	}
 
 	@Override
-	public String visitProperty(Property property) {
+	public ImageDescriptor visitProperty(Property property) {
 		SymbolAccessibility accessibility = property.getAccessibility();
 		return visitFieldOrProperty(accessibility);
 	}
 
 	@Override
-	public String visitSignal(Signal signal) {
-		return ValaPluginConstants.IMG_OBJECT_SIGNAL_PUBLIC;
+	public ImageDescriptor visitSignal(Signal signal) {
+		return ValaPluginImages.DESC_OBJS_SIGNAL;
 	}
 
 	@Override
-	public String visitLocalVariable(LocalVariable localVariable) {
-		return ValaPluginConstants.IMG_OBJECT_LOCAL_VARIABLE;
+	public ImageDescriptor visitLocalVariable(LocalVariable localVariable) {
+		return ValaPluginImages.DESC_OBJS_LOCAL_VARIABLE;
 	}
 
-	public String visitFieldOrProperty(SymbolAccessibility accessibility) {
+	public ImageDescriptor visitFieldOrProperty(SymbolAccessibility accessibility) {
 		if (accessibility.equals(SymbolAccessibility.PRIVATE)) {
-			return ValaPluginConstants.IMG_OBJECT_FIELD_PRIVATE;
+			return ValaPluginImages.DESC_FIELD_PRIVATE;
 		} else if (accessibility.equals(SymbolAccessibility.PROTECTED)) {
-			return ValaPluginConstants.IMG_OBJECT_FIELD_PROTECTED;
+			return ValaPluginImages.DESC_FIELD_PROTECTED;
 		} else if (accessibility.equals(SymbolAccessibility.PUBLIC)) {
-			return ValaPluginConstants.IMG_OBJECT_FIELD_PUBLIC;
+			return ValaPluginImages.DESC_FIELD_PUBLIC;
 		} else {
-			return ValaPluginConstants.IMG_OBJECT_FIELD_DEFAULT;
+			return ValaPluginImages.DESC_FIELD_DEFAULT;
 		}
 	}
 
@@ -144,23 +146,24 @@ public class ValaSymbolImageProvider extends NopCodeVisitor<String> {
 		return instance;
 	}
 
-	public static String getKey(Symbol symbol) {
+	public static ImageDescriptor getImageDescriptor(Symbol symbol) {
 		if (symbol == null) {
 			throw new IllegalArgumentException("Symbol must not be null");
 		}
-		String key = symbol.accept(getInstance());
-		if (key == null) {
-			key = ValaPluginConstants.IMG_OBJECT_UNKNOWN;
+		ImageDescriptor descriptor = symbol.accept(getInstance());
+		if (descriptor == null) {
+			descriptor = ValaPluginImages.DESC_OBJS_UNKNOWN;
 		}
-		return key;
+		return descriptor;
 	}
 
 	public static Image getImage(ValaPlugin valaPlugin, Symbol symbol) {
 		if (valaPlugin == null) {
 			throw new IllegalArgumentException("ValaPlugin must not be null");
 		}
-		String key = getKey(symbol);
-		Image image = valaPlugin.getImageRegistry().get(key);
+		ImageDescriptor descriptor = getImageDescriptor(symbol);
+		ImageDescriptorRegistry registry = ValaPlugin.getImageDescriptorRegistry();
+		Image image = registry.get(descriptor);
 		return image;
 	}
 
