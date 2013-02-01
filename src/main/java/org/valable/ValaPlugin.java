@@ -34,12 +34,15 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.valable.builder.ValaProjectBuilder;
 import org.valable.editors.ValaEditor;
+import org.valable.editors.ValaTextTools;
 
 public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants {
 
 	private static ValaPlugin plugin;
 	private static ResourceBundle resourceBundle = ResourceBundle
 			.getBundle("org.valable.data.ValaPluginMessages");
+
+	private ValaTextTools valaTextTools;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -143,6 +146,13 @@ public class ValaPlugin extends AbstractUIPlugin implements ValaPluginConstants 
 			}
 			getImageRegistry().put(key, desc);
 		}
+	}
+
+	public synchronized ValaTextTools getValaTextTools() {
+		if (valaTextTools == null) {
+			valaTextTools = new ValaTextTools(getPreferenceStore());
+		}
+		return valaTextTools;
 	}
 
 }

@@ -35,19 +35,27 @@ import org.valable.editors.vala.ValaStringTemplateScanner;
 public class ValaConfiguration extends SourceViewerConfiguration {
 
 	private final ColorManager colorManager;
-
+	
+	/**
+	 * The document partitioning.
+	 */
+	private final String documentPartitioning;
+	
 	private ValaCodeScanner codeScanner;
 	private GTKDocScanner docScanner;
 	private ValaStringTemplateScanner templateScanner;
 	private ValaDoubleClickStrategy doubleClickStrategy;
 
-	public ValaConfiguration(ColorManager colorManager) {
+	public ValaConfiguration(ColorManager colorManager, String documentPartitioning) {
 		this.colorManager = colorManager;
+		this.documentPartitioning = documentPartitioning;
 	}
 
 	@Override
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
-		return new String[] { IDocument.DEFAULT_CONTENT_TYPE,
+		return new String[] {
+				IDocument.DEFAULT_CONTENT_TYPE,
+				IValaPartitions.GTKDOC_COMMENT,
 				IValaPartitions.VALA_MULTILINE_COMMENT,
 				IValaPartitions.VALA_MULTILINE_STRING,
 				IValaPartitions.VALA_VERBATIM_STRING,
@@ -80,6 +88,7 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 	public IPresentationReconciler getPresentationReconciler(
 			ISourceViewer sourceViewer) {
 		PresentationReconciler reconciler = new PresentationReconciler();
+		reconciler.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
 
 		// Rule for code
 		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(getValaScanner());
@@ -148,6 +157,18 @@ public class ValaConfiguration extends SourceViewerConfiguration {
 			doubleClickStrategy = new ValaDoubleClickStrategy();
 		}
 		return doubleClickStrategy;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getConfiguredDocumentPartitioning(org.eclipse.jface.text.source.ISourceViewer)
+	 */
+	@Override
+	public String getConfiguredDocumentPartitioning(ISourceViewer sourceViewer) {
+		if (documentPartitioning != null) {
+			return documentPartitioning;
+		}
+		return super.getConfiguredDocumentPartitioning(sourceViewer);
 	}
 
 }
