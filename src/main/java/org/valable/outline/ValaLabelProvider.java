@@ -32,8 +32,8 @@ import org.gnome.vala.Symbol;
 
 import org.valable.ValaPlugin;
 import org.valable.ValaPluginImages;
-import org.valable.model.ValaSymbolImageProvider;
 import org.valable.viewsupport.ImageDescriptorRegistry;
+import org.valable.viewsupport.ValaSymbolImageProvider;
 
 /**
  * Provides a label for a given element in the outline.

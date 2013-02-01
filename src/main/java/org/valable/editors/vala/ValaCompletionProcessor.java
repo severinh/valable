@@ -29,7 +29,7 @@ import org.gnome.vala.TypeSymbol;
 import org.valable.ValaPlugin;
 import org.valable.model.ValaProject;
 import org.valable.model.ValaSource;
-import org.valable.model.ValaSymbolImageProvider;
+import org.valable.viewsupport.ValaSymbolImageProvider;
 
 /**
  * Handle code complete of possible types.

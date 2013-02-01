@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.valable.model;
+package org.valable.viewsupport;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -26,7 +26,6 @@ import org.gnome.vala.SymbolAccessibility;
 
 import org.valable.ValaPlugin;
 import org.valable.ValaPluginImages;
-import org.valable.viewsupport.ImageDescriptorRegistry;
 
 /**
  * Provides the images used to visually represent symbols.
