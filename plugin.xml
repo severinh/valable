@@ -10,7 +10,7 @@
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="true"
             extensions="vala"
-            icon="src/main/resources/icons/vala_obj.gif"
+            icon="src/main/resources/icons/full/obj16/vala_obj.gif"
             id="org.valable.editors.ValaEditor"
             name="Vala Editor">
       </editor>
@@ -92,7 +92,7 @@
       <wizard
             category="org.valable.wizard.file.importCategory"
             class="org.valable.wizard.file.ValaImportWizard"
-            icon="src/main/resources/icons/vala_obj.gif"
+            icon="src/main/resources/icons/full/obj16/vala_obj.gif"
             id="org.valable.wizard.file.ValaImportWizard"
             name="Import Vala File">
          <description>
