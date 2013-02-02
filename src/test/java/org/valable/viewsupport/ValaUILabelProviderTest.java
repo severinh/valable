@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.valable.outline;
+package org.valable.viewsupport;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,15 +22,16 @@ import org.junit.Test;
 
 import org.valable.AbstractTest;
 import org.valable.model.ValaSource;
+import org.valable.viewsupport.ValaUILabelProvider;
 
 /**
- * Tests {@link ValaLabelProvider}.
+ * Tests {@link ValaUILabelProvider}.
  */
-public class ValaLabelProviderTest extends AbstractTest {
+public class ValaUILabelProviderTest extends AbstractTest {
 
 	@Test
 	public void testText() {
-		ValaLabelProvider labelProvider = new ValaLabelProvider();
+		ValaUILabelProvider labelProvider = new ValaUILabelProvider();
 		Field field = new Field("field", new VoidType());
 		TreeNode fieldTreeNode = new TreeNode(field);
 		String expectedFieldText = "field : void";
@@ -54,7 +55,7 @@ public class ValaLabelProviderTest extends AbstractTest {
 		Property automaticProperty = sampleClass.getProperty("automatic");
 		Property delegProperty = sampleClass.getProperty("deleg");
 
-		ValaLabelProvider labelProvider = new ValaLabelProvider();
+		ValaUILabelProvider labelProvider = new ValaUILabelProvider();
 
 		assertEquals("real_struct : RealStruct",
 				labelProvider.getText(realStructProperty));
@@ -73,7 +74,7 @@ public class ValaLabelProviderTest extends AbstractTest {
 		Class returnFooClass = sourceFile.getClass("ReturnFoo");
 		Signal intActivatedSignal = returnFooClass.getSignal("int_activated");
 
-		ValaLabelProvider labelProvider = new ValaLabelProvider();
+		ValaUILabelProvider labelProvider = new ValaUILabelProvider();
 
 		assertEquals("activated(bool) : void",
 				labelProvider.getText(activatedSignal));

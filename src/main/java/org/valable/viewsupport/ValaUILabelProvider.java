@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.valable.outline;
+package org.valable.viewsupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +15,11 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeNode;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.gnome.vala.Constant;
 import org.gnome.vala.CreationMethod;
@@ -32,14 +34,11 @@ import org.gnome.vala.Symbol;
 
 import org.valable.ValaPlugin;
 import org.valable.ValaPluginImages;
-import org.valable.viewsupport.ImageDescriptorRegistry;
-import org.valable.viewsupport.ValaSymbolImageProvider;
 
 /**
  * Provides a label for a given element in the outline.
  */
-public class ValaLabelProvider extends LabelProvider implements
-		IStyledLabelProvider {
+public class ValaUILabelProvider extends LabelProvider implements IColorProvider, IStyledLabelProvider {
 
 	/**
 	 * The {@link String} between the main part of the label and the type, if
@@ -233,6 +232,24 @@ public class ValaLabelProvider extends LabelProvider implements
 			return result;
 		}
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
+	 */
+	@Override
+	public Color getForeground(Object element) {
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
+	 */
+	@Override
+	public Color getBackground(Object element) {
+		return null;
 	}
 
 }

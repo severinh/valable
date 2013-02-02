@@ -32,6 +32,7 @@ import org.gnome.vala.Symbol;
 import org.valable.editors.ValaEditor;
 import org.valable.model.ValaProject;
 import org.valable.model.ValaSource;
+import org.valable.viewsupport.ValaUILabelProvider;
 
 /**
  * Provide an outline view for the current class.
@@ -69,7 +70,7 @@ public class ValaOutlinePage extends ContentOutlinePage {
 		TreeViewer viewer = getTreeViewer();
 		viewer.setContentProvider(new ValaContentProvider());
 		viewer.setLabelProvider(new DecoratingStyledCellLabelProvider(
-				new ValaLabelProvider(), PlatformUI.getWorkbench()
+				new ValaUILabelProvider(), PlatformUI.getWorkbench()
 						.getDecoratorManager().getLabelDecorator(),
 				DecorationContext.DEFAULT_CONTEXT));
 		viewer.setInput(currentSourceFile);
