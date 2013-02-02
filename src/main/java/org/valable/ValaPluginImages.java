@@ -45,21 +45,21 @@ public class ValaPluginImages {
 	/*
 	 * Keys for images available from the Vala plug-in image registry.
 	 */
-	public static final String IMG_MISC_PUBLIC= NAME_PREFIX + "methpub_obj.gif";	
-	public static final String IMG_MISC_PROTECTED= NAME_PREFIX + "methpro_obj.gif";
-	public static final String IMG_MISC_PRIVATE= NAME_PREFIX + "methpri_obj.gif";
-	public static final String IMG_MISC_DEFAULT= NAME_PREFIX + "methdef_obj.gif";
+	public static final String IMG_MISC_PUBLIC = NAME_PREFIX + "methpub_obj.gif";	
+	public static final String IMG_MISC_PROTECTED = NAME_PREFIX + "methpro_obj.gif";
+	public static final String IMG_MISC_PRIVATE = NAME_PREFIX + "methpri_obj.gif";
+	public static final String IMG_MISC_DEFAULT = NAME_PREFIX + "methdef_obj.gif";
 	
-	public static final String IMG_FIELD_PUBLIC= NAME_PREFIX + "field_public_obj.gif";	
-	public static final String IMG_FIELD_PROTECTED= NAME_PREFIX + "field_protected_obj.gif";
-	public static final String IMG_FIELD_PRIVATE= NAME_PREFIX + "field_private_obj.gif";
-	public static final String IMG_FIELD_DEFAULT= NAME_PREFIX + "field_default_obj.gif";
+	public static final String IMG_FIELD_PUBLIC = NAME_PREFIX + "field_public_obj.gif";	
+	public static final String IMG_FIELD_PROTECTED = NAME_PREFIX + "field_protected_obj.gif";
+	public static final String IMG_FIELD_PRIVATE = NAME_PREFIX + "field_private_obj.gif";
+	public static final String IMG_FIELD_DEFAULT = NAME_PREFIX + "field_default_obj.gif";
 
 	public static final String IMG_OBJS_CLASS = NAME_PREFIX + "class_obj.gif";
 	public static final String IMG_OBJS_CLASS_DEFAULT = NAME_PREFIX + "class_default_obj.gif"; 
 
 	public static final String IMG_OBJS_INNER_CLASS_PUBLIC = NAME_PREFIX + "innerclass_public_obj.gif"; 
-	public static final String IMG_OBJS_INNER_CLASS_DEFAULT= NAME_PREFIX + "innerclass_default_obj.gif";
+	public static final String IMG_OBJS_INNER_CLASS_DEFAULT = NAME_PREFIX + "innerclass_default_obj.gif";
 	public static final String IMG_OBJS_INNER_CLASS_PROTECTED = NAME_PREFIX + "innerclass_protected_obj.gif"; 
 	public static final String IMG_OBJS_INNER_CLASS_PRIVATE = NAME_PREFIX + "innerclass_private_obj.gif"; 
 
@@ -78,54 +78,54 @@ public class ValaPluginImages {
 	public static final String IMG_OBJS_PACKAGE = NAME_PREFIX + "package_obj.gif"; 
 	public static final String IMG_OBJS_SIGNAL = NAME_PREFIX + "signal_obj.gif"; 
 
-	public static final String IMG_OBJS_UNKNOWN= NAME_PREFIX + "unknown_obj.gif"; 
+	public static final String IMG_OBJS_UNKNOWN = NAME_PREFIX + "unknown_obj.gif"; 
 	public static final String IMG_OBJS_LOCAL_VARIABLE = NAME_PREFIX + "localvariable_obj.gif"; 
 
 	/*
 	 * Set of predefined image descriptors.
 	 */
-	public static final ImageDescriptor DESC_MISC_PUBLIC= createManagedFromKey(T_OBJ, IMG_MISC_PUBLIC);
-	public static final ImageDescriptor DESC_MISC_PROTECTED= createManagedFromKey(T_OBJ, IMG_MISC_PROTECTED);
-	public static final ImageDescriptor DESC_MISC_PRIVATE= createManagedFromKey(T_OBJ, IMG_MISC_PRIVATE);
-	public static final ImageDescriptor DESC_MISC_DEFAULT= createManagedFromKey(T_OBJ, IMG_MISC_DEFAULT);
+	public static final ImageDescriptor DESC_MISC_PUBLIC = createManagedFromKey(T_OBJ, IMG_MISC_PUBLIC);
+	public static final ImageDescriptor DESC_MISC_PROTECTED = createManagedFromKey(T_OBJ, IMG_MISC_PROTECTED);
+	public static final ImageDescriptor DESC_MISC_PRIVATE = createManagedFromKey(T_OBJ, IMG_MISC_PRIVATE);
+	public static final ImageDescriptor DESC_MISC_DEFAULT = createManagedFromKey(T_OBJ, IMG_MISC_DEFAULT);
 	
 	public static final ImageDescriptor DESC_FIELD_PUBLIC = createManagedFromKey(T_OBJ, IMG_FIELD_PUBLIC);
 	public static final ImageDescriptor DESC_FIELD_PROTECTED = createManagedFromKey(T_OBJ, IMG_FIELD_PROTECTED);
 	public static final ImageDescriptor DESC_FIELD_PRIVATE = createManagedFromKey(T_OBJ, IMG_FIELD_PRIVATE);
 	public static final ImageDescriptor DESC_FIELD_DEFAULT = createManagedFromKey(T_OBJ, IMG_FIELD_DEFAULT);
 
-	public static final ImageDescriptor DESC_OBJS_VALA_FILE= createManagedFromKey(T_OBJ, IMG_OBJS_VALA_FILE);
-	public static final ImageDescriptor DESC_OBJS_PACKAGE= createManagedFromKey(T_OBJ, IMG_OBJS_PACKAGE);
-	public static final ImageDescriptor DESC_OBJS_SIGNAL= createManagedFromKey(T_OBJ, IMG_OBJS_SIGNAL);
+	public static final ImageDescriptor DESC_OBJS_VALA_FILE = createManagedFromKey(T_OBJ, IMG_OBJS_VALA_FILE);
+	public static final ImageDescriptor DESC_OBJS_PACKAGE = createManagedFromKey(T_OBJ, IMG_OBJS_PACKAGE);
+	public static final ImageDescriptor DESC_OBJS_SIGNAL = createManagedFromKey(T_OBJ, IMG_OBJS_SIGNAL);
 	
-	public static final ImageDescriptor DESC_OBJS_CLASS= createManagedFromKey(T_OBJ, IMG_OBJS_CLASS);
-	public static final ImageDescriptor DESC_OBJS_CLASS_DEFAULT= createManagedFromKey(T_OBJ, IMG_OBJS_CLASS_DEFAULT);
+	public static final ImageDescriptor DESC_OBJS_CLASS = createManagedFromKey(T_OBJ, IMG_OBJS_CLASS);
+	public static final ImageDescriptor DESC_OBJS_CLASS_DEFAULT = createManagedFromKey(T_OBJ, IMG_OBJS_CLASS_DEFAULT);
 
 	public static final ImageDescriptor DESC_OBJS_INNER_CLASS_PUBLIC = createManagedFromKey(T_OBJ, IMG_OBJS_INNER_CLASS_PUBLIC);
 	public static final ImageDescriptor DESC_OBJS_INNER_CLASS_DEFAULT = createManagedFromKey(T_OBJ, IMG_OBJS_INNER_CLASS_DEFAULT);
 	public static final ImageDescriptor DESC_OBJS_INNER_CLASS_PROTECTED= createManagedFromKey(T_OBJ, IMG_OBJS_INNER_CLASS_PROTECTED);
 	public static final ImageDescriptor DESC_OBJS_INNER_CLASS_PRIVATE= createManagedFromKey(T_OBJ, IMG_OBJS_INNER_CLASS_PRIVATE);
 	
-	public static final ImageDescriptor DESC_OBJS_INTERFACE= createManagedFromKey(T_OBJ, IMG_OBJS_INTERFACE);
-	public static final ImageDescriptor DESC_OBJS_INTERFACE_DEFAULT= createManagedFromKey(T_OBJ, IMG_OBJS_INTERFACE_DEFAULT);
+	public static final ImageDescriptor DESC_OBJS_INTERFACE = createManagedFromKey(T_OBJ, IMG_OBJS_INTERFACE);
+	public static final ImageDescriptor DESC_OBJS_INTERFACE_DEFAULT = createManagedFromKey(T_OBJ, IMG_OBJS_INTERFACE_DEFAULT);
 	
-	public static final ImageDescriptor DESC_OBJS_INNER_INTERFACE_PROTECTED= createManagedFromKey(T_OBJ, IMG_OBJS_INNER_INTERFACE_PROTECTED);
-	public static final ImageDescriptor DESC_OBJS_INNER_INTERFACE_PRIVATE= createManagedFromKey(T_OBJ, IMG_OBJS_INNER_INTERFACE_PRIVATE);
+	public static final ImageDescriptor DESC_OBJS_INNER_INTERFACE_PROTECTED = createManagedFromKey(T_OBJ, IMG_OBJS_INNER_INTERFACE_PROTECTED);
+	public static final ImageDescriptor DESC_OBJS_INNER_INTERFACE_PRIVATE = createManagedFromKey(T_OBJ, IMG_OBJS_INNER_INTERFACE_PRIVATE);
 	
-	public static final ImageDescriptor DESC_OBJS_ENUM= createManagedFromKey(T_OBJ, IMG_OBJS_ENUM);
-	public static final ImageDescriptor DESC_OBJS_ENUM_DEFAULT= createManagedFromKey(T_OBJ, IMG_OBJS_ENUM_DEFAULT);
-	public static final ImageDescriptor DESC_OBJS_ENUM_PROTECTED= createManagedFromKey(T_OBJ, IMG_OBJS_ENUM_PROTECTED);
-	public static final ImageDescriptor DESC_OBJS_ENUM_PRIVATE= createManagedFromKey(T_OBJ, IMG_OBJS_ENUM_PRIVATE);
+	public static final ImageDescriptor DESC_OBJS_ENUM = createManagedFromKey(T_OBJ, IMG_OBJS_ENUM);
+	public static final ImageDescriptor DESC_OBJS_ENUM_DEFAULT = createManagedFromKey(T_OBJ, IMG_OBJS_ENUM_DEFAULT);
+	public static final ImageDescriptor DESC_OBJS_ENUM_PROTECTED = createManagedFromKey(T_OBJ, IMG_OBJS_ENUM_PROTECTED);
+	public static final ImageDescriptor DESC_OBJS_ENUM_PRIVATE = createManagedFromKey(T_OBJ, IMG_OBJS_ENUM_PRIVATE);
 	
-	public static final ImageDescriptor DESC_OBJS_UNKNOWN= createManagedFromKey(T_OBJ, IMG_OBJS_UNKNOWN);
-	public static final ImageDescriptor DESC_OBJS_LOCAL_VARIABLE= createManagedFromKey(T_OBJ, IMG_OBJS_LOCAL_VARIABLE);
+	public static final ImageDescriptor DESC_OBJS_UNKNOWN = createManagedFromKey(T_OBJ, IMG_OBJS_UNKNOWN);
+	public static final ImageDescriptor DESC_OBJS_LOCAL_VARIABLE = createManagedFromKey(T_OBJ, IMG_OBJS_LOCAL_VARIABLE);
 
-	public static final ImageDescriptor DESC_OVR_STATIC= createUnManagedCached(T_OVR, "static_co.gif");
-	public static final ImageDescriptor DESC_OVR_ABSTRACT= createUnManagedCached(T_OVR, "abstract_co.gif");
+	public static final ImageDescriptor DESC_OVR_STATIC = createUnManagedCached(T_OVR, "static_co.gif");
+	public static final ImageDescriptor DESC_OVR_ABSTRACT = createUnManagedCached(T_OVR, "abstract_co.gif");
 	
-	public static final ImageDescriptor DESC_OVR_OVERRIDES= createUnManagedCached(T_OVR, "over_co.gif");
-	public static final ImageDescriptor DESC_OVR_IMPLEMENTS= createUnManagedCached(T_OVR, "implm_co.gif");
-	public static final ImageDescriptor DESC_OVR_CONSTRUCTOR= createUnManagedCached(T_OVR, "constr_ovr.gif");
+	public static final ImageDescriptor DESC_OVR_OVERRIDES = createUnManagedCached(T_OVR, "over_co.gif");
+	public static final ImageDescriptor DESC_OVR_IMPLEMENTS = createUnManagedCached(T_OVR, "implm_co.gif");
+	public static final ImageDescriptor DESC_OVR_CONSTRUCTOR = createUnManagedCached(T_OVR, "constr_ovr.gif");
 	
 	private static final class CachedImageDescriptor extends ImageDescriptor {
 

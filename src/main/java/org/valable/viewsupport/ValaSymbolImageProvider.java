@@ -28,7 +28,7 @@ import org.valable.ValaPlugin;
 import org.valable.ValaPluginImages;
 
 /**
- * Provides the images used to visually represent symbols.
+ * Default strategy of the Vala plugin for the construction of Vala symbol icons.
  * 
  * This class is a singleton.
  */
@@ -36,6 +36,19 @@ public class ValaSymbolImageProvider extends NopCodeVisitor<ImageDescriptor> {
 
 	private static final ValaSymbolImageProvider instance = new ValaSymbolImageProvider();
 
+	private ImageDescriptorRegistry registry;
+	
+	public ValaSymbolImageProvider() {
+		registry = null; // lazy initialization
+	}
+
+	private ImageDescriptorRegistry getRegistry() {
+		if (registry == null) {
+			registry = ValaPlugin.getImageDescriptorRegistry();
+		}
+		return registry;
+	}
+	
 	@Override
 	public ImageDescriptor visitSymbol(Symbol symbol) {
 		return ValaPluginImages.DESC_OBJS_UNKNOWN;
